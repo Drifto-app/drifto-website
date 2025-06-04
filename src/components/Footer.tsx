@@ -1,5 +1,6 @@
 
 import { Calendar, Mail, MapPin } from "lucide-react";
+import { FaXTwitter, FaInstagram, FaLinkedin } from "react-icons/fa6";
 
 export const Footer = () => {
   return (
@@ -23,13 +24,13 @@ export const Footer = () => {
             <div className="flex space-x-4">
               {/* Social media placeholder */}
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold">f</span>
+                <span className="text-sm font-bold"><a href="https://www.google.com" target="_blank"><FaInstagram /></a></span>
               </div>
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold">t</span>
+                <span className="text-sm font-bold"><a href="https://www.google.com" target="_blank"><FaXTwitter /></a></span>
               </div>
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold">in</span>
+                <span className="text-sm font-bold"><a href="https://www.google.com" target="_blank"><FaLinkedin /></a></span>
               </div>
             </div>
           </div>

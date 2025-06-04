@@ -20,8 +20,8 @@ export const AppPreviewSection = () => {
 
             <div className="space-y-4">
               {[
-                "Swipe through experiences with our card-based interface",
-                "One-tap booking with saved payment methods",
+                // "Swipe through experiences with our card-based interface",
+                "One-tap booking with secure payment methods",
                 "Real-time notifications for updates and reminders",
                 "Offline access to your tickets and experience details"
               ].map((feature, index) => (

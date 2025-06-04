@@ -11,13 +11,8 @@ export const CTASection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) {
-      toast({
-        title: "You're on the list!",
-        description: "We'll send you updates about Drifto's launch.",
-      });
-      setEmail("");
-    }
+    // Redirect to Google Form
+    window.open('https://forms.google.com/your-form-url', '_blank');
   };
 
   return (
@@ -73,19 +68,11 @@ export const CTASection = () => {
 
         {/* Email signup */}
         <div className="max-w-md mx-auto">
-          <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-            <Input
-              type="email"
-              placeholder="Enter your email for updates"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60 backdrop-blur-sm focus:bg-white/20 focus:border-blue-400"
-              required
-            />
+          <form onSubmit={handleSubmit} className="flex flex-col">
             <Button
               type="submit"
               size="lg"
-              className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+              className="h-14 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0 text-lg"
             >
               Join Waitlist
             </Button>

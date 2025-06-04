@@ -10,11 +10,11 @@ export const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <img 
-                src="/lovable-uploads/487328b0-0083-4230-ba48-4bb6c02d4672.png" 
+                src="/lovable-uploads/drifto-logo-white.svg"
                 alt="Drifto Logo" 
                 className="w-10 h-10 object-contain mr-3"
               />
-              <h3 className="text-2xl font-bold">Drifto</h3>
+              <h3 className="text-2xl font-bold font-poppins">Drifto</h3>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               The ultimate mobile platform for discovering, booking, and managing experiences. 
@@ -39,7 +39,7 @@ export const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Product</h4>
             <ul className="space-y-2 text-gray-400">
               <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>
+              {/*<li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>*/}
               <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Roadmap</a></li>
             </ul>
@@ -49,7 +49,7 @@ export const Footer = () => {
           <div>
             <h4 className="text-lg font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>
+              {/*<li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>*/}
               <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
@@ -65,11 +65,11 @@ export const Footer = () => {
           <div className="flex items-center space-x-6 mt-4 md:mt-0">
             <div className="flex items-center text-gray-400 text-sm">
               <Mail className="w-4 h-4 mr-2" />
-              hello@drifto.app
+              driftoapp@gmail.com
             </div>
             <div className="flex items-center text-gray-400 text-sm">
               <MapPin className="w-4 h-4 mr-2" />
-              San Francisco, CA
+              Lagos, Nigeria
             </div>
           </div>
         </div>

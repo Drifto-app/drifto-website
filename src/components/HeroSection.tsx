@@ -20,18 +20,26 @@ export const HeroSection = () => {
       {/* Header */}
       <div className="relative z-10 flex justify-between items-center w-full px-4 sm:px-6 lg:px-8 py-6">
         {/* Logo on top left */}
-        <div className="flex items-center">
-          <img 
-            src="/lovable-uploads/487328b0-0083-4230-ba48-4bb6c02d4672.png" 
-            alt="Drifto Logo" 
-            className="w-12 h-12 object-contain"
+        <div className="flex items-center flex-row gap-5">
+          <img
+            src="/lovable-uploads/drifto-logo-white.svg"
+            alt="Drifto Logo"
+            className="w-12 object-contain text-white"
           />
+          <div className="text-white text-3xl font-poppins font-bold">
+            Drifto
+          </div>
         </div>
-        
-        {/* Name on top right */}
-        <div className="text-white text-2xl font-bold">
-          Drifto
-        </div>
+
+        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row">
+          <Button
+              type="submit"
+              size="lg"
+              className="h-16 w-full px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0 text-lg"
+          >
+            Join Waitlist
+          </Button>
+        </form>
       </div>
 
       {/* Background decoration */}
@@ -60,7 +68,7 @@ export const HeroSection = () => {
 
             {/* Subheading */}
             <p className="text-xl sm:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
-              The ultimate mobile platform for discovering, booking, and managing experiences. 
+              The ultimate platform for discovering, booking, and managing experiences.
               From concerts to conferences, make every moment count.
             </p>
 
@@ -82,21 +90,13 @@ export const HeroSection = () => {
             </div>
 
             {/* Email signup form */}
-            <div className="max-w-md mx-auto">
+            <div className="max-w-md mx-auto mb-6">
               <p className="text-white/90 mb-4 font-medium">Be the first to know when we launch!</p>
-              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3">
-                <Input
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="flex-1 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60 backdrop-blur-sm focus:bg-white/20 focus:border-blue-400"
-                  required
-                />
+              <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row">
                 <Button
                   type="submit"
                   size="lg"
-                  className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+                  className="h-16 w-full px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0 text-xl"
                 >
                   Join Waitlist
                 </Button>

@@ -14,7 +14,7 @@ export const HeroSection = () => {
     if (email) {
       toast({
         title: "Thanks for your interest!",
-        description: "We'll notify you when ExperienceMaster launches.",
+        description: "We'll notify you when Drifto launches.",
       });
       setEmail("");
     }
@@ -39,8 +39,8 @@ export const HeroSection = () => {
           {/* Logo */}
           <div className="flex justify-center mb-8">
             <img 
-              src="/lovable-uploads/4e7832c6-9bf6-46ce-9a6b-6b8bc042a2d8.png" 
-              alt="ExperienceMaster Logo" 
+              src="/lovable-uploads/487328b0-0083-4230-ba48-4bb6c02d4672.png" 
+              alt="Drifto Logo" 
               className="w-24 h-24 object-contain"
             />
           </div>

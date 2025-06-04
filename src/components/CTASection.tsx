@@ -14,7 +14,7 @@ export const CTASection = () => {
     if (email) {
       toast({
         title: "You're on the list!",
-        description: "We'll send you updates about ExperienceMaster's launch.",
+        description: "We'll send you updates about Drifto's launch.",
       });
       setEmail("");
     }
@@ -37,7 +37,7 @@ export const CTASection = () => {
             </span>
           </h2>
           <p className="text-xl text-white/80 mb-8 leading-relaxed">
-            Join thousands of experience enthusiasts waiting for the launch of ExperienceMaster. 
+            Join thousands of experience enthusiasts waiting for the launch of Drifto. 
             Be among the first to experience the future of experience booking.
           </p>
         </div>

@@ -48,7 +48,7 @@ export const FeaturesSection = () => {
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-black mb-6">
             Why Choose
             <span className="bg-gradient-to-r from-blue-600 to-blue-700 bg-clip-text text-transparent">
-              {" "}ExperienceMaster?
+              {" "}Drifto?
             </span>
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">

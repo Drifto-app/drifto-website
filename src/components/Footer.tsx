@@ -10,11 +10,11 @@ export const Footer = () => {
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
               <img 
-                src="/lovable-uploads/4e7832c6-9bf6-46ce-9a6b-6b8bc042a2d8.png" 
-                alt="ExperienceMaster Logo" 
+                src="/lovable-uploads/487328b0-0083-4230-ba48-4bb6c02d4672.png" 
+                alt="Drifto Logo" 
                 className="w-10 h-10 object-contain mr-3"
               />
-              <h3 className="text-2xl font-bold">ExperienceMaster</h3>
+              <h3 className="text-2xl font-bold">Drifto</h3>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               The ultimate mobile platform for discovering, booking, and managing experiences. 
@@ -60,12 +60,12 @@ export const Footer = () => {
         {/* Bottom section */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            © 2024 ExperienceMaster. All rights reserved.
+            © 2024 Drifto. All rights reserved.
           </p>
           <div className="flex items-center space-x-6 mt-4 md:mt-0">
             <div className="flex items-center text-gray-400 text-sm">
               <Mail className="w-4 h-4 mr-2" />
-              hello@experiencemaster.app
+              hello@drifto.app
             </div>
             <div className="flex items-center text-gray-400 text-sm">
               <MapPin className="w-4 h-4 mr-2" />

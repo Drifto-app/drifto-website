@@ -13,9 +13,8 @@ export const Footer = () => {
               <img 
                 src="/lovable-uploads/drifto-logo-white.svg"
                 alt="Drifto Logo" 
-                className="w-10 h-10 object-contain mr-3"
+                className="max-w-28 h-10 object-contain mr-3"
               />
-              <h3 className="text-2xl font-bold font-poppins">Drifto</h3>
             </div>
             <p className="text-gray-400 mb-6 max-w-md">
               The ultimate mobile platform for discovering, booking, and managing experiences. 
@@ -24,13 +23,13 @@ export const Footer = () => {
             <div className="flex space-x-4">
               {/* Social media placeholder */}
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold"><a href="https://www.google.com" target="_blank"><FaInstagram /></a></span>
+                <span className="text-sm font-bold"><a href="#" target="_blank"><FaInstagram /></a></span>
               </div>
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold"><a href="https://www.google.com" target="_blank"><FaXTwitter /></a></span>
+                <span className="text-sm font-bold"><a href="#" target="_blank"><FaXTwitter /></a></span>
               </div>
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold"><a href="https://www.google.com" target="_blank"><FaLinkedin /></a></span>
+                <span className="text-sm font-bold"><a href="https://www.linkedin.com/company/drifto-app/" target="_blank"><FaLinkedin /></a></span>
               </div>
             </div>
           </div>
@@ -41,7 +40,7 @@ export const Footer = () => {
             <ul className="space-y-2 text-gray-400">
               <li><a href="#" className="hover:text-white transition-colors">Features</a></li>
               {/*<li><a href="#" className="hover:text-white transition-colors">Pricing</a></li>*/}
-              <li><a href="#" className="hover:text-white transition-colors">Security</a></li>
+              {/*<li><a href="#" className="hover:text-white transition-colors">Security</a></li>*/}
               <li><a href="#" className="hover:text-white transition-colors">Roadmap</a></li>
             </ul>
           </div>
@@ -51,9 +50,9 @@ export const Footer = () => {
             <h4 className="text-lg font-semibold mb-4">Support</h4>
             <ul className="space-y-2 text-gray-400">
               {/*<li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>*/}
-              <li><a href="#" className="hover:text-white transition-colors">Contact Us</a></li>
+              <li><a href="mailto:driftoapp@gmail.com" className="hover:text-white transition-colors">Contact Us</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
+              {/*<li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>*/}
             </ul>
           </div>
         </div>
@@ -61,7 +60,7 @@ export const Footer = () => {
         {/* Bottom section */}
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            © 2024 Drifto. All rights reserved.
+            © 2024 Drifto Limited. All rights reserved.
           </p>
           <div className="flex items-center space-x-6 mt-4 md:mt-0">
             <div className="flex items-center text-gray-400 text-sm">

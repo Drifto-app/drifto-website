@@ -12,7 +12,7 @@ export const CTASection = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Redirect to Google Form
-    window.open('https://forms.google.com/your-form-url', '_blank');
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScuRBvlaoMWh08pZoOflVtiNPknmDKFD3ISkfYKk6JIPa-O3w/viewform?usp=sharing&ouid=111268504502329986988', '_blank');
   };
 
   return (

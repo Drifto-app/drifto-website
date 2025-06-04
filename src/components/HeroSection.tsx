@@ -12,7 +12,7 @@ export const HeroSection = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // Redirect to Google Form
-    window.open('https://forms.google.com/your-form-url', '_blank');
+    window.open('https://docs.google.com/forms/d/e/1FAIpQLScuRBvlaoMWh08pZoOflVtiNPknmDKFD3ISkfYKk6JIPa-O3w/viewform?usp=sharing&ouid=111268504502329986988', '_blank');
   };
 
   return (
@@ -20,22 +20,19 @@ export const HeroSection = () => {
       {/* Header */}
       <div className="relative z-10 flex justify-between items-center w-full px-4 sm:px-6 lg:px-8 py-6">
         {/* Logo on top left */}
-        <div className="flex items-center flex-row gap-5">
+        <div className="flex items-center">
           <img
             src="/lovable-uploads/drifto-logo-white.svg"
             alt="Drifto Logo"
-            className="w-12 object-contain text-white"
+            className="w-28 md:w-40 object-contain text-white"
           />
-          <div className="text-white text-3xl font-poppins font-bold">
-            Drifto
-          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row">
           <Button
               type="submit"
               size="lg"
-              className="h-16 w-full px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0 text-lg"
+              className="h-10 sm:h-16 w-36 sm:w-full px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0 text-lg"
           >
             Join Waitlist
           </Button>

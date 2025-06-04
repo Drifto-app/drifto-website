@@ -14,31 +14,31 @@ export const CTASection = () => {
     if (email) {
       toast({
         title: "You're on the list!",
-        description: "We'll send you updates about EventMaster's launch.",
+        description: "We'll send you updates about ExperienceMaster's launch.",
       });
       setEmail("");
     }
   };
 
   return (
-    <section className="py-20 bg-gradient-to-br from-purple-600 via-blue-600 to-indigo-800 relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-br from-black via-gray-900 to-black relative overflow-hidden">
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-white opacity-5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-pink-300 opacity-10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500 opacity-10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-400 opacity-15 rounded-full blur-3xl"></div>
       </div>
 
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="mb-8">
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">
             Ready to Transform Your
-            <span className="bg-gradient-to-r from-yellow-400 to-pink-400 bg-clip-text text-transparent">
-              {" "}Event Experience?
+            <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+              {" "}Experience Journey?
             </span>
           </h2>
           <p className="text-xl text-white/80 mb-8 leading-relaxed">
-            Join thousands of event enthusiasts waiting for the launch of EventMaster. 
-            Be among the first to experience the future of event booking.
+            Join thousands of experience enthusiasts waiting for the launch of ExperienceMaster. 
+            Be among the first to experience the future of experience booking.
           </p>
         </div>
 
@@ -53,7 +53,7 @@ export const CTASection = () => {
             {
               icon: Calendar,
               title: "Special Offers",
-              description: "Receive launch discounts and promotional event tickets"
+              description: "Receive launch discounts and promotional experience tickets"
             },
             {
               icon: Clock,
@@ -79,13 +79,13 @@ export const CTASection = () => {
               placeholder="Enter your email for updates"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="flex-1 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60 backdrop-blur-sm focus:bg-white/20 focus:border-white/40"
+              className="flex-1 h-12 bg-white/10 border-white/20 text-white placeholder:text-white/60 backdrop-blur-sm focus:bg-white/20 focus:border-blue-400"
               required
             />
             <Button
               type="submit"
               size="lg"
-              className="h-12 px-8 bg-gradient-to-r from-yellow-400 to-pink-500 hover:from-yellow-500 hover:to-pink-600 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
+              className="h-12 px-8 bg-blue-600 hover:bg-blue-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 border-0"
             >
               Join Waitlist
             </Button>

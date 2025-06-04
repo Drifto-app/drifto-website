@@ -23,10 +23,10 @@ export const Footer = () => {
             <div className="flex space-x-4">
               {/* Social media placeholder */}
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold"><a href="#" target="_blank"><FaInstagram /></a></span>
+                <span className="text-sm font-bold"><a href="https://www.instagram.com/driftoapp?igsh=c2lreHQwN3p3ZGN4" target="_blank"><FaInstagram /></a></span>
               </div>
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
-                <span className="text-sm font-bold"><a href="#" target="_blank"><FaXTwitter /></a></span>
+                <span className="text-sm font-bold"><a href="https://x.com/driftoapp?t=NYOQveTcIrra-wlmTPeNBA&s=08" target="_blank"><FaXTwitter /></a></span>
               </div>
               <div className="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-gray-700 transition-colors cursor-pointer">
                 <span className="text-sm font-bold"><a href="https://www.linkedin.com/company/drifto-app/" target="_blank"><FaLinkedin /></a></span>

@@ -66,7 +66,7 @@ export const HeroSection = () => {
             {/* Subheading */}
             <p className="text-xl sm:text-2xl text-white/80 mb-8 max-w-3xl mx-auto leading-relaxed">
               The ultimate platform for discovering, booking, and managing experiences.
-              From concerts to conferences, make every moment count.
+              From local meetups to major conferences, make every moment count.
             </p>
 
             {/* Features badges */}

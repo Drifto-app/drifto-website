@@ -1,5 +1,5 @@
 import * as React from "react";
-import {cn} from "@/lib/utils";
+import {cn, passwordRegex} from "@/lib/utils";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -8,29 +8,44 @@ import {toast} from "react-toastify";
 import {api} from "@/components/axios";
 import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
-import {useEffect, useState} from "react";
+import {useEffect, useRef, useState} from "react";
 import {GoogleLogin} from "@react-oauth/google";
 import {useAuthStore} from "@/store/auth-store";
 import {useRouter} from "next/navigation";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Calendar28} from "@/components/ui/date-input";
+import {Autocomplete, useLoadScript} from "@react-google-maps/api";
 
 interface SignUpFormProps extends React.ComponentProps<"form"> {
+    setIsSignUp: (value: boolean) => void;
 }
 
 export const SignUpForm = ({
+    setIsSignUp,
     className,
     ...props
 }: SignUpFormProps) => {
-    const { googleLogin } = useAuthStore();
+    const { googleLogin,  setUser, setTokens } = useAuthStore();
     const router = useRouter();
 
     const [isLoading, setLoading] = React.useState<boolean>(false);
     const [emailOtp, setEmailOtp] = React.useState<boolean>(false);
-    const [isRegister, setIsRegister] = React.useState<boolean>(true);
+    const [isRegister, setIsRegister] = React.useState<boolean>(false);
     const [otpValue, setOtpValue] = React.useState<string>("");
     const [isResendVisible, setIsResendVisible] = useState(false);
     const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false)
+    const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
+    const [isCheckingUsername, setCheckingUsername] = useState(false);
+    const [isUsernameValid, setUsernameValid] = useState<boolean|null>(null);
+    const [usernameError, setUsernameError] = useState<string>("");
+
+    const { isLoaded, loadError } = useLoadScript({
+        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+        libraries: ["places"],
+        language: "en-US",
+        region: "ng",
+        // optional: you can set region: 'ng' or language: 'en'
+    });
 
     const [email, setEmail] = React.useState<string>("");
     const [username, setUsername] = React.useState<string>("");
@@ -40,8 +55,14 @@ export const SignUpForm = ({
     const [dob, setDob] = React.useState<Date>(new Date(Date.now()));
     const [city, setCity] = React.useState<string>("");
     const [isAgreed, setIsAgreed] = React.useState<boolean>(false);
+    const [profilePic, setProfilePic] = useState<File | null>(null);
 
-    const delay: number = 5000
+    const delay: number = 30000
+
+    const usernameDebounce = useRef<NodeJS.Timeout|null>(null);
+
+    const isPasswordValid = password != null && password != "" && passwordRegex.test(password);
+    const showPasswordRequirementsMessage = password && !isPasswordValid;
 
     useEffect(() => {
         if (!emailOtp || isResendVisible) return;
@@ -63,6 +84,70 @@ export const SignUpForm = ({
         }
     }, [otpValue, emailOtp]);
 
+    useEffect(() => {
+        setUsernameValid(null);
+        setUsernameError("");
+        if (usernameDebounce.current) clearTimeout(usernameDebounce.current);
+
+        // only check once they’ve typed at least 3 chars
+        if (username.trim().length < 3) {
+            setUsernameError("Username must be at least 3 characters");
+            return;
+        }
+
+        usernameDebounce.current = setTimeout(async () => {
+            try {
+                setCheckingUsername(true);
+                const { data } = await api.get(
+                    `/auth/username/${username}/validate`,
+                );
+                setCheckingUsername(false);
+
+                if (!data.data) {
+                    setUsernameValid(true);
+                } else {
+                    setUsernameValid(false);
+                    setUsernameError("Username is not available");
+                }
+            } catch (err: any) {
+                setCheckingUsername(false);
+                setUsernameValid(false);
+                setUsernameError("Unable to validate username");
+            }
+        }, 500);
+
+        return () => {
+            if (usernameDebounce.current) clearTimeout(usernameDebounce.current);
+        };
+    }, [username]);
+
+    if (loadError) {
+        return <p>Failed to load maps script</p>;
+    }
+    if (!isLoaded) {
+        return <LoaderSmall className="absolute right-2 top-2" />
+    }
+
+    const autocompleteOptions = {
+        types: ['(cities)'],
+        componentRestrictions: {
+            country: 'ng'
+        },
+        // strictBounds: false,
+    };
+
+
+    const onPlaceChanged = () => {
+        if (!autocomplete) return;
+        const place = autocomplete.getPlace();
+        const cityComponent = place.address_components?.find(c =>
+            c.types.includes("locality")
+        ) || place.address_components?.find(c =>
+            c.types.includes("administrative_area_level_1")
+        );
+        setCity(cityComponent?.long_name || place.formatted_address || "");
+    };
+
     const handleResendOtp = async () => {
         setLoading(true);
         setIsResendVisible(false);
@@ -74,7 +159,7 @@ export const SignUpForm = ({
 
             setLoading(false);
             toast.success(response.data.message);
-        }catch (err) {
+        }catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Email Request Failed');
         }
@@ -96,7 +181,7 @@ export const SignUpForm = ({
             setLoading(false);
             toast.success(response.data.message);
             setEmailOtp(true);
-        }catch (err) {
+        }catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Email Request Failed');
         }
@@ -115,7 +200,7 @@ export const SignUpForm = ({
             setEmailOtp(false);
             setOtpValue("");
             setIsRegister(true)
-        }catch (err) {
+        }catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Email Request Failed');
             setOtpValue("");
@@ -125,6 +210,70 @@ export const SignUpForm = ({
     const handleOtpVerify = async (e: React.FormEvent) => {
         e.preventDefault();
         await submitOtp();
+    }
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setProfilePic(e.target.files?.[0] || null);
+    };
+
+    const handleRegisterSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!isPasswordValid) {
+            toast.error('Password does not meet requirements');
+            return;
+        }
+
+        if (!isUsernameValid) {
+            toast.error(usernameError || "Please fix your username first");
+            return;
+        }
+
+
+        if(!firstName || !lastName || !password || !username || !dob || !city || !isAgreed) {
+            toast.error("Complete all filed")
+            return;
+        }
+
+        setLoading(true);
+
+        const requestBody = {
+            email, firstName, lastName, dob, password, username, city, agreed: isAgreed
+        }
+
+        const formData = new FormData();
+        formData.append(
+            'userData',
+            new Blob([JSON.stringify(requestBody)], { type: 'application/json' })
+        );
+
+        if (profilePic) {
+            formData.append('profileImage', profilePic, profilePic.name);
+        }
+
+
+        try {
+            const {data} = await api.post('/auth/register', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+
+            setLoading(false);
+            toast.success(data.message);
+            setIsSignUp(false)
+
+            setTokens(
+                data.data.accessToken,
+                data.data.refreshToken,
+            )
+
+            setUser(data.data.user)
+
+            router.push("/")
+        } catch (err: any) {
+            setLoading(false);
+            toast.error(err.response?.data?.description || 'Email Request Failed');
+            setOtpValue("");
+        }
     }
 
     if (emailOtp) {
@@ -188,14 +337,14 @@ export const SignUpForm = ({
 
     if(isRegister) {
         return (
-            <form className={cn("flex flex-col gap-6", className)} onSubmit={handleOtpVerify} {...props}>
+            <form className={cn("flex flex-col gap-6", className)} onSubmit={handleRegisterSubmit} {...props}>
                 <div className="flex flex-col gap-2">
                     <h1 className="text-3xl font-extrabold">Create Account</h1>
                     <p className="text-muted-foreground text-base text-balance">
-                        Create an accoount with your info.
+                        Create an account with your info.
                     </p>
                 </div>
-                <div className="grid gap-6">
+                <div className="grid gap-5">
                     <div className="grid gap-2">
                         <Label htmlFor="principal">Email</Label>
                         <Input
@@ -232,14 +381,26 @@ export const SignUpForm = ({
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="username">Username</Label>
-                        <Input
-                            id="username"
-                            type="text"
-                            placeholder="Username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                        />
+                        <div className="relative flex flex-row gap-2">
+                            <Input
+                                id="username"
+                                type="text"
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
+                                required
+                                className={cn(
+                                    "w-full pr-10",
+                                    isUsernameValid === false && "border-red-500",
+                                    isUsernameValid === true && "border-green-500"
+                                )}
+                            />
+                            {isCheckingUsername && (
+                                <LoaderSmall className="absolute right-2 top-2" />
+                            )}
+                        </div>
+                        {usernameError && (
+                            <p className="text-sm text-red-600">{usernameError}</p>
+                        )}
                     </div>
                     <div className="grid gap-2">
                         <Label htmlFor="password">Password</Label>
@@ -251,25 +412,37 @@ export const SignUpForm = ({
                                 placeholder="Password"
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full border-none"/>
+                                className="w-full border-none shadow-none"/>
                             <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                                 {isPasswordShow
                                     ?<FaEyeSlash />
                                     : <FaEye />}
                             </div>
                         </div>
+                        {showPasswordRequirementsMessage && (
+                            <p className="text-red-600 text-sm">
+                                Password must be at least 8 characters long and include uppercase, lowercase, number, and special character
+                            </p>
+                        )}
                     </div>
-                    <Calendar28 date={dob} setDate={setDob} />
+                    <Calendar28 date={dob} setDate={setDob} required={true} label="Date of Birth" />
                     <div className="grid gap-2">
-                        <Label htmlFor="username">City</Label>
-                        <Input
-                            id="city"
-                            type="text"
-                            placeholder="City"
-                            value={city}
-                            onChange={(e) => setCity(e.target.value)}
-                            required
-                        />
+                        <Label htmlFor="city">City</Label>
+                        <Autocomplete
+                            onLoad={inst => setAutocomplete(inst)}
+                            onPlaceChanged={onPlaceChanged}
+                            options={autocompleteOptions}
+                        >
+                            <Input
+                                id="city"
+                                type="text"
+                                placeholder="Start typing your city"
+                                value={city}
+                                onChange={e => setCity(e.target.value)}
+                                required
+                                className="w-full"
+                            />
+                        </Autocomplete>
                     </div>
                     <div className="w-full flex flex-row items-center gap-2">
                         <input
@@ -287,6 +460,30 @@ export const SignUpForm = ({
                             </a>
                         </label>
                     </div>
+                    <div className="grid gap-2">
+                        <Label htmlFor="profilepic">Profile Picture</Label>
+                        <Input
+                            id="profilePic"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            required
+                        />
+                    </div>
+                    <Button
+                        type="submit"
+                        size="lg"
+                        className="w-full"
+                        disabled={isLoading}
+                    >
+                        {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                    </Button>
+                </div>
+                <div className="text-center text-sm flex flex-row justify-center gap-2">
+                    Already have an account?{" "}
+                    <p onClick={() => setIsSignUp(false)} className="hover:underline cursor-pointer">
+                        Login
+                    </p>
                 </div>
             </form>
         )
@@ -332,7 +529,7 @@ export const SignUpForm = ({
                             await googleLogin(idToken!);
 
                             router.push("/");
-                        } catch (err) {
+                        } catch (err: any) {
                             toast.error(err.response?.data?.description || 'Google Auth failed');
                         }
                     }}

@@ -16,6 +16,8 @@ import {cn} from "@/lib/utils";
 interface LoginFormProps extends React.ComponentProps<"div"> {
     date: Date | undefined;
     setDate: (value: Date) => void;
+    required: boolean;
+    label: string;
 }
 
 function formatDate(date: Date | undefined) {
@@ -38,7 +40,7 @@ function isValidDate(date: Date | undefined) {
 }
 
 export const Calendar28 = ({
-    date, setDate, className, ...props
+   label, date, setDate, className, required, ...props
 }: LoginFormProps) => {
     const [open, setOpen] = React.useState(false)
     // const [date, setDate] = React.useState<Date | undefined>(
@@ -50,14 +52,15 @@ export const Calendar28 = ({
 
     return (
         <div className={cn("flex flex-col gap-3", className)} {...props}>
-            <Label htmlFor="date" className="px-1">
-                Subscription Date
+            <Label htmlFor="date" className="px-1 capitalize">
+                {label}
             </Label>
             <div className="relative flex gap-2 border-solid border-1 rounded-sm border-neutral-200">
                 <Input
                     id="date"
                     value={value}
                     placeholder="June 01, 2025"
+                    required={required}
                     className="bg-background pr-10 border-none shadow-none"
                     onChange={(e) => {
                         const date = new Date(e.target.value)

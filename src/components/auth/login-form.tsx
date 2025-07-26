@@ -6,14 +6,13 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import {useState} from "react";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
-import {FcGoogle} from "react-icons/fc";
 import {useAuthStore} from "@/store/auth-store";
 import {useRouter} from "next/navigation";
 import {LoaderSmall} from "@/components/ui/loader";
 import {toast} from "react-toastify";
 import * as React from "react";
-import {emailRegex} from "@/app/login/page";
-import {GoogleLogin, useGoogleLogin} from "@react-oauth/google";
+import {emailRegex} from "@/lib/utils";
+import {GoogleLogin} from "@react-oauth/google";
 
 interface LoginFormProps extends React.ComponentProps<"form"> {
   setLoginPrincipal: (value: string) => void;
@@ -57,7 +56,7 @@ export function LoginForm({
       }
 
       router.push('/');
-    } catch (err) {
+    } catch (err: any) {
       setError(err.response?.data?.description || 'Login failed');
       toast.error(err.response?.data?.description || 'Login failed');
     }
@@ -100,7 +99,7 @@ export function LoginForm({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="w-full border-none"/>
+                  className="w-full border-none shadow-none"/>
               <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                 {isPasswordShow
                     ?<FaEyeSlash />
@@ -143,7 +142,7 @@ export function LoginForm({
         </div>
         <div className="text-center text-sm flex flex-row justify-center gap-2">
           Don&apos;t have an account?{" "}
-          <p onClick={() => setIsSignUp(true)} className="hover:underline">
+          <p onClick={() => setIsSignUp(true)} className="hover:underline cursor-pointer">
             Sign up
           </p>
         </div>

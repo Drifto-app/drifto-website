@@ -1,18 +1,17 @@
 'use strict'
 
 import * as React from "react";
-import {cn} from "@/lib/utils";
+import {cn, passwordRegex} from "@/lib/utils";
 import {toast} from "react-toastify";
 import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {emailRegex} from "@/app/login/page";
+import {emailRegex} from "@/lib/utils";
 import {api} from "@/components/axios";
 import {LoaderSmall} from "@/components/ui/loader";
 import {
     InputOTP,
     InputOTPGroup,
-    InputOTPSeparator,
     InputOTPSlot,
 } from "@/components/ui/input-otp"
 import {REGEXP_ONLY_DIGITS} from "input-otp";
@@ -23,9 +22,6 @@ interface ForgotPasswordProps extends React.ComponentProps<"form"> {
     loginPrincipal: string;
     setForgotPassword: (val: boolean) => void;
 }
-
-const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E])[A-Za-z\d\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]{8,}$/;
-
 
 export const ForgotPassword = ({
     loginPrincipal,
@@ -79,20 +75,21 @@ export const ForgotPassword = ({
         setLoading(true);
 
         try {
+            let response = null;
             if(emailRegex.test(principal)) {
-                await api.post("/auth/forgotPassword", {
+                response = await api.post("/auth/forgotPassword", {
                     email: principal,
                 });
             }else {
-                const response = await api.post("/auth/forgotPassword", {
+                response = await api.post("/auth/forgotPassword", {
                     username: principal,
                 });
-
-                setLoading(false);
-                toast.success(response.data.message);
-                setIsVerifyForgotPassword(true);
             }
-        } catch (err) {
+
+            setLoading(false);
+            toast.success(response.data.message);
+            setIsVerifyForgotPassword(true);
+        } catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Request failed');
         }
@@ -103,19 +100,20 @@ export const ForgotPassword = ({
         setLoading(true);
 
         try {
+            let response = null
             if(emailRegex.test(principal)) {
-                await api.post("/auth/forgotPassword", {
+                response = await api.post("/auth/forgotPassword", {
                     email: principal,
                 });
             }else {
-                const response = await api.post("/auth/forgotPassword", {
+               response = await api.post("/auth/forgotPassword", {
                     username: principal,
                 });
-
-                setLoading(false);
-                toast.success(response.data.message);
             }
-        } catch (err) {
+
+            setLoading(false);
+            toast.success(response.data.message);
+        } catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Request failed');
         }
@@ -147,7 +145,7 @@ export const ForgotPassword = ({
             setIsVerifyForgotPassword(false);
             setIsResetPassword(true);
             setOtpValue("");
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Request failed');
             setOtpValue("");
@@ -190,7 +188,7 @@ export const ForgotPassword = ({
             setPassword("")
             setConfirmPassword("")
             setForgotPassword(false);
-        } catch (err) {
+        } catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Reset failed');
         }
@@ -273,7 +271,7 @@ export const ForgotPassword = ({
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="w-full border-none"/>
+                            className="w-full border-none shadow-none"/>
                         <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                             {isPasswordShow
                                 ?<FaEyeSlash />
@@ -288,7 +286,7 @@ export const ForgotPassword = ({
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
-                            className="w-full border-none"/>
+                            className="w-full border-none shadow-none"/>
                         <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                             {isPasswordShow
                                 ?<FaEyeSlash />

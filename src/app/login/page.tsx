@@ -8,8 +8,6 @@ import Image from "next/image";
 import {ForgotPassword} from "@/components/auth/forgot-password";
 import { SignUpForm } from "@/components/auth/sign-up";
 
-export const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 export default function LoginPage() {
     const { isAuthenticated } = useAuthStore();
     const router = useRouter();
@@ -80,7 +78,15 @@ export default function LoginPage() {
                 <div className="flex flex-col gap-4 p-6 md:p-10">
                     <div className="flex flex-1 items-center justify-center">
                         <div className="w-full max-w-sm flex flex-col gap-12">
-                            <SignUpForm />
+                            <div className="relative w-12 h-12">
+                                <Image
+                                    src="/logo.png"
+                                    alt="Logo Extend"
+                                    fill
+                                    className="object-contain"
+                                />
+                            </div>
+                            <SignUpForm setIsSignUp={setIsSignUp} />
                         </div>
                     </div>
                 </div>

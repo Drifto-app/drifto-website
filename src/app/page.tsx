@@ -1,99 +1,126 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client"
+
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
+import {BottomNavbar} from "@/components/nav-mobile/bottom-navbar";
+import {useEffect, useRef, useState} from "react";
+import {HeaderMobile} from "@/components/header-mobile/header-mobile";
+import {EventDisplay} from "@/components/event-display/event-display";
+
+interface EventDisplayRef {
+    refresh: () => void;
+}
 
 export default function Home() {
-  return (
-   <ProtectedRoute>
-     <div className={styles.page}>
-       <main className={styles.main}>
-         <Image
-             className={styles.logo}
-             src="/next.svg"
-             alt="Next.js logo"
-             width={180}
-             height={38}
-             priority
-         />
-         <ol>
-           <li>
-             Get started by editing <code>src/app/page.tsx</code>.
-           </li>
-           <li>Save and see your changes instantly.</li>
-         </ol>
+    const [activeScreen, setActiveScreen] = useState<string>("events");
+    const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [location, setLocation] = useState<string | null>("lagos");
+    const eventDisplayRef = useRef<EventDisplayRef>(null);
 
-         <div className={styles.ctas}>
-           <a
-               className={styles.primary}
-               href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-               target="_blank"
-               rel="noopener noreferrer"
-           >
-             <Image
-                 className={styles.logo}
-                 src="/vercel.svg"
-                 alt="Vercel logomark"
-                 width={20}
-                 height={20}
-             />
-             Deploy now
-           </a>
-           <a
-               href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-               target="_blank"
-               rel="noopener noreferrer"
-               className={styles.secondary}
-           >
-             Read our docs
-           </a>
-           <button className="text-red-300 bg-blue-200">Click</button>
-         </div>
-       </main>
-       <footer className={styles.footer}>
-         <a
-             href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-             target="_blank"
-             rel="noopener noreferrer"
-         >
-           <Image
-               aria-hidden
-               src="/file.svg"
-               alt="File icon"
-               width={16}
-               height={16}
-           />
-           Learn
-         </a>
-         <a
-             href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-             target="_blank"
-             rel="noopener noreferrer"
-         >
-           <Image
-               aria-hidden
-               src="/window.svg"
-               alt="Window icon"
-               width={16}
-               height={16}
-           />
-           Examples
-         </a>
-         <a
-             href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-             target="_blank"
-             rel="noopener noreferrer"
-         >
-           <Image
-               aria-hidden
-               src="/globe.svg"
-               alt="Globe icon"
-               width={16}
-               height={16}
-           />
-           Go to nextjs.org →
-         </a>
-       </footer>
-     </div>
-   </ProtectedRoute>
-  );
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener("resize", handleResize);
+        return () => window.removeEventListener("resize", handleResize);
+    }, []);
+
+    // Function to handle events refresh
+    const handleEventsRefresh = () => {
+        if (eventDisplayRef.current) {
+            eventDisplayRef.current.refresh();
+        }
+    };
+
+    if(activeScreen === "plans") {
+        return (
+            <ProtectedRoute>
+                {isMobile && <div className="w-full">
+                    <div className="w-full">
+                        <div>plans</div>
+                    </div>
+                    <BottomNavbar
+                        activeScreen={activeScreen}
+                        setActiveScreen={setActiveScreen}
+                        onEventsRefresh={handleEventsRefresh}
+                    />
+                </div>}
+            </ProtectedRoute>
+        )
+    }
+
+    if(activeScreen === "posts") {
+        return (
+            <ProtectedRoute>
+                {isMobile && <div className="w-full">
+                    <div className="w-full">
+                        <div>posts</div>
+                    </div>
+                    <BottomNavbar
+                        activeScreen={activeScreen}
+                        setActiveScreen={setActiveScreen}
+                        onEventsRefresh={handleEventsRefresh}
+                    />
+                </div>}
+            </ProtectedRoute>
+        )
+    }
+
+    if(activeScreen === "update") {
+        return (
+            <ProtectedRoute>
+                {isMobile && <div className="w-full">
+                    <div className="w-full">
+                        <div>update</div>
+                    </div>
+                    <BottomNavbar
+                        activeScreen={activeScreen}
+                        setActiveScreen={setActiveScreen}
+                        onEventsRefresh={handleEventsRefresh}
+                    />
+                </div>}
+            </ProtectedRoute>
+        )
+    }
+
+    if(activeScreen === "profile") {
+        return (
+            <ProtectedRoute>
+                {isMobile && <div className="w-full">
+                    <div className="w-full">
+                        <div>profile</div>
+                    </div>
+                    <BottomNavbar
+                        activeScreen={activeScreen}
+                        setActiveScreen={setActiveScreen}
+                        onEventsRefresh={handleEventsRefresh}
+                    />
+                </div>}
+            </ProtectedRoute>
+        )
+    }
+
+    return (
+        <ProtectedRoute>
+            {isMobile && <div className="w-full">
+                <div className="w-full">
+                    <HeaderMobile
+                        location={location}
+                        setLocation={setLocation}
+                        activeScreen={activeScreen}
+                    />
+                    <EventDisplay
+                        ref={eventDisplayRef}
+                        location={location}
+                    />
+                </div>
+                <BottomNavbar
+                    activeScreen={activeScreen}
+                    setActiveScreen={setActiveScreen}
+                    onEventsRefresh={handleEventsRefresh}
+                />
+            </div>}
+        </ProtectedRoute>
+    );
 }

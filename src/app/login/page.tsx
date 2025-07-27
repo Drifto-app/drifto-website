@@ -51,7 +51,7 @@ export default function LoginPage() {
                             <div className="relative w-12 h-12">
                                 <Image
                                     src="/logo.png"
-                                    alt="Logo Extend"
+                                    alt="Logo"
                                     fill
                                     className="object-contain"
                                 />
@@ -81,7 +81,7 @@ export default function LoginPage() {
                             <div className="relative w-12 h-12">
                                 <Image
                                     src="/logo.png"
-                                    alt="Logo Extend"
+                                    alt="Logo"
                                     fill
                                     className="object-contain"
                                 />

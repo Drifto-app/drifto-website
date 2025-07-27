@@ -5,7 +5,7 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {LoaderSmall} from "@/components/ui/loader";
 import {toast} from "react-toastify";
-import {api} from "@/components/axios";
+import {api} from "@/lib/axios";
 import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp";
 import {REGEXP_ONLY_DIGITS} from "input-otp";
 import {useEffect, useRef, useState} from "react";

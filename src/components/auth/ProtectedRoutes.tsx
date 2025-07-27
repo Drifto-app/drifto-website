@@ -11,18 +11,20 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, redirectTo = '/login' }: ProtectedRouteProps) {
-    const { isAuthenticated, isLoading } = useAuthStore();
+    const { isAuthenticated, isLoading, hasTriedRefresh } = useAuthStore();
     const router = useRouter();
 
     useEffect(() => {
-        if (!isLoading && !isAuthenticated) {
+        if (hasTriedRefresh && !isLoading && !isAuthenticated) {
             router.push(redirectTo);
         }
-    }, [isAuthenticated, isLoading, router, redirectTo]);
+    }, [isAuthenticated, isLoading, router, redirectTo, hasTriedRefresh]);
 
     if (isLoading) {
         return (
-            <Loader className="h-8 w-8"/>
+           <div className="w-full h-screen flex flex-col items-center justify-center">
+               <Loader className="h-10 w-10"/>
+           </div>
         );
     }
 

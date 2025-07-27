@@ -1,6 +1,6 @@
 import {persist} from "zustand/middleware";
 import {create} from "zustand";
-import {api} from "@/components/axios";
+import {api} from "@/lib/axios";
 
 interface AuthState {
     user: {[key: string]: any} | null;
@@ -8,6 +8,7 @@ interface AuthState {
     refreshToken: string | null;
     isAuthenticated: boolean;
     isLoading: boolean;
+    hasTriedRefresh: boolean;
 }
 
  export interface LoginCredentials {
@@ -43,6 +44,7 @@ export const useAuthStore = create<AuthStore>()(
             refreshToken: null,
             isAuthenticated: false,
             isLoading: false,
+            hasTriedRefresh: false,
 
             login: async (credentials: LoginCredentials) => {
                 try{
@@ -119,12 +121,15 @@ export const useAuthStore = create<AuthStore>()(
 
                     set({
                         accessToken: response.data.data.accessToken,
-                        user: response.data.user,
+                        user: response.data.data.user,
+                        isAuthenticated: true,
                     });
                     return true;
                 } catch (error) {
                     get().clearAuth();
                     return false;
+                } finally {
+                    set({ isLoading: false, hasTriedRefresh: true });
                 }
             },
 
@@ -148,10 +153,10 @@ export const useAuthStore = create<AuthStore>()(
             name: 'auth-storage',
             partialize: (state) => ({
                 user: state.user,
-                accessToken: state.accessToken,
                 refreshToken: state.refreshToken,
                 isAuthenticated: state.isAuthenticated,
                 isLoading: state.isLoading,
+                hasTriedRefresh: state.hasTriedRefresh,
             }),
         }
     )

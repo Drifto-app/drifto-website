@@ -7,7 +7,7 @@ import {Button} from "@/components/ui/button";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {emailRegex} from "@/lib/utils";
-import {api} from "@/components/axios";
+import {api} from "@/lib/axios";
 import {LoaderSmall} from "@/components/ui/loader";
 import {
     InputOTP,

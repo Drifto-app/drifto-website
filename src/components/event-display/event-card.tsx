@@ -6,6 +6,10 @@ import Image from "next/image";
 import {IoMdHeartEmpty} from "react-icons/io";
 import {FaHeart} from "react-icons/fa";
 import {IoTicket} from "react-icons/io5";
+import {useRouter} from "next/navigation";
+import {useEffect, useState} from "react";
+import {authApi} from "@/lib/axios";
+import {toast} from "react-toastify";
 
 
 interface EventCardProps extends React.ComponentProps<"div">{
@@ -13,6 +17,24 @@ interface EventCardProps extends React.ComponentProps<"div">{
 }
 
 export const EventCard = ({ event, className, ...props }: EventCardProps) => {
+    const router = useRouter();
+
+    const [price, setPrice] = useState<string>("5000");
+    const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
+    const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
+
+    useEffect(() => {
+        const newPrice: number = event.tickets.reduce((min: number, ticket: { price: number; }) => {
+            return ticket.price < min ? ticket.price : min;
+        }, Infinity);
+
+        if(newPrice === 0) {
+            setPrice("Free");
+        }else {
+            setPrice(newPrice.toString());
+        }
+    }, [price])
+
     const dt = new Date(event.startTime);
     const formatted = dt.toLocaleString("en-US", {
         weekday: "short",
@@ -23,30 +45,54 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
         hour12: true,
     });
 
+    const handleReaction = async () => {
+        setIsLikedLoading(true);
+
+        try {
+            setIsLiked(!isLiked);
+            await authApi.post(`/reaction/react`, {
+                reactionType: "EVENT",
+                eventId: event.id,
+            })
+        } catch (err: any) {
+            toast.error(err.message);
+        } finally {
+            setIsLikedLoading(false);
+        }
+    }
+
     return (
-        <div className={cn("flex flex-col border-none", className)} {...props}>
+        <div className={cn("flex flex-col border-none", className)} {...props} onClick={() => router.push(`/event/m/${event.id}`)}>
             <div className="w-full rounded-lg flex flex-col gap-1">
-                <div className="relative w-full max-h-[85vh] overflow-hidden">
+                <div className="relative w-full max-h-[75vh] overflow-hidden">
                     <Image
                         src={event.titleImage}
                         alt={event.title}
                         width={800} // Or any base width — adjust as needed
                         height={500} // Controls aspect ratio
                         className="w-full h-auto object-cover rounded-lg"
+                        style={{ maxHeight: '75vh' }}
                     />
-                    <button className="absolute top-2 right-2 text-white rounded-full bg-neutral-800 p-2 opacity-90" disabled>
-                        {event.likedByUser ? <FaHeart size={25} className="text-red-500"/>: <IoMdHeartEmpty size={25}/>}
+                    {event.original && <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">
+                        Drifto Original
+                    </div>}
+                    <button className="absolute top-3 right-2 text-white rounded-full bg-neutral-800 p-2 opacity-90 z-90" disabled onClick={handleReaction}>
+                        {isLiked ? (
+                            <FaHeart size={25} className="text-red-500" />
+                        ) : (
+                            <IoMdHeartEmpty size={25} />
+                        )}
                     </button>
                 </div>
-                <h3 className="mt-2 font-semibold text-xl">{event.title}</h3>
+                <h3 className="mt-2 font-semibold text-xl capitalize">{event.title}</h3>
                 <p className="text-sm text-gray-500 flex flex-row gap-2 items-center">
                     {formatted} at
                     <span className="capitalize font-semibold">{event.city}</span>
                     <span className="flex flex-row gap-1 items-center"><IoTicket size={15}/>{event.numberOfPurchasedTickets}</span>
                 </p>
             </div>
-            <div className="flex items-center text-xl font-bold">
-                {event.attendees}
+            <div className="flex items-center text-xl font-bold w-full justify-end mt-2 text-neutral-500">
+                {price === "Free" ? price : "₦ "+price}
             </div>
         </div>
     );

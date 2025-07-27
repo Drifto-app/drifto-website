@@ -32,10 +32,10 @@ export const HeaderMobile = ({
             {location !== null && <div className="h-full w-90 rounded-full shadow-none border-none focus:border-blue-600 focus:border-solid  placeholder:font-black placeholder:text-lg placeholder:text-black placeholder:text-center text-center font-black mb-3" onClick={handleLocationClick}>
                 {location}
             </div>}
-            <div className="w-90 h-13 flex flex-row justify-start items-center border rounded-full px-4 shadow-md" onClick={handleSearchClick}>
+            <div className="w-9/10 max-w-xl h-13 flex flex-row items-center border rounded-full px-4 shadow-md" onClick={handleSearchClick}>
                 <IoMdSearch size={20} />
                 <Input
-                    className="h-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-black"
+                    className="h-full w-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-black"
                     placeholder="Search here"
                     disabled
                 />

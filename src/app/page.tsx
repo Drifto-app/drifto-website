@@ -5,15 +5,19 @@ import {BottomNavbar} from "@/components/nav-mobile/bottom-navbar";
 import {useEffect, useRef, useState} from "react";
 import {HeaderMobile} from "@/components/header-mobile/header-mobile";
 import {EventDisplay} from "@/components/event-display/event-display";
+import {useAuthStore} from "@/store/auth-store";
+import {ScreenProvider} from "@/components/screen/screen-provider";
 
 interface EventDisplayRef {
     refresh: () => void;
 }
 
 export default function Home() {
+    const {user} = useAuthStore.getState();
+
     const [activeScreen, setActiveScreen] = useState<string>("events");
     const [isMobile, setIsMobile] = useState<boolean>(false);
-    const [location, setLocation] = useState<string | null>("lagos");
+    const [location, setLocation] = useState<string | null>(user?.city);
     const eventDisplayRef = useRef<EventDisplayRef>(null);
 
     useEffect(() => {
@@ -36,16 +40,18 @@ export default function Home() {
     if(activeScreen === "plans") {
         return (
             <ProtectedRoute>
-                {isMobile && <div className="w-full">
+                <ScreenProvider>
                     <div className="w-full">
-                        <div>plans</div>
+                        <div className="w-full">
+                            <div>plans</div>
+                        </div>
+                        <BottomNavbar
+                            activeScreen={activeScreen}
+                            setActiveScreen={setActiveScreen}
+                            onEventsRefresh={handleEventsRefresh}
+                        />
                     </div>
-                    <BottomNavbar
-                        activeScreen={activeScreen}
-                        setActiveScreen={setActiveScreen}
-                        onEventsRefresh={handleEventsRefresh}
-                    />
-                </div>}
+                </ScreenProvider>
             </ProtectedRoute>
         )
     }
@@ -53,16 +59,18 @@ export default function Home() {
     if(activeScreen === "posts") {
         return (
             <ProtectedRoute>
-                {isMobile && <div className="w-full">
+                <ScreenProvider>
                     <div className="w-full">
-                        <div>posts</div>
+                        <div className="w-full">
+                            <div>posts</div>
+                        </div>
+                        <BottomNavbar
+                            activeScreen={activeScreen}
+                            setActiveScreen={setActiveScreen}
+                            onEventsRefresh={handleEventsRefresh}
+                        />
                     </div>
-                    <BottomNavbar
-                        activeScreen={activeScreen}
-                        setActiveScreen={setActiveScreen}
-                        onEventsRefresh={handleEventsRefresh}
-                    />
-                </div>}
+                </ScreenProvider>
             </ProtectedRoute>
         )
     }
@@ -70,16 +78,18 @@ export default function Home() {
     if(activeScreen === "update") {
         return (
             <ProtectedRoute>
-                {isMobile && <div className="w-full">
+                <ScreenProvider>
                     <div className="w-full">
-                        <div>update</div>
+                        <div className="w-full">
+                            <div>update</div>
+                        </div>
+                        <BottomNavbar
+                            activeScreen={activeScreen}
+                            setActiveScreen={setActiveScreen}
+                            onEventsRefresh={handleEventsRefresh}
+                        />
                     </div>
-                    <BottomNavbar
-                        activeScreen={activeScreen}
-                        setActiveScreen={setActiveScreen}
-                        onEventsRefresh={handleEventsRefresh}
-                    />
-                </div>}
+                </ScreenProvider>
             </ProtectedRoute>
         )
     }
@@ -87,40 +97,44 @@ export default function Home() {
     if(activeScreen === "profile") {
         return (
             <ProtectedRoute>
-                {isMobile && <div className="w-full">
+                <ScreenProvider>
                     <div className="w-full">
-                        <div>profile</div>
+                        <div className="w-full">
+                            <div>profile</div>
+                        </div>
+                        <BottomNavbar
+                            activeScreen={activeScreen}
+                            setActiveScreen={setActiveScreen}
+                            onEventsRefresh={handleEventsRefresh}
+                        />
                     </div>
-                    <BottomNavbar
-                        activeScreen={activeScreen}
-                        setActiveScreen={setActiveScreen}
-                        onEventsRefresh={handleEventsRefresh}
-                    />
-                </div>}
+                </ScreenProvider>
             </ProtectedRoute>
         )
     }
 
     return (
         <ProtectedRoute>
-            {isMobile && <div className="w-full">
+            <ScreenProvider>
                 <div className="w-full">
-                    <HeaderMobile
-                        location={location}
-                        setLocation={setLocation}
+                    <div className="w-full">
+                        <HeaderMobile
+                            location={location}
+                            setLocation={setLocation}
+                            activeScreen={activeScreen}
+                        />
+                        <EventDisplay
+                            ref={eventDisplayRef}
+                            location={location}
+                        />
+                    </div>
+                    <BottomNavbar
                         activeScreen={activeScreen}
-                    />
-                    <EventDisplay
-                        ref={eventDisplayRef}
-                        location={location}
+                        setActiveScreen={setActiveScreen}
+                        onEventsRefresh={handleEventsRefresh}
                     />
                 </div>
-                <BottomNavbar
-                    activeScreen={activeScreen}
-                    setActiveScreen={setActiveScreen}
-                    onEventsRefresh={handleEventsRefresh}
-                />
-            </div>}
+            </ScreenProvider>
         </ProtectedRoute>
     );
 }

@@ -79,37 +79,37 @@ interface EventItem {
 // ];
 
 const eventItems: EventItem[] = [
-    { value: null,        icon: <HiOutlineGlobe size={25} />,         label: "Explore" },
-    { value: "gaming",          icon: <IoGameControllerOutline size={25} />, label: "Games" },
-    { value: "music",          icon: <IoMusicalNotes size={25} />,          label: "Music" },
-    { value: "sports",          icon: <MdOutlineSportsBasketball size={25} />, label: "Sports" },
-    { value: "adventure",      icon: <GiMountainClimbing size={25} />,      label: "Adventure" },
-    { value: "art & culture",    icon: <GiPaintBrush size={25} />,            label: "Art & Culture" },
-    { value: "business & talks", icon: <FaBriefcase size={25} />,             label: "Business & Talks" },
-    { value: "causes",         icon: <FaHandHoldingHeart size={25} />,      label: "Causes" },
-    { value: "diy & crafts",     icon: <GiCrafting size={25} />,              label: "DIY & Crafts" },
-    { value: "family",         icon: <FaChild size={25} />,                label: "Family" },
-    { value: "fashion",        icon: <GiPalmTree size={25} />,             label: "Fashion" },
-    { value: "fitness",        icon: <GiWeightLiftingUp size={25} />,      label: "Fitness" },
-    { value: "food & drinks",    icon: <FaUtensils size={25} />,             label: "Food & Drinks" },
-    { value: "learning",       icon: <FaBookOpen size={25} />,             label: "Learning" },
-    { value: "meetups",        icon: <FaHandsHelping size={25} />,         label: "Meetups" },
-    { value: "movies & film",    icon: <MdOutlineMovie size={25} />,         label: "Movies & Film" },
-    { value: "nightlife",      icon: <FaMoon size={25} />,                 label: "Nightlife" },
-    { value: "photography",    icon: <FaCameraRetro size={25} />,          label: "Photography" },
-    { value: "pets & animals",   icon: <FaPaw size={25} />,                  label: "Pets & Animals" },
-    { value: "recreation",     icon: <GiPalmTree size={25} />,             label: "Recreation" },
-    { value: "shows",          icon: <GiCrafting size={25} />,             label: "Shows" },
-    { value: "tech",           icon: <FaLaptopCode size={25} />,           label: "Tech" },
-    { value: "travel",         icon: <FaPlane size={25} />,                label: "Travel" },
-    { value: "volunteering",   icon: <FaHandsHelping size={25} />,         label: "Volunteering" },
-    { value: "wellness",       icon: <MdSpa size={25} />,                  label: "Wellness" },
+    { value: null,        icon: <HiOutlineGlobe size={27} />,         label: "Explore" },
+    { value: "gaming",          icon: <IoGameControllerOutline size={27} />, label: "Games" },
+    { value: "music",          icon: <IoMusicalNotes size={27} />,          label: "Music" },
+    { value: "sports",          icon: <MdOutlineSportsBasketball size={27} />, label: "Sports" },
+    { value: "adventure",      icon: <GiMountainClimbing size={27} />,      label: "Adventure" },
+    { value: "art & culture",    icon: <GiPaintBrush size={27} />,            label: "Art & Culture" },
+    { value: "business & talks", icon: <FaBriefcase size={27} />,             label: "Business & Talks" },
+    { value: "causes",         icon: <FaHandHoldingHeart size={27} />,      label: "Causes" },
+    { value: "diy & crafts",     icon: <GiCrafting size={27} />,              label: "DIY & Crafts" },
+    { value: "family",         icon: <FaChild size={27} />,                label: "Family" },
+    { value: "fashion",        icon: <GiPalmTree size={27} />,             label: "Fashion" },
+    { value: "fitness",        icon: <GiWeightLiftingUp size={27} />,      label: "Fitness" },
+    { value: "food & drinks",    icon: <FaUtensils size={27} />,             label: "Food & Drinks" },
+    { value: "learning",       icon: <FaBookOpen size={27} />,             label: "Learning" },
+    { value: "meetups",        icon: <FaHandsHelping size={27} />,         label: "Meetups" },
+    { value: "movies & film",    icon: <MdOutlineMovie size={27} />,         label: "Movies & Film" },
+    { value: "nightlife",      icon: <FaMoon size={27} />,                 label: "Nightlife" },
+    { value: "photography",    icon: <FaCameraRetro size={27} />,          label: "Photography" },
+    { value: "pets & animals",   icon: <FaPaw size={27} />,                  label: "Pets & Animals" },
+    { value: "recreation",     icon: <GiPalmTree size={27} />,             label: "Recreation" },
+    { value: "shows",          icon: <GiCrafting size={27} />,             label: "Shows" },
+    { value: "tech",           icon: <FaLaptopCode size={27} />,           label: "Tech" },
+    { value: "travel",         icon: <FaPlane size={27} />,                label: "Travel" },
+    { value: "volunteering",   icon: <FaHandsHelping size={27} />,         label: "Volunteering" },
+    { value: "wellness",       icon: <MdSpa size={27} />,                  label: "Wellness" },
 ];
 
 export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
     location, className, ...props
 }, ref) => {
-    const [activeEventItem, setActiveEventItem] = React.useState<string>(null);
+    const [activeEventItem, setActiveEventItem] = React.useState<string | null>(null);
     const [events, setEvents] = React.useState<any[]>([]);
     const [hasMore, setHasMore] = React.useState(true);
     const [loading, setLoading] = React.useState(false);
@@ -128,7 +128,6 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
             const currentPage = resetData ? 1 : pageRef.current;
 
             const params: {[key: string]: string | number} = {
-                location,
                 pageSize: 10,
                 pageNumber: currentPage,
             }
@@ -213,13 +212,13 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
             )}
             {...props}
         >
-            <ul className="flex flex-row flex-nowrap gap-1 w-full overflow-x-auto px-4">
+            <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4">
                 {eventItems.map((item) => (
-                    <li key={item.value} className="flex-shrink-0 px-2">
+                    <li key={item.value} className="flex-shrink-0">
                         <div
                             onClick={() => setActiveEventItem(item.value)}
                             className={cn(
-                                "flex flex-col items-center hover:text-neutral-900 pb-1 border-b-2 cursor-pointer",
+                                "flex flex-col items-center hover:text-neutral-900 pb-1 border-b-2 cursor-pointer px-4",
                                 activeEventItem === item.value
                                     ? "border-neutral-900 text-neutral-900"
                                     : "border-transparent text-neutral-400"

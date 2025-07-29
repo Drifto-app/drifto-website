@@ -62,7 +62,7 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
     }
 
     return (
-        <div className={cn("flex flex-col border-none", className)} {...props} onClick={() => router.push(`/event/m/${event.id}`)}>
+        <div className={cn("flex flex-col border-none", className)} {...props}>
             <div className="w-full rounded-lg flex flex-col gap-1">
                 <div className="relative w-full max-h-[75vh] overflow-hidden">
                     <Image
@@ -72,17 +72,20 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
                         height={500} // Controls aspect ratio
                         className="w-full h-auto object-cover rounded-lg"
                         style={{ maxHeight: '75vh' }}
+                        onClick={() => router.push(`/m/event/${event.id}?prev=/`)}
                     />
                     {event.original && <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">
                         Drifto Original
                     </div>}
-                    <button className="absolute top-3 right-2 text-white rounded-full bg-neutral-800 p-2 opacity-90 z-90" disabled onClick={handleReaction}>
-                        {isLiked ? (
-                            <FaHeart size={25} className="text-red-500" />
-                        ) : (
-                            <IoMdHeartEmpty size={25} />
-                        )}
-                    </button>
+                    <div className="p-3 absolute top-3 right-2 z-1000 h-15 w-15" onClick={handleReaction}>
+                        <button className="absolute top-3 right-2 text-white rounded-full bg-neutral-800 p-2 opacity-90 z-90" disabled={isLikedLoading}>
+                            {isLiked ? (
+                                <FaHeart size={25} className="text-red-500" />
+                            ) : (
+                                <IoMdHeartEmpty size={25} />
+                            )}
+                        </button>
+                    </div>
                 </div>
                 <h3 className="mt-2 font-semibold text-xl capitalize">{event.title}</h3>
                 <p className="text-sm text-gray-500 flex flex-row gap-2 items-center">

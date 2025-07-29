@@ -25,7 +25,7 @@ export const HeaderMobile = ({
 
     return (
         <div className={cn(
-            "w-full flex flex-col items-center justify-center py-4",
+            "w-full flex flex-col items-center justify-center py-4 z-100",
             className,
             activeScreen !== 'events' ? "hidden" : ""
         )} {...props}>

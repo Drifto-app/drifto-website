@@ -2,7 +2,7 @@ import * as React from "react";
 import {cn} from "@/lib/utils";
 import Image from "next/image";
 import {FaHeart, FaHotjar, FaRegCalendar} from "react-icons/fa";
-import {IoMdHeartEmpty} from "react-icons/io";
+import {IoMdHeartEmpty, IoMdSearch} from "react-icons/io";
 import {IoLocationOutline, IoPizzaOutline, IoShareSocialOutline} from "react-icons/io5";
 import {EventSingleContent, EventSingleContentText} from "@/components/ui/content";
 import {TbTicketOff} from "react-icons/tb";
@@ -11,36 +11,42 @@ import {SnapshotCarousel} from "@/components/event-page/image-silder";
 import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
 import {useState} from "react";
+import {UserEventSinglePlaceholder} from "@/components/ui/user-placeholder";
+import {MdCancel} from "react-icons/md";
+import {Dialog} from "@headlessui/react";
+import {Input} from "@/components/ui/input";
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
+    isCoHost: boolean;
+    setActiveScreen?: (activeScreen: string) => void;
 }
 
 
 export const SingleEventDetails = ({
-    event, className, ...props
+    event, setActiveScreen, isCoHost, className, ...props
 }: SingleEventDetailsProps) => {
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
+    const [isOpen, setIsOpen] = React.useState(false);
+    const [activeSrc, setActiveSrc] = React.useState<string | null>(null);
 
-    const startDate = new Date(event.startTime);false
+    const startDate = new Date(event.startTime);
     const stopDate = new Date(event.stopTime);
-    const formatted = startDate.toLocaleString("en-US", {
+    const formattedStartDate = startDate.toLocaleString("en-US", {
         weekday: "short",
         month: "short",
         day: "numeric",
        year: "numeric",
     });
 
-    let eventDisplayDetails: {
-        icon: React.ReactNode
-        value: string
-        description: string
-    } = {
-        icon: <IoPizzaOutline size={26}/>,
-        value: event.eventDisplayStatus,
-        description: `This event is now ${event.eventDisplayStatus}`
-    }
+    const formattedStopDate = stopDate.toLocaleString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+    });
+
 
     const formattedStartTime = startDate.toLocaleString("en-US", {
         hour: "numeric",
@@ -53,6 +59,22 @@ export const SingleEventDetails = ({
         minute: "numeric",
         hour12: true,
     });
+
+    let eventDisplayDetails: {
+        icon: React.ReactNode
+        value: string
+        description: string
+    } = {
+        icon: <IoPizzaOutline size={26}/>,
+        value: event.eventDisplayStatus,
+        description: `This event is now ${event.eventDisplayStatus}`
+    }
+
+    const openModal = (src: string) => {
+        setActiveSrc(src);
+        setIsOpen(true);
+    };
+    const closeModal = () => setIsOpen(false);
 
     const handleReaction = async () => {
         setIsLikedLoading(true);
@@ -90,6 +112,151 @@ export const SingleEventDetails = ({
         }
     }
 
+    if(isCoHost) {
+        return (
+            <>
+                <div className={cn(
+                    "w-full px-4",
+                    className,
+                )} {...props}>
+                    <div className="w-full flex flex-col items-center gap-6 pt-5 pb-25">
+                        <div className="w-full max-w-xl h-12 flex flex-row items-center border rounded-full px-4 shadow-md cursor-pointer" onClick={() => setActiveScreen!("tickets")} >
+                            <IoMdSearch size={20} />
+                            <Input
+                                className="h-full w-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-black"
+                                placeholder="Find people who booked"
+                                disabled
+                            />
+                        </div>
+                        <div className="relative w-full max-h-[40vh] overflow-hidden rounded-lg" onClick={() => openModal(event.titleImage)}>
+                            <Image
+                                src={event.titleImage}
+                                alt={event.title}
+                                width={800}
+                                height={500}
+                                className="w-full h-auto rounded-lg object-cover"
+                                style={{ maxHeight: '40vh' }}
+                                loading="eager"
+                            />
+
+                            {event.original && (
+                                <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">
+                                    Drifto Original
+                                </div>
+                            )}
+                        </div>
+                        <EventSingleContentText isLine={false} headText={"Event Title:"} className="shadow-xl">
+                            <h1 className="capitalize font-black text-4xl w-full text-neutral-400">{event.title}</h1>
+                        </EventSingleContentText>
+                        <EventSingleContentText isLine={false} headText={"Location:"} className="shadow-xl">
+                            <p className="capitalize font-black text-lg w-full text-neutral-400">
+                                {event.address}, {event.city}, {event.state}
+                            </p>
+                        </EventSingleContentText>
+                        <EventSingleContentText isLine={false} headText={"Event Time:"} className="shadow-xl items-start">
+                            <div className="flex flex-col gap-1">
+                                <p className="text-md font-semibold text-neutral-400">{formattedStartDate} - {formattedStopDate}</p>
+                                <p className="text-md font-medium text-neutral-400">{formattedStartTime} - {formattedStopTime}</p>
+                            </div>
+                        </EventSingleContentText>
+                        <EventSingleContentText
+                            headText="Event Stats:"
+                            className="space-y-2 items-start shadow-xl"
+                            isLine={false}
+                        >
+                            <div className="w-full flex flex-row gap-1 justify-between px-10 sm:px-20">
+                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("comments")}>
+                                    <p className="font-semibold text-neutral-800 text-2xl">
+                                        {event.totalComments}
+                                    </p>
+                                    <p className="text-md text-neutral-400">
+                                        comments
+                                    </p>
+                                </div>
+                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("likes")}>
+                                    <p className="font-semibold text-neutral-800 text-2xl">
+                                        {event.totalLikes}
+                                    </p>
+                                    <p className="text-md text-neutral-400">
+                                        likes
+                                    </p>
+                                </div>
+                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("tickets-analysis")}>
+                                    <p className="font-semibold text-neutral-800 text-2xl">
+                                        {event.tickets.reduce((min: number, ticket: {purchasedQuantity: number}) => {
+                                            return ticket.purchasedQuantity
+                                        }, 0)}
+                                    </p>
+                                    <p className="text-md text-neutral-400">
+                                        tickets sold
+                                    </p>
+                                </div>
+                            </div>
+                        </EventSingleContentText>
+                        <EventSingleContentText
+                            headText="Event Tags"
+                            className="space-y-2 items-start shadow-xl"
+                            isLine={false}
+                        >
+                            <div className="flex flex-wrap gap-2">
+                                {event.eventTags.map((tag: string) => (
+                                    <span
+                                        key={tag}
+                                        className="inline-block text-sm font-semibold px-3 py-1 bg-neutral-950 text-white rounded-full"
+                                    >
+                                {tag}
+                            </span>
+                                ))}
+                            </div>
+                        </EventSingleContentText>
+                        <EventSingleContentText isLine={false} headText={"Minimum Age:"} className="shadow-xl items-start">
+                            <h2 className="text-2xl font-semibold text-neutral-400">
+                                {event.ageRestricted ? event.minimumAge : "No age restrictions"}
+                            </h2>
+                        </EventSingleContentText>
+                        <EventSingleContentText isLine={false} headText="Event Description" className="flex-col shadow-xl">
+                            <p className="text-md w-full text-left text-neutral-400 font-semibold">{event.description}</p>
+                        </EventSingleContentText>
+                        <EventSingleContentText headText={"Event Screenshots"} isLine={false} className="flex-col shadow-xl">
+                            <SnapshotCarousel snapshots={event.screenshots} />
+                        </EventSingleContentText>
+                        <EventSingleContentText isLine={false} headText="Hosted By" className="flex-col items-start shadow-xl">
+                            {event.coHosts.map((coHost: {[key: string]: any}) => (
+                                <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={true} />
+                            ))}
+                            <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
+                                <p className="underline font-bold underline-offset-3 cursor-pointer">Manage Co-Host</p>
+                                <p className="underline font-bold underline-offset-3 cursor-pointer">See All Host Invites</p>
+                            </div>
+                        </EventSingleContentText>
+                    </div>
+                </div>
+
+                <Dialog
+                    open={isOpen}
+                    onClose={closeModal}
+                    className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50"
+                >
+                    <div className="absolute top-4 right-4" onClick={closeModal}>
+                        <MdCancel size={30} className="text-white" />
+                    </div>
+                    <Dialog.Panel className="bg-white overflow-hidden w-full max-h-[95%]">
+                        {activeSrc && (
+                            <Image
+                                src={activeSrc}
+                                alt="Snapshot"
+                                width={800}
+                                height={600}
+                                className="object-contain w-full h-auto"
+                                // style={{ maxHeight: "95vh" }}
+                            />
+                        )}
+                    </Dialog.Panel>
+                </Dialog>
+            </>
+        )
+    }
+
     return (
         <div className={cn(
             "w-full px-4",
@@ -125,12 +292,12 @@ export const SingleEventDetails = ({
                         </button>
                     </div>
                 </div>
-                <h1 className="capitalize font-black text-2xl w-full">{event.title}</h1>
+                <h1 className="capitalize font-black text-2xl w-full text-neutral-950">{event.title}</h1>
                 <EventSingleContent>
                     <FaRegCalendar size={18}/>
-                    <div className="flex flex-col">
-                        <p className="text-sm font-semibold">{formatted}</p>
-                        <p className="text-sm font-medium text-neutral-400">{formattedStartTime} - {formattedStopTime}</p>
+                    <div className="flex flex-col gap-1">
+                        <p className="text-md font-semibold text-neutral-500">{formattedStartDate} - {formattedStopDate}</p>
+                        <p className="text-md font-medium text-neutral-400 text-neutral-500">{formattedStartTime} - {formattedStopTime}</p>
                     </div>
                 </EventSingleContent>
                 <EventSingleContent>
@@ -150,12 +317,35 @@ export const SingleEventDetails = ({
                         <p className="font-semibold text-sm">This event is suitable for ages {event.minimumAge} and above</p>
                     </EventSingleContent>
                 )}
-                <EventSingleContentText headText="About" className="flex-col jus">
+                <EventSingleContentText
+                    headText="Event Vibe"
+                    className="flex flex-col space-y-2 items-start"
+                >
+                    <div className="flex flex-wrap gap-2">
+                        {event.eventTags.map((tag: string) => (
+                            <span
+                                key={tag}
+                                className="inline-block text-sm font-semibold px-3 py-1 bg-neutral-950 text-white rounded-full"
+                            >
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+                </EventSingleContentText>
+                <EventSingleContentText headText="About" className="flex-col">
                     <p className="text-sm w-full text-left">{event.description}</p>
                 </EventSingleContentText>
-                <EventSingleContentText headText="Snapshots" className="flex-col jus">
+                <EventSingleContentText headText="Snapshots" className="flex-col">
                     <SnapshotCarousel snapshots={event.screenshots} />
                 </EventSingleContentText>
+                <EventSingleContentText headText="Hosted By" className="flex-col items-start">
+                    {event.coHosts.map((coHost: {[key: string]: any}) => (
+                        <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={true} />
+                    ))}
+                </EventSingleContentText>
+                <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">
+                    Report Event
+                </div>
             </div>
         </div>
     )

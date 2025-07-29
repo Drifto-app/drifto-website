@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 
 export const ScreenProvider= ({ children }: { children: React.ReactNode }) => {
-    const [isMobile, setIsMobile] = useState<boolean>(false);
+    const [isMobile, setIsMobile] = useState<boolean>(true);
 
     useEffect(() => {
         const handleResize = () => {

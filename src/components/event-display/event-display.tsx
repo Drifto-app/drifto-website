@@ -30,6 +30,8 @@ import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
 import {EventCard} from "@/components/event-display/event-card";
 import {Loader} from "@/components/ui/loader";
+import {Button} from "@/components/ui/button";
+import {useRouter} from "next/navigation";
 
 interface EventDisplayProps extends React.ComponentProps<"div"> {
     location: string | null;
@@ -109,6 +111,8 @@ const eventItems: EventItem[] = [
 export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
     location, className, ...props
 }, ref) => {
+    const router = useRouter();
+
     const [activeEventItem, setActiveEventItem] = React.useState<string | null>(null);
     const [events, setEvents] = React.useState<any[]>([]);
     const [hasMore, setHasMore] = React.useState(true);
@@ -212,7 +216,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
             )}
             {...props}
         >
-            <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4">
+            <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4 no-scrollbar">
                 {eventItems.map((item) => (
                     <li key={item.value} className="flex-shrink-0">
                         <div
@@ -238,6 +242,10 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                     <EventCard key={evt.id} event={evt} />
                 ))}
             </div>
+
+            <Button size="lg" className="fixed bottom-20 rounded-full z-1000" onClick={() => router.push("/m/create/event")}>
+                Create Event
+            </Button>
 
             {loading && (
                 <div className="flex justify-center py-4">

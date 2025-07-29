@@ -8,6 +8,7 @@ interface EventSingleContentProps extends React.HTMLAttributes<HTMLDivElement> {
 interface EventSingleContentTextProps extends React.HTMLAttributes<HTMLDivElement> {
     children: React.ReactNode;
     headText: string;
+    isLine?: boolean;
 }
 
 function EventSingleContent({ className, children, ...props }: EventSingleContentProps) {
@@ -25,17 +26,20 @@ function EventSingleContent({ className, children, ...props }: EventSingleConten
     );
 }
 
-function EventSingleContentText({ headText, className, children, ...props }: EventSingleContentTextProps) {
+function EventSingleContentText({ headText, isLine = true, className, children, ...props }: EventSingleContentTextProps) {
     return (
         <div
             data-slot="input"
             className={cn(
-                "flex flex-row gap-4 rounded-2xl bg-white w-full py-3 px-4 items-center justify-start",
+                "flex flex-col gap-4 rounded-2xl bg-white w-full py-4 px-6 items-center justify-start",
                 className
             )}
             {...props}
         >
-            <p className="border-b-neutral-black font-semibold border-b-1 w-full pb-2">{headText}</p>
+            <p className={cn(
+                "font-semibold w-full",
+                isLine && "border-b-neutral-black border-b-1 pb-2"
+            )}>{headText}</p>
             {children}
         </div>
     );

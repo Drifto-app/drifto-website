@@ -1,7 +1,7 @@
 "use client"
 
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
-import {useParams} from "next/navigation";
+import {useParams, useSearchParams} from "next/navigation";
 import {useEffect, useState} from "react";
 import {authApi} from "@/lib/axios";
 import {Loader} from "@/components/ui/loader";
@@ -12,12 +12,18 @@ import {SingleEventDetails} from "@/components/event-page/details";
 import * as React from "react";
 import EventSinglePage from "@/components/event-page/event-single-page";
 import {toast} from "react-toastify";
+import SingleEventHostPage from "@/components/event-page/event-single-host-page";
 
 export default function EventPage() {
-    const { id } = useParams(); // gets the "id" param from the URL
+    const { id } = useParams();
+
+    const queryParams = useSearchParams();
+    const prev = queryParams.get("prev");
+
     const [event, setEvent] = useState<{[key: string]: any}>({});
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [coHost, setCoHost] = useState<string | null>(null);
 
     useEffect(() => {
         if (!id) return;
@@ -26,6 +32,12 @@ export default function EventPage() {
             try {
                const response = await authApi.get(`/event/${id}`)
                 setEvent(response.data.data);
+
+               if(response.data.data.hostCollaborationStatus != null) {
+                   setCoHost(response.data.data.hostCollaborationStatus);
+               }
+
+               console.log(response.data);
             } catch (err: any) {
                 toast.error(err.message);
                 setError(err.message);
@@ -49,11 +61,23 @@ export default function EventPage() {
         )
     }
 
+    if (coHost) {
+        return(
+            <ProtectedRoute>
+                <ScreenProvider>
+                    <div className="w-full">
+                        <SingleEventHostPage event={event} prev={prev} />
+                    </div>
+                </ScreenProvider>
+            </ProtectedRoute>
+        )
+    }
+
     return(
         <ProtectedRoute>
             <ScreenProvider>
-                <div className="w-full bg-neutral-100">
-                    <EventSinglePage event={event} />
+                <div className="w-full">
+                    <EventSinglePage event={event} prev={prev} />
                 </div>
             </ScreenProvider>
         </ProtectedRoute>

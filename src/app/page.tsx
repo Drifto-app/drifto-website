@@ -2,7 +2,7 @@
 
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
 import {BottomNavbar} from "@/components/nav-mobile/bottom-navbar";
-import {useEffect, useRef, useState} from "react";
+import {useRef, useState} from "react";
 import {HeaderMobile} from "@/components/header-mobile/header-mobile";
 import {EventDisplay} from "@/components/event-display/event-display";
 import {useAuthStore} from "@/store/auth-store";
@@ -16,19 +16,8 @@ export default function Home() {
     const {user} = useAuthStore.getState();
 
     const [activeScreen, setActiveScreen] = useState<string>("events");
-    const [isMobile, setIsMobile] = useState<boolean>(false);
     const [location, setLocation] = useState<string | null>(user?.city);
     const eventDisplayRef = useRef<EventDisplayRef>(null);
-
-    useEffect(() => {
-        const handleResize = () => {
-            setIsMobile(window.innerWidth <= 768);
-        };
-
-        handleResize();
-        window.addEventListener("resize", handleResize);
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
 
     // Function to handle events refresh
     const handleEventsRefresh = () => {

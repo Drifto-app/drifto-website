@@ -30,9 +30,9 @@ export const SnapshotCarousel: React.FC<SnapshotCarouselProps> = ({ snapshots })
     return (
         <>
             <Carousel className="w-full">
-                <CarouselContent className="flex gap-2 overflow-x-auto">
+                <CarouselContent className="flex gap-2 overflow-x-auto no-scrollbar">
                     {snapshots.map((src, idx) => (
-                        <CarouselItem key={idx} className="w-[40%] flex-none">
+                        <CarouselItem key={idx} className="w-[60%] flex-none">
                             <div className="cursor-pointer" onClick={() => openModal(src)}>
                                 <Card className="overflow-hidden p-0 rounded-lg">
                                     <CardContent className="p-0">
@@ -56,7 +56,7 @@ export const SnapshotCarousel: React.FC<SnapshotCarouselProps> = ({ snapshots })
             <Dialog
                 open={isOpen}
                 onClose={closeModal}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+                className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50"
             >
                 <div className="absolute top-4 right-4" onClick={closeModal}>
                     <MdCancel size={30} className="text-white" />

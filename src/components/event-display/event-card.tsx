@@ -46,6 +46,8 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
     });
 
     const handleReaction = async () => {
+        if (isLikedLoading) return;
+
         setIsLikedLoading(true);
 
         try {
@@ -56,6 +58,7 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
             })
         } catch (err: any) {
             toast.error(err.message);
+            setIsLiked(!isLiked);
         } finally {
             setIsLikedLoading(false);
         }

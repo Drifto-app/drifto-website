@@ -15,17 +15,21 @@ import {UserEventSinglePlaceholder} from "@/components/ui/user-placeholder";
 import {MdCancel} from "react-icons/md";
 import {Dialog} from "@headlessui/react";
 import {Input} from "@/components/ui/input";
+import {router} from "next/client";
+import {useRouter} from "next/navigation";
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
     isCoHost: boolean;
-    setActiveScreen?: (activeScreen: string) => void;
+    setActiveScreen?: (activeScreen: string, title?: string) => void;
 }
 
 
 export const SingleEventDetails = ({
     event, setActiveScreen, isCoHost, className, ...props
 }: SingleEventDetailsProps) => {
+    const router = useRouter();
+
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
     const [isOpen, setIsOpen] = React.useState(false);
@@ -77,6 +81,8 @@ export const SingleEventDetails = ({
     const closeModal = () => setIsOpen(false);
 
     const handleReaction = async () => {
+        if (isLikedLoading) return;
+
         setIsLikedLoading(true);
 
         try {
@@ -87,6 +93,7 @@ export const SingleEventDetails = ({
             })
         } catch (err: any) {
             toast.error(err.message);
+            setIsLiked(!isLiked);
         } finally {
             setIsLikedLoading(false);
         }
@@ -165,7 +172,11 @@ export const SingleEventDetails = ({
                             isLine={false}
                         >
                             <div className="w-full flex flex-row gap-1 justify-between px-10 sm:px-20">
-                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("comments")}>
+                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => router.push(
+                                    `/m/comment/${event.id}` +
+                                    `?prev=${encodeURIComponent(`/m/event/${event.id}`)}` +
+                                    `&type=EVENT`
+                                )}>
                                     <p className="font-semibold text-neutral-800 text-2xl">
                                         {event.totalComments}
                                     </p>
@@ -224,10 +235,22 @@ export const SingleEventDetails = ({
                             {event.coHosts.map((coHost: {[key: string]: any}) => (
                                 <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={true} />
                             ))}
-                            <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
-                                <p className="underline font-bold underline-offset-3 cursor-pointer">Manage Co-Host</p>
-                                <p className="underline font-bold underline-offset-3 cursor-pointer">See All Host Invites</p>
-                            </div>
+                            {event.hostCollaborationStatus == "HOST" && (
+                                <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
+                                    <p
+                                        className="underline font-bold underline-offset-3 cursor-pointer hover:text-blue-800 transition-colors"
+                                        onClick={() => setActiveScreen!('co-host-manage', 'Manage Co-Host')}
+                                    >
+                                        Manage Co-Host
+                                    </p>
+                                    <p
+                                        className="underline font-bold underline-offset-3 cursor-pointer hover:text-blue-800 transition-colors"
+                                        onClick={() => setActiveScreen!('host-invites', 'Host Invites')}
+                                    >
+                                        See All Host Invites
+                                    </p>
+                                </div>
+                            )}
                         </EventSingleContentText>
                     </div>
                 </div>

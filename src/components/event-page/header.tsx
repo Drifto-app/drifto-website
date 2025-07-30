@@ -11,6 +11,7 @@ interface SingleEventHeaderProps extends React.ComponentProps<"div">{
     isCoHost: boolean;
     isCoHostComponent?: boolean;
     title?: string;
+    onBackClick?: () => void; // New prop for custom back navigation
 }
 
 interface HeaderItem {
@@ -26,18 +27,31 @@ const headerItems: HeaderItem[] = [
 ]
 
 export const SingleEventHeader = ({
-    title = "Manage Event", isCoHostComponent = false, isCoHost, event, activeScreen, setActiveScreen, prev, className, ...props
+                                      title = "Manage Event",
+                                      isCoHostComponent = false,
+                                      isCoHost,
+                                      event,
+                                      activeScreen,
+                                      setActiveScreen,
+                                      prev,
+                                      onBackClick, // New prop
+                                      className,
+                                      ...props
                                   }: SingleEventHeaderProps) => {
     const router = useRouter();
 
     const handleBackClick = () => {
-        if(isCoHostComponent) {
-            setActiveScreen!(prev!);
+        if (onBackClick) {
+            // Use custom back navigation if provided
+            onBackClick();
+        } else if (isCoHostComponent) {
+            // Fallback for legacy usage
+            setActiveScreen?.(prev || 'details');
         } else {
-            router.push(prev != null ? prev : "/")
+            // Default router navigation
+            router.push(prev != null ? prev : "/");
         }
     }
-
 
     if (isCoHost) {
         return (
@@ -46,7 +60,11 @@ export const SingleEventHeader = ({
                 className
             )} {...props}>
                 <div className="flex flex-row items-center px-8">
-                    <FaArrowLeft size={20} onClick={handleBackClick} />
+                    <FaArrowLeft
+                        size={20}
+                        onClick={handleBackClick}
+                        className="cursor-pointer hover:text-neutral-700 transition-colors"
+                    />
                     <p className="font-semibold text-neutral-950 text-xl w-full text-center capitalize truncate ml-4">
                         {isCoHostComponent ? title : "Manage Event"}
                     </p>
@@ -61,7 +79,11 @@ export const SingleEventHeader = ({
             className
         )} {...props}>
             <div className="flex flex-row items-center pt-6 px-8">
-                <FaArrowLeft size={20} onClick={() => router.push(prev != null ? prev : "/")} />
+                <FaArrowLeft
+                    size={20}
+                    onClick={handleBackClick}
+                    className="cursor-pointer hover:text-neutral-700 transition-colors"
+                />
                 <p className="font-semibold text-neutral-800 text-xl w-full text-center capitalize truncate ml-4">
                     {event.title}
                 </p>

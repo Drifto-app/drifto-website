@@ -16,7 +16,7 @@ import {MdCancel} from "react-icons/md";
 import {Dialog} from "@headlessui/react";
 import {Input} from "@/components/ui/input";
 import {router} from "next/client";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -29,6 +29,9 @@ export const SingleEventDetails = ({
     event, setActiveScreen, isCoHost, className, ...props
 }: SingleEventDetailsProps) => {
     const router = useRouter();
+
+    const pathname = usePathname();
+    const searchParams = useSearchParams();
 
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
@@ -330,7 +333,7 @@ export const SingleEventDetails = ({
                 <EventSingleContent>
                     {eventDisplayDetails.icon}
                     <div className="flex flex-col">
-                        <p className="text-sm font-semibold">This event is {eventDisplayDetails.value.toLowerCase()}</p>
+                        <p className="text-sm font-semibold lowercase">This event is {eventDisplayDetails.value}</p>
                         <p className="text-sm font-medium text-neutral-400">{eventDisplayDetails.description}</p>
                     </div>
                 </EventSingleContent>
@@ -363,7 +366,11 @@ export const SingleEventDetails = ({
                 </EventSingleContentText>
                 <EventSingleContentText headText="Hosted By" className="flex-col items-start">
                     {event.coHosts.map((coHost: {[key: string]: any}) => (
-                        <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={true} />
+                        <UserEventSinglePlaceholder
+                            user={coHost}
+                            key={coHost.id}
+                            isHost={true}
+                            onClick={() => {router.push(`/user/m/${coHost.id}?prev=${pathname}?${searchParams}`)}} />
                     ))}
                 </EventSingleContentText>
                 <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">

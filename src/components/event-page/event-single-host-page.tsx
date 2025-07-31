@@ -112,18 +112,6 @@ export default function SingleEventHostPage(
                     </div>
                 );
 
-            case 'delete':
-                return (
-                    <div className="w-full min-h-[85vh] px-4">
-                        <div className="w-full flex flex-col gap-4">
-                            <h1 className="text-xl font-semibold text-neutral-800 pt-4">
-                                Delete Event
-                            </h1>
-                            {/* Add your delete event component here */}
-                        </div>
-                    </div>
-                );
-
             case 'co-host-manage':
                 return (
                     <div className="w-full min-h-[85vh] px-4">

@@ -7,6 +7,7 @@ import {HeaderMobile} from "@/components/header-mobile/header-mobile";
 import {EventDisplay} from "@/components/event-display/event-display";
 import {useAuthStore} from "@/store/auth-store";
 import {ScreenProvider} from "@/components/screen/screen-provider";
+import {useSearchParams} from "next/navigation";
 
 interface EventDisplayRef {
     refresh: () => void;
@@ -15,7 +16,9 @@ interface EventDisplayRef {
 export default function Home() {
     const {user} = useAuthStore.getState();
 
-    const [activeScreen, setActiveScreen] = useState<string>("events");
+    const screen = useSearchParams().get("screen");
+
+    const [activeScreen, setActiveScreen] = useState<string>(screen ?? "events");
     const [location, setLocation] = useState<string | null>(user?.city);
     const eventDisplayRef = useRef<EventDisplayRef>(null);
 

@@ -1,4 +1,4 @@
-"use strict"
+"use client"
 
 import * as React from "react";
 import {cn} from "@/lib/utils";
@@ -17,15 +17,18 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {Label} from "@/components/ui/label";
+import {toast} from "react-toastify";
+import {authApi} from "@/lib/axios";
 
 interface SingleEventFooterProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
     setActiveScreen?: (activeScreen: string) => void;
     isCoHost?: boolean;
+    setLoading?: (state: boolean) => void;
 }
 
 export const SingleEventFooter = ({
-    event, isCoHost, setActiveScreen, className, ...props
+    event, isCoHost, setLoading, setActiveScreen, className, ...props
 }: SingleEventFooterProps) => {
     const router = useRouter();
 
@@ -37,6 +40,21 @@ export const SingleEventFooter = ({
             backgroundImage: gradient
         }
         : undefined;
+
+    const handleEventDelete = async () => {
+        setLoading!(true);
+
+        try {
+            await authApi.delete(`/event/${event.id}`);
+
+            setLoading!(false);
+
+            router.push("http://localhost:3000/?screen=plans");
+        }catch (err: any) {
+            toast.error(err.message || "Error deleting event");
+            setLoading!(false);
+        }
+    }
 
     useEffect(() => {
         const newPrice: number = event.tickets.reduce((min: number, ticket: { price: number; }) => {
@@ -94,7 +112,7 @@ export const SingleEventFooter = ({
                                     Cancel
                                 </Button>
                             </DialogClose>
-                            <Button type="button" variant="secondary" className="text-xl py-6 px-8 bg-red-500 text-white font-semibold">
+                            <Button type="button" variant="secondary" className="text-xl py-6 px-8 bg-red-500 text-white font-semibold" onClick={handleEventDelete}>
                                 Confirm
                             </Button>
                         </DialogFooter>
@@ -127,7 +145,7 @@ export const SingleEventFooter = ({
                     <p className="text-xs text-neutral-600">Starting:</p>
                     <h3 className="font-bold text-xl">{price === "Free" ? price : "₦ "+ price}</h3>
                 </div>
-                <Button className="rounded-full px-5 py-6" onClick={() => {router.push(`/orders/m/${event.id}`)}}>
+                <Button className="rounded-full px-5 py-6" onClick={() => {router.push(`/m/orders/${event.id}`)}}>
                     Get Tickets
                 </Button>
             </div>

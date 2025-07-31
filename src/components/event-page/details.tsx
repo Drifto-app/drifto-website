@@ -174,7 +174,7 @@ export const SingleEventDetails = ({
                             className="space-y-2 items-start shadow-xl"
                             isLine={false}
                         >
-                            <div className="w-full flex flex-row gap-1 justify-between px-10 sm:px-20">
+                            <div className="w-full flex flex-row gap-1 justify-between px-6 sm:px-20">
                                 <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => router.push(
                                     `/m/comment/${event.id}` +
                                     `?prev=${encodeURIComponent(`/m/event/${event.id}`)}` +
@@ -187,7 +187,11 @@ export const SingleEventDetails = ({
                                         comments
                                     </p>
                                 </div>
-                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("likes")}>
+                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => router.push(
+                                    `/m/reaction/${event.id}` +
+                                    `?prev=${encodeURIComponent(`/m/event/${event.id}`)}` +
+                                    `&type=EVENT`
+                                )}>
                                     <p className="font-semibold text-neutral-800 text-2xl">
                                         {event.totalLikes}
                                     </p>
@@ -195,7 +199,7 @@ export const SingleEventDetails = ({
                                         likes
                                     </p>
                                 </div>
-                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("tickets-analysis")}>
+                                <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => setActiveScreen!("event-earnings")}>
                                     <p className="font-semibold text-neutral-800 text-2xl">
                                         {event.tickets.reduce((min: number, ticket: {purchasedQuantity: number}) => {
                                             return ticket.purchasedQuantity

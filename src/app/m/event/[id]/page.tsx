@@ -36,8 +36,6 @@ export default function EventPage() {
                if(response.data.data.hostCollaborationStatus != null) {
                    setCoHost(response.data.data.hostCollaborationStatus);
                }
-
-               console.log(response.data);
             } catch (err: any) {
                 toast.error(err.message);
                 setError(err.message);
@@ -66,7 +64,7 @@ export default function EventPage() {
             <ProtectedRoute>
                 <ScreenProvider>
                     <div className="w-full">
-                        <SingleEventHostPage event={event} prev={prev} />
+                        <SingleEventHostPage event={event} prev={prev} setLoading={setLoading} />
                     </div>
                 </ScreenProvider>
             </ProtectedRoute>

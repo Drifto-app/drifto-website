@@ -7,14 +7,16 @@ import {SingleEventFooter} from "@/components/event-page/footer";
 import {useState} from "react";
 import CommentManagePage from "@/components/comment/comment-manage";
 import { useNavigationHistory } from "@/hooks/use-navigation-history";
+import {EventEarnings} from "@/components/event-page/event-earnings";
 
 interface SingleEventHostPageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
     prev: string | null;
+    setLoading: (state: boolean) => void;
 }
 
 export default function SingleEventHostPage(
-    {event, prev, className, ...props}: SingleEventHostPageProps
+    {event, prev, setLoading, className, ...props}: SingleEventHostPageProps
 ) {
     const {
         navigateTo,
@@ -39,7 +41,7 @@ export default function SingleEventHostPage(
         const screenTitles: Record<string, string> = {
             'likes': 'Event Likes',
             'tickets': 'Find Attendees',
-            'tickets-analysis': 'Ticket Analytics',
+            'event-earnings': 'Event Earnings',
             'edit': 'Edit Event',
             'delete': 'Delete Event',
             'co-host-manage': 'Manage Co-Host',
@@ -64,18 +66,6 @@ export default function SingleEventHostPage(
     // Render different screens based on activeScreen
     const renderScreen = () => {
         switch (activeScreen) {
-            case 'likes':
-                return (
-                    <div className="w-full min-h-[85vh] px-4">
-                        <div className="w-full flex flex-col gap-4">
-                            <h1 className="text-xl font-semibold text-neutral-800 pt-4">
-                                Event Likes ({event.totalLikes})
-                            </h1>
-                            {/* Add your likes management component here */}
-                        </div>
-                    </div>
-                );
-
             case 'tickets':
                 return (
                     <div className="w-full min-h-[85vh] px-4">
@@ -88,16 +78,9 @@ export default function SingleEventHostPage(
                     </div>
                 );
 
-            case 'tickets-analysis':
+            case 'event-earnings':
                 return (
-                    <div className="w-full min-h-[85vh] px-4">
-                        <div className="w-full flex flex-col gap-4">
-                            <h1 className="text-xl font-semibold text-neutral-800 pt-4">
-                                Ticket Analytics
-                            </h1>
-                            {/* Add your ticket analytics component here */}
-                        </div>
-                    </div>
+                    <EventEarnings event={event} />
                 );
 
             case 'edit':
@@ -148,6 +131,7 @@ export default function SingleEventHostPage(
                             isCoHost={true}
                             event={event}
                             setActiveScreen={setActiveScreen}
+                            setLoading={setLoading}
                         />
                     </>
                 );
@@ -157,7 +141,7 @@ export default function SingleEventHostPage(
     return (
         <div
             className={cn(
-                "w-full ",
+                "w-full",
                 className,
                 event.eventTheme !== null ? "" : "bg-neutral-100",
             )}

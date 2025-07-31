@@ -14,6 +14,7 @@ import { toast } from "react-toastify";
 import { useState } from "react";
 import {useRouter} from "next/navigation";
 import {cn} from "@/lib/utils";
+import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
 
 interface CommentCardProps extends React.ComponentProps<"div"> {
     comment: { [key: string]: any };
@@ -60,23 +61,7 @@ export function CommentCard({ comment, currentPathUrl, className, ...props}: Com
         )} {...props}>
             {/* author + date */}
             <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                    <Image
-                        src={comment.userPlaceHolder.profileImageUrl}
-                        alt={comment.userPlaceHolder.username}
-                        width={32}
-                        height={32}
-                        className="rounded-full"
-                    />
-                    <div className="flex items-center gap-1">
-                        <p className="font-semibold text-neutral-900">
-                            {comment.userPlaceHolder.username}
-                        </p>
-                        {comment.userPlaceHolder.verified && (
-                            <FaCheckCircle size={14} className="text-blue-500" />
-                        )}
-                    </div>
-                </div>
+               <UserSinglePlaceholder user={comment.userPlaceHolder} />
                 <p className="text-md text-neutral-500">
                     {new Date(comment.createdAt).toLocaleDateString()}
                 </p>
@@ -95,9 +80,9 @@ export function CommentCard({ comment, currentPathUrl, className, ...props}: Com
                         className="font-inherit"
                     >
                         {isLiked ? (
-                            <FaHeart size={28} className="text-red-500" />
+                            <FaHeart className="w-6 h-6 text-red-500" />
                         ) : (
-                            <FaRegHeart size={28} />
+                            <FaRegHeart className="w-6 h-6" />
                         )}
                     </button>
                 </div>
@@ -108,10 +93,10 @@ export function CommentCard({ comment, currentPathUrl, className, ...props}: Com
                     `&type=COMMENT_REPLY`
                     )}>
                     <span className="text-md">{comment.totalComments}</span>
-                    <FaRegComment size={28} />
+                    <FaRegComment className="w-6 h-6" />
                 </div>
 
-                <AiOutlineSend size={28} className="cursor-pointer" />
+                <AiOutlineSend className="w-6 h-6 cursor-pointer" />
             </div>
         </div>
     );

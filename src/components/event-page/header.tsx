@@ -56,16 +56,16 @@ export const SingleEventHeader = ({
     if (isCoHost) {
         return (
             <div className={cn(
-                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
+                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 bg-white justify-center",
                 className
             )} {...props}>
-                <div className="flex flex-row items-center px-8">
+                <div className="flex flex-row items-center px-8 py-6">
                     <FaArrowLeft
                         size={20}
                         onClick={handleBackClick}
                         className="cursor-pointer hover:text-neutral-700 transition-colors"
                     />
-                    <p className="font-semibold text-neutral-950 text-xl w-full text-center capitalize truncate ml-4">
+                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
                         {isCoHostComponent ? title : "Manage Event"}
                     </p>
                 </div>
@@ -84,7 +84,7 @@ export const SingleEventHeader = ({
                     onClick={handleBackClick}
                     className="cursor-pointer hover:text-neutral-700 transition-colors"
                 />
-                <p className="font-semibold text-neutral-800 text-xl w-full text-center capitalize truncate ml-4">
+                <p className="font-semibold text-neutral-800 text-md w-full text-center capitalize truncate ml-4">
                     {event.title}
                 </p>
             </div>

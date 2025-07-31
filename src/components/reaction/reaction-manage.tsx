@@ -7,13 +7,12 @@ import {FaArrowLeft} from "react-icons/fa";
 import {CommentCard} from "@/components/comment/comment-card";
 import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
-import {Loader, LoaderSmall} from "@/components/ui/loader";
-import {useEffect, useRef, useCallback, useState} from "react";
+import {Loader} from "@/components/ui/loader";
+import {useEffect, useRef, useCallback} from "react";
 import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {IoSend} from "react-icons/io5";
+import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
 
-interface CommentManageProps extends React.ComponentProps<"div">{
+interface ReactionManageProps extends React.ComponentProps<"div">{
     entityId: string;
     type: string;
     onBackClick?: () => void;
@@ -21,69 +20,25 @@ interface CommentManageProps extends React.ComponentProps<"div">{
     currentPathUrl: string
 }
 
-export default function CommentManagePage(
-    {entityId, currentPathUrl, onBackClick, prev, type, className, ...props}: CommentManageProps
+export default function ReactionManagePage(
+    {entityId, currentPathUrl, onBackClick, prev, type, className, ...props}: ReactionManageProps
 ) {
     const router = useRouter();
 
     // State for infinite scroll
-    const [comments, setComments] = useState<any[]>([]);
-    const [numOfComments, setNumOfComments] = useState<number>(0);
-    const [title, setTitle] = useState<string>("");
-    const [hasMore, setHasMore] = useState(true);
-    const [loading, setLoading] = useState(false);
-    const [initialLoading, setInitialLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    const [comment, setComment] = useState<string>("");
-    const [submitCommentLoading, setSubmitCommentLoading] = useState(false);
-
-    const inputRef = useRef<HTMLInputElement>(null);
-    const [keyboardOffset, setKeyboardOffset] = useState(0);
+    const [users, setUsers] = React.useState<any[]>([]);
+    const [title, setTitle] = React.useState<string>("");
+    const [hasMore, setHasMore] = React.useState(true);
+    const [loading, setLoading] = React.useState(false);
+    const [initialLoading, setInitialLoading] = React.useState(true);
+    const [error, setError] = React.useState<string | null>(null);
 
     // Refs for infinite scroll logic
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
 
-    const handleCommentSubmit =   async (e: React.FormEvent) => {
-        e.preventDefault()
-
-        setSubmitCommentLoading(true);
-
-        if(comment == null || comment == ""){
-           toast.error("Comment must specify a comment");
-           return;
-        }
-
-        const params: {[key: string]: string} = {
-            comment,
-            commentType: type,
-        }
-
-        if(type === "EVENT") {
-            params.eventId = entityId
-        } else if(type === "POST") {
-            params.postId = entityId
-        } else if(type === "COMMENT_REPLY") {
-            params.commentId = entityId
-        }
-
-        try {
-            const response = await authApi.post("/comment", params)
-
-            toast.success(response?.data?.message || "Commented successfully");
-            setComments([response.data.data, ...comments])
-            setComment("")
-        } catch (err: any) {
-            setError(err.response?.data?.description || 'Commenting failed');
-            toast.error(err.response?.data?.description || 'Commenting failed');
-        } finally {
-            setSubmitCommentLoading(false);
-        }
-    }
-
-    const loadComments = useCallback(async (resetData = false) => {
+    const loadReactions = useCallback(async (resetData = false) => {
         if (loadingRef.current || !hasMoreRef.current) return;
 
         loadingRef.current = true;
@@ -100,30 +55,29 @@ export default function CommentManagePage(
             const params: {[key: string]: string | number} = {
                 pageSize: 10,
                 pageNumber: currentPage,
-                commentType: type
+                reactionType: type
             };
 
-            const response = await authApi.get(`/comment/entity/${entityId}`, {
+            const response = await authApi.get(`/reaction/entity/${entityId}`, {
                 params
             });
 
-            const newComments = response.data.data.data;
-            setNumOfComments(response.data.data.totalElements)
+            const newUsers = response.data.data.data;
 
             if (resetData) {
-                setComments(newComments);
+                setUsers(newUsers);
                 pageRef.current = 2;
             } else {
-                setComments((prev) => [...prev, ...newComments]);
+                setUsers((prev) => [...prev, ...newUsers]);
                 pageRef.current = currentPage + 1;
             }
 
             if(type === "COMMENT_REPLY") {
-                setTitle("Comment Replies");
+                setTitle("Comment Reactions");
             } else if(type === "POST") {
-                setTitle("Post Comments")
+                setTitle("Post Reactions")
             }else if(type === "EVENT") {
-                setTitle("Event Comments")
+                setTitle("Event Reactions")
             }
 
             const isLast = response.data.data.isLast;
@@ -131,7 +85,7 @@ export default function CommentManagePage(
             hasMoreRef.current = !isLast;
 
         } catch (err: any) {
-            toast.error(err.message || "Error loading comments");
+            toast.error(err.message || "Error loading user reactions");
             setError(err.message);
         } finally {
             setLoading(false);
@@ -140,43 +94,15 @@ export default function CommentManagePage(
         }
     }, [entityId, type]);
 
-    useEffect(() => {
-        if (!window.visualViewport || !inputRef.current) return;
-
-        const onResize = () => {
-            const offset = window.innerHeight - window.visualViewport.height;
-            // only treat as keyboard if it’s a big change
-            setKeyboardOffset(offset > 100 ? offset : 0);
-        };
-
-        const onFocus = () => {
-            window.visualViewport.addEventListener("resize", onResize);
-        };
-        const onBlur = () => {
-            window.visualViewport.removeEventListener("resize", onResize);
-            setKeyboardOffset(0);
-        };
-
-        const inp = inputRef.current;
-        inp.addEventListener("focus", onFocus);
-        inp.addEventListener("blur", onBlur);
-
-        return () => {
-            inp.removeEventListener("focus", onFocus);
-            inp.removeEventListener("blur", onBlur);
-            window.visualViewport.removeEventListener("resize", onResize);
-        };
-    }, []);
-
     // Initial load
     useEffect(() => {
-        setComments([]);
+        setUsers([]);
         setHasMore(true);
         pageRef.current = 1;
         hasMoreRef.current = true;
         setError(null);
-        loadComments(true);
-    }, [loadComments]);
+        loadReactions(true);
+    }, [loadReactions]);
 
     // Infinite scroll
     useEffect(() => {
@@ -188,13 +114,13 @@ export default function CommentManagePage(
                 hasMoreRef.current &&
                 !error
             ) {
-                loadComments(false);
+                loadReactions(false);
             }
         };
 
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
-    }, [loadComments, error]);
+    }, [loadReactions, error]);
 
     const handleBackClick = () => {
         if (onBackClick) {
@@ -236,7 +162,7 @@ export default function CommentManagePage(
     }
 
     // Error state
-    if (error && comments.length === 0) {
+    if (error && users.length === 0) {
         return (
             <div className={cn(
                 "w-full flex flex-col items-center justify-center",
@@ -258,7 +184,7 @@ export default function CommentManagePage(
                     </div>
                 </div>
                 <div className="w-full h-screen flex flex-col items-center justify-center">
-                    <h2>Unable to load comments</h2>
+                    <h2>Unable to users reactions</h2>
                 </div>
             </div>
         );
@@ -286,45 +212,16 @@ export default function CommentManagePage(
             </div>
             <div className="w-full flex flex-col gap-4 px-4">
                 <h1 className="text-md font-semibold text-neutral-800 pt-4">
-                    {title} ({numOfComments})
+                    {title} ({users.length})
                 </h1>
             </div>
             <div className="w-full flex flex-col gap-6 px-4 py-4">
-                {comments.map((c) => (
-                    <CommentCard key={c.id} comment={c} currentPathUrl={currentPathUrl} />
+                {users.map((user) => (
+                    <div key={user.id} className="rounded-lg border-1 px-4 py-4 border-neutral-800">
+                        <UserSinglePlaceholder user={user}  />
+                    </div>
                 ))}
             </div>
-
-            <form
-                onSubmit={handleCommentSubmit}
-                className="fixed inset-x-0 z-60 border-t bg-white border-neutral-200 safe-area-inset-bottom flex flex-row"
-                style={{
-                    bottom: keyboardOffset,
-                    transition: "bottom 0.2s ease",
-                }}
-            >
-                <Input
-                    ref={inputRef}
-                    type="text"
-                    name="comments"
-                    className="min-h-16 outline-none w-full px-6 border-none"
-                    placeholder="Add a comment…"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                />
-                <div className="flex items-center py-0 px-3">
-                    <button className={cn(
-                        "p-3 rounded-full",
-                        comment.length === 0 ? "bg-neutral-300" : "bg-blue-700"
-                    )} type="submit" disabled={comment.length === 0 || submitCommentLoading}>
-                        {
-                            !submitCommentLoading
-                                ? <IoSend size={20} className="text-white" />
-                                : <LoaderSmall />
-                        }
-                    </button>
-                </div>
-            </form>
 
             {/* Loading indicator for pagination */}
             {loading && !initialLoading && (
@@ -334,24 +231,24 @@ export default function CommentManagePage(
             )}
 
             {/* End of content indicator */}
-            {!hasMore && comments.length > 0 && (
+            {!hasMore && users.length > 0 && (
                 <p className="py-4 text-gray-500">You have reached the end!</p>
             )}
 
             {/* No comments message */}
-            {!loading && !initialLoading && comments.length === 0 && (
+            {!loading && !initialLoading && users.length === 0 && (
                 <div className="w-full flex flex-col items-center justify-center py-8">
-                    <p className="text-gray-500">No comments found</p>
+                    <p className="text-gray-500">No user reaction found</p>
                 </div>
             )}
 
-            {error && comments.length > 0 && (
+            {error && users.length > 0 && (
                 <div className="flex flex-col items-center justify-center py-4 pt-4 pb-15 w-full">
                     <p className="text-orange-700 text-sm mb-2">
-                        Failed to load more comments
+                        Failed to load more user reactions
                     </p>
                     <Button
-                        onClick={() => loadComments(false)}
+                        onClick={() => loadReactions(false)}
                         size="sm"
                         variant="outline"
                         className="border-orange-300 text-orange-700 hover:bg-orange-50"

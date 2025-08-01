@@ -8,6 +8,7 @@ import {useState} from "react";
 import CommentManagePage from "@/components/comment/comment-manage";
 import { useNavigationHistory } from "@/hooks/use-navigation-history";
 import {EventEarnings} from "@/components/event-page/event-earnings";
+import {EventEdit} from "@/components/event-page/event-edit";
 
 interface SingleEventHostPageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -85,14 +86,7 @@ export default function SingleEventHostPage(
 
             case 'edit':
                 return (
-                    <div className="w-full min-h-[85vh] px-4">
-                        <div className="w-full flex flex-col gap-4">
-                            <h1 className="text-xl font-semibold text-neutral-800 pt-4">
-                                Edit Event
-                            </h1>
-                            {/* Add your edit event component here */}
-                        </div>
-                    </div>
+                    <EventEdit event={event} />
                 );
 
             case 'co-host-manage':

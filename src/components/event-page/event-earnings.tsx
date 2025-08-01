@@ -150,7 +150,7 @@ export const EventEarnings = ({
                                 <DrawerTitle>Ticket Details</DrawerTitle>
                                 {/*<DrawerDescription>Set your daily activity goal.</DrawerDescription>*/}
                             </DrawerHeader>
-                            <div className="flex flex-col gap-6 pb-10">
+                            <div className="flex flex-col gap-6 pb-10 px-6">
                                 {event.tickets.map((ticket: {[key: string]: any}) => (
                                     <EventSingleContent className="shadow-lg border-1" key={ticket.id}>
                                         <div className="flex flex-row justify-between items-center w-full">

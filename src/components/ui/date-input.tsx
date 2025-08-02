@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/popover"
 import {cn} from "@/lib/utils";
 
-interface LoginFormProps extends React.ComponentProps<"div"> {
+interface Calendar28Props extends React.ComponentProps<"div"> {
     date: Date | undefined;
     setDate: (value: Date) => void;
     required: boolean;
@@ -41,7 +41,7 @@ function isValidDate(date: Date | undefined) {
 
 export const Calendar28 = ({
    label, date, setDate, className, required, ...props
-}: LoginFormProps) => {
+}: Calendar28Props) => {
     const [open, setOpen] = React.useState(false)
     // const [date, setDate] = React.useState<Date | undefined>(
     //     new Date("2025-06-01")

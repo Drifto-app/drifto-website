@@ -141,8 +141,14 @@ a {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
+  }
+
+  .pac-container {
+    z-index: 99999999999 !important;
+    pointer-events: auto !important;
   }
 }
 

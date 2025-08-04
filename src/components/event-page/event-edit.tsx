@@ -7,6 +7,9 @@ import {Input} from "@/components/ui/input";
 import {LocationSearchDialog} from "@/components/event-page/location-search-dialog";
 import {Switch} from "@/components/ui/switch";
 import {DateTimePicker} from "@/components/event-page/date-time-input";
+import {toast} from "react-toastify";
+import {CiEdit} from "react-icons/ci";
+import {ImageSnapshots} from "@/components/ui/image-snapshot";
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -40,6 +43,10 @@ export const EventEdit = ({
     const [isPublic, setIsPublic] = useState<boolean>(event.public);
     const [startTime, setStartTime] = React.useState<Date>(new Date(event.startTime));
     const [stopTime, setStopTime] = React.useState<Date>(new Date(event.stopTime));
+    const [isAgeRestricted, setIsAgeRestricted] = useState<boolean>(event.ageRestricted);
+    const [minimumAge, setMinimumAge] = useState<number>(event.minimumAge || 0);
+    const [eventTags, setEventTags] = useState<string[]>(event.eventTags)
+    const [screenshots, setScreenshots] = useState<string[]>(event.screenshots)
 
     const handleTitleImageChange = useCallback((newUrl: string) => {
         setTitleImage(newUrl);
@@ -53,6 +60,39 @@ export const EventEdit = ({
         setAddress(locationData.address);
         setCity(locationData.city);
         setState(locationData.state);
+    }
+
+    const handleStartDateChange = (value: Date) => {
+        if(value > stopTime || value < new Date(Date.now())) {
+            toast.error("Invalid start date");
+            return;
+        }
+
+        setStartTime(value);
+    }
+
+    const handleStopDateChange = (value: Date) => {
+        if(value < startTime || value < new Date(Date.now())) {
+            toast.error("Invalid stop date");
+            return;
+        }
+
+        setStopTime(value);
+    }
+
+    const handleMinimumAgeChange = (value: number) => {
+        if(!value) {
+            setIsAgeRestricted(false);
+            setMinimumAge(0);
+
+            console.log(0, false);
+            return;
+        }
+
+        setMinimumAge(value);
+        setIsAgeRestricted(true);
+
+        console.log(value, true);
     }
 
     return (
@@ -134,8 +174,37 @@ export const EventEdit = ({
                             <Switch id="event-visible" size="medium" checked={isPublic} onCheckedChange={() => {setIsPublic(!isPublic)}} />
                         </div>
                     </div>
-                    <DateTimePicker date={startTime} setDate={setStartTime} label="start date" />
-                    <DateTimePicker date={stopTime} setDate={setStopTime} label="stop date" />
+                    <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date" />
+                    <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date" />
+                    <div className="grid gap-2 w-full">
+                        <Label htmlFor="m-age" className="text-neutral-500">Minimum Age</Label>
+                        <Input
+                            id="m-age"
+                            name="m-age"
+                            type="number"
+                            min={0}
+                            placeholder="Minimum Age"
+                            value={minimumAge}
+                            onChange={e => handleMinimumAgeChange(Number(e.target.value))}
+                            required
+                            className="py-2 bg-neutral-200"
+                        />
+                    </div>
+                    <div className="grid gap-2">
+                        <div className="text-neutral-500">Event Tags</div>
+                        <div className="py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
+                        <span className="text-sm">
+                            {
+                                eventTags.length > 1 ? eventTags.concat(", ") : eventTags[0]
+                            }
+                        </span>
+                            <CiEdit size={22} />
+                        </div>
+                    </div>
+                    <div className="grid gap-2 w-full">
+                        <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
+                        <ImageSnapshots initialImages={screenshots} />
+                    </div>
                 </div>
             </form>
         </div>

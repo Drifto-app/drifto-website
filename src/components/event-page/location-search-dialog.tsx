@@ -19,6 +19,9 @@ import { CiEdit } from "react-icons/ci";
 import { MapPin, Search, AlertCircle, Maximize, Minimize } from "lucide-react";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 
+// Move libraries array outside component to prevent reloading
+const GOOGLE_MAPS_LIBRARIES: ("places")[] = ["places"];
+
 interface LocationData {
     coordinates: {
         lat: number;
@@ -264,8 +267,8 @@ interface LocationSearchDialogProps {
 }
 
 export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
-    currentLocation, onLocationUpdate, googleMapsApiKey
-}) => {
+                                                                              currentLocation, onLocationUpdate, googleMapsApiKey
+                                                                          }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [mapCenter, setMapCenter] = useState({ lat: 6.5244, lng: 3.3792 }); // Lagos, Nigeria
@@ -283,24 +286,24 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
     // Detect mobile device
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    // Load Google Maps script using useLoadScript hook
+    // Load Google Maps script using useLoadScript hook with static libraries array
     const { isLoaded, loadError } = useLoadScript({
         googleMapsApiKey: googleMapsApiKey,
-        libraries: ["places"],
+        libraries: GOOGLE_MAPS_LIBRARIES, // Use static array
         language: "en-US",
         region: "ng",
     });
 
     const placesServiceRef = useRef<google.maps.places.PlacesService | null>(null);
 
-    // Autocomplete options
-    const autocompleteOptions = {
+    // Autocomplete options - also make static to avoid recreating
+    const autocompleteOptions = React.useMemo(() => ({
         fields: ['place_id', 'formatted_address', 'address_components', 'geometry'],
         types: ['establishment', 'geocode'],
         componentRestrictions: {
             country: 'ng'
         }
-    };
+    }), []);
 
     // Handle fullscreen toggle
     const handleToggleFullscreen = useCallback(() => {

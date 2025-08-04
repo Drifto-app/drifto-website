@@ -10,6 +10,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 // Headless UI Dialog for modal pop-up
 import { Dialog } from '@headlessui/react';
 import { MdCancel } from "react-icons/md";
+import {X} from "lucide-react";
 
 interface SnapshotCarouselProps {
     snapshots?: string[];
@@ -58,8 +59,8 @@ export const SnapshotCarousel: React.FC<SnapshotCarouselProps> = ({ snapshots })
                 onClose={closeModal}
                 className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-50"
             >
-                <div className="absolute top-4 right-4" onClick={closeModal}>
-                    <MdCancel size={30} className="text-white" />
+                <div className="absolute top-4 right-4 text-white" onClick={closeModal}>
+                    <X size={30} />
                 </div>
                 <Dialog.Panel className="bg-white overflow-hidden w-full max-h-[95%]">
                     {activeSrc && (

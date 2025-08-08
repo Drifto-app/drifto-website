@@ -1,5 +1,4 @@
 import axios, {AxiosError, AxiosResponse, InternalAxiosRequestConfig} from "axios";
-import jwt from "jsonwebtoken";
 import {useAuthStore} from "@/store/auth-store";
 
 export const api = axios.create({
@@ -11,7 +10,7 @@ export const api = axios.create({
 })
 
 export const authApi = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api',
+    baseURL: process.env.NEXT_PUBLIC_API_URL,
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',

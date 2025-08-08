@@ -10,6 +10,18 @@ import {DateTimePicker} from "@/components/event-page/date-time-input";
 import {toast} from "react-toastify";
 import {CiEdit} from "react-icons/ci";
 import {ImageSnapshots} from "@/components/ui/image-snapshot";
+import {EventTagDialog} from "@/components/event-page/event-tag-edit";
+import {Button} from "@/components/ui/button";
+import {
+    Dialog,
+    DialogClose,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -47,6 +59,7 @@ export const EventEdit = ({
     const [minimumAge, setMinimumAge] = useState<number>(event.minimumAge || 0);
     const [eventTags, setEventTags] = useState<string[]>(event.eventTags)
     const [screenshots, setScreenshots] = useState<string[]>(event.screenshots)
+    const [tickets, setTickets] = useState<any[]>(event.tickets);
 
     const handleTitleImageChange = useCallback((newUrl: string) => {
         setTitleImage(newUrl);
@@ -85,14 +98,151 @@ export const EventEdit = ({
             setIsAgeRestricted(false);
             setMinimumAge(0);
 
-            console.log(0, false);
             return;
         }
 
         setMinimumAge(value);
         setIsAgeRestricted(true);
+    }
 
-        console.log(value, true);
+    const renderScreen = () => {
+        switch (activeScreen) {
+            case "tickets":
+                return (
+                    <div className="px-3 flex flex-col gap-3 pt-2">
+                        {tickets.map((ticket) => (
+                            <div key={ticket.id} className="bg-neutral-200 rounded-md px-4 py-3 flex flex-col gap-2">
+                                <div className="w-full flex items-center justify-between text-lg">
+                                    <p className="font-semibold capitalize">{ticket.title}</p>
+                                    <p>{ticket.price === 0 ? "Free" : "₦" + ticket.price.toFixed(2)}</p>
+                                </div>
+                                <p className="w-full text-sm text-neutral-500">Quantity: {ticket.totalQuantity}</p>
+                                <p className="w-full text-sm text-neutral-500">Purchased: {ticket.purchasedQuantity}</p>
+                                <p className="w-full text-sm text-blue-600">Available: {ticket.totalQuantity - ticket.purchasedQuantity}</p>
+                                <div className="w-full flex items-center justify-end mt-4 gap-3">
+                                    <Button className="bg-neutral-300 text-black" type="button">Edit</Button>
+                                    <Dialog>
+                                        <DialogTrigger asChild>
+                                            <Button className="bg-red-400" type="button">Delete</Button>
+                                        </DialogTrigger>
+                                        <DialogContent className="w-full flex flex-col gap-6">
+                                            <DialogHeader>
+                                                <DialogTitle className="text-xl">Delete Ticket</DialogTitle>
+                                                <DialogDescription className="text-md">
+                                                    Are you sure you want to delete this ticket category?
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <DialogFooter className="w-full flex flex-row sm:justify-between justify-between px-4 sm:px-20">
+                                                <DialogClose asChild>
+                                                    <Button type="button" variant="secondary" className="text-xl bg-neutral-300 py-6 px-8 font-semibold">
+                                                        Cancel
+                                                    </Button>
+                                                </DialogClose>
+                                                <Button type="button" variant="secondary" className="text-xl py-6 px-8 bg-red-500 text-white font-semibold" >
+                                                    Confirm
+                                                </Button>
+                                            </DialogFooter>
+                                        </DialogContent>
+                                    </Dialog>
+                                </div>
+                            </div>
+                        ))}
+                        <Button variant="outline" className="text-lg text-blue-600 py-7 border-blue-600" type="button">
+                            + Add Ticket
+                        </Button>
+                    </div>
+                )
+
+            case "details":
+                return (
+                    <>
+                        <CoverImageUploader
+                            value={titleImage}
+                            onChange={handleTitleImageChange}
+                            mediaFileType={"EVENT_HEADER"}
+                        />
+                        <div className="w-full flex flex-col gap-5 px-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="title" className="text-neutral-500">Title</Label>
+                                <Input
+                                    id="title"
+                                    type="text"
+                                    placeholder="Title"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    required
+                                    className="py-6 bg-neutral-200"
+                                />
+                            </div>
+                            <div className="grid gap-2 ">
+                                <Label htmlFor="description" className="text-neutral-500">Description</Label>
+                                <textarea
+                                    id="decription"
+                                    placeholder="Description"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    required
+                                    className="py-2 px-3 bg-neutral-200 rounded-md focus:border-blue-600 focus:border-1 focus:outline-hidden"
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <div className="text-neutral-500">Location</div>
+                                <LocationSearchDialog
+                                    currentLocation={{coordinates, address, city, state }}
+                                    onLocationUpdate={handleLocationChange}
+                                    googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+                                />
+                            </div>
+                            <div className="grid gap-2 w-full">
+                                <Label htmlFor="secure-location" className="text-neutral-500">Secure Location</Label>
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
+                                    <div className="flex flex-col gap-1">
+                                        <h3 className="font-bold">Hide Exact Location</h3>
+                                        <p className="text-sm text-neutral-500">Enable to hide the exact location fromm attendees until necessary</p>
+                                    </div>
+                                    <Switch id="secure-location" size="medium" checked={locationSecure} onCheckedChange={() => {setLocationSecure(!locationSecure)}} />
+                                </div>
+                            </div>
+                            <div className="grid gap-2 w-full">
+                                <Label htmlFor="event-visible" className="text-neutral-500">Event Visibility</Label>
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
+                                    <div className="flex flex-col gap-1">
+                                        <h3 className="font-bold">Public Event</h3>
+                                        <p className="text-sm text-neutral-500">Enable to make the event visible to all users.</p>
+                                    </div>
+                                    <Switch id="event-visible" size="medium" checked={isPublic} onCheckedChange={() => {setIsPublic(!isPublic)}} />
+                                </div>
+                            </div>
+                            <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date" />
+                            <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date" />
+                            <div className="grid gap-2 w-full">
+                                <Label htmlFor="m-age" className="text-neutral-500">Minimum Age</Label>
+                                <Input
+                                    id="m-age"
+                                    name="m-age"
+                                    type="number"
+                                    min={0}
+                                    placeholder="Minimum Age"
+                                    value={minimumAge}
+                                    onChange={e => handleMinimumAgeChange(Number(e.target.value))}
+                                    required
+                                    className="py-2 bg-neutral-200"
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <div className="text-neutral-500">Event Tags</div>
+                                <EventTagDialog currentEventTags={eventTags} onTagAdd={
+                                    (tag: string) => setEventTags([...eventTags, tag])
+                                } onTagRemove={(tag: string) => setEventTags((value) => value.filter((i) => i !== tag)) } />
+                            </div>
+                            <div className="grid gap-2 w-full">
+                                <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
+                                <ImageSnapshots initialImages={screenshots} maxImages={50} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
+                            </div>
+                        </div>
+                    </>
+                )
+        }
     }
 
     return (
@@ -117,95 +267,9 @@ export const EventEdit = ({
                 ))}
             </ul>
             <form className="w-full flex flex-col gap-5 pb-10">
-                <CoverImageUploader
-                    value={titleImage}
-                    onChange={handleTitleImageChange}
-                    mediaFileType={"EVENT_HEADER"}
-                />
-                <div className="w-full flex flex-col gap-5 px-4">
-                    <div className="grid gap-2">
-                        <Label htmlFor="title" className="text-neutral-500">Title</Label>
-                        <Input
-                            id="title"
-                            type="text"
-                            placeholder="Title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                            className="py-6 bg-neutral-200"
-                        />
-                    </div>
-                    <div className="grid gap-2 ">
-                        <Label htmlFor="description" className="text-neutral-500">Description</Label>
-                        <textarea
-                            id="decription"
-                            placeholder="Description"
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            required
-                            className="py-2 px-3 bg-neutral-200 rounded-md focus:border-blue-600 focus:border-1 focus:outline-hidden"
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="text-neutral-500">Location</div>
-                        <LocationSearchDialog
-                            currentLocation={{coordinates, address, city, state }}
-                            onLocationUpdate={handleLocationChange}
-                            googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-                        />
-                    </div>
-                    <div className="grid gap-2 w-full">
-                        <Label htmlFor="secure-location" className="text-neutral-500">Secure Location</Label>
-                        <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
-                            <div className="flex flex-col gap-1">
-                                <h3 className="font-bold">Hide Exact Location</h3>
-                                <p className="text-sm text-neutral-500">Enable to hide the exact location fromm attendees until necessary</p>
-                            </div>
-                            <Switch id="secure-location" size="medium" checked={locationSecure} onCheckedChange={() => {setLocationSecure(!locationSecure)}} />
-                        </div>
-                    </div>
-                    <div className="grid gap-2 w-full">
-                        <Label htmlFor="event-visible" className="text-neutral-500">Event Visibility</Label>
-                        <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
-                            <div className="flex flex-col gap-1">
-                                <h3 className="font-bold">Public Event</h3>
-                                <p className="text-sm text-neutral-500">Enable to make the event visible to all users.</p>
-                            </div>
-                            <Switch id="event-visible" size="medium" checked={isPublic} onCheckedChange={() => {setIsPublic(!isPublic)}} />
-                        </div>
-                    </div>
-                    <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date" />
-                    <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date" />
-                    <div className="grid gap-2 w-full">
-                        <Label htmlFor="m-age" className="text-neutral-500">Minimum Age</Label>
-                        <Input
-                            id="m-age"
-                            name="m-age"
-                            type="number"
-                            min={0}
-                            placeholder="Minimum Age"
-                            value={minimumAge}
-                            onChange={e => handleMinimumAgeChange(Number(e.target.value))}
-                            required
-                            className="py-2 bg-neutral-200"
-                        />
-                    </div>
-                    <div className="grid gap-2">
-                        <div className="text-neutral-500">Event Tags</div>
-                        <div className="py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
-                        <span className="text-sm">
-                            {
-                                eventTags.length > 1 ? eventTags.concat(", ") : eventTags[0]
-                            }
-                        </span>
-                            <CiEdit size={22} />
-                        </div>
-                    </div>
-                    <div className="grid gap-2 w-full">
-                        <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
-                        <ImageSnapshots initialImages={screenshots} />
-                    </div>
-                </div>
+                {
+                    renderScreen()
+                }
             </form>
         </div>
     )

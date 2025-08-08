@@ -32,6 +32,7 @@ import {EventCard} from "@/components/event-display/event-card";
 import {Loader} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
+import {useEventTagsStore} from "@/store/event-tag-store";
 
 interface EventDisplayProps extends React.ComponentProps<"div"> {
     location: string | null;

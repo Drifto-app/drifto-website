@@ -1,11 +1,7 @@
-'use client';
-
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import {Bounce, ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {GoogleOAuthProvider} from "@react-oauth/google";
-import {AuthProvider} from "@/components/auth/auth-provider";
+import {ClientProviders} from "@/components/client-providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -26,27 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}>
-        <AuthProvider>
-          <main>
-            {children}
-            <ToastContainer
-                position="top-right"
-                autoClose={3000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick={false}
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="colored"
-                transition={Bounce}
-            />
-
-          </main>
-        </AuthProvider>
-      </GoogleOAuthProvider>
+        <ClientProviders>
+            <main>{children}</main>
+        </ClientProviders>
       </body>
     </html>
   );

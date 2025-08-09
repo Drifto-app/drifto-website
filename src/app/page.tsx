@@ -7,20 +7,32 @@ import {HeaderMobile} from "@/components/header-mobile/header-mobile";
 import {EventDisplay} from "@/components/event-display/event-display";
 import {useAuthStore} from "@/store/auth-store";
 import {ScreenProvider} from "@/components/screen/screen-provider";
-import {useSearchParams} from "next/navigation";
+import {useSearchParams, useRouter} from "next/navigation";
 
 interface EventDisplayRef {
     refresh: () => void;
 }
 
 export default function Home() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const {user} = useAuthStore.getState();
 
-    const screen = useSearchParams().get("screen");
+    const screen = searchParams.get("screen");
 
     const [activeScreen, setActiveScreen] = useState<string>(screen ?? "events");
     const [location, setLocation] = useState<string | null>(user?.city);
     const eventDisplayRef = useRef<EventDisplayRef>(null);
+
+
+    const handleScreen = (value: string) => {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("screen", value);
+        router.replace(`?${params.toString()}`);
+
+        setActiveScreen(value);
+    }
 
     // Function to handle events refresh
     const handleEventsRefresh = () => {
@@ -39,7 +51,7 @@ export default function Home() {
                         </div>
                         <BottomNavbar
                             activeScreen={activeScreen}
-                            setActiveScreen={setActiveScreen}
+                            setActiveScreen={handleScreen}
                             onEventsRefresh={handleEventsRefresh}
                         />
                     </div>
@@ -58,7 +70,7 @@ export default function Home() {
                         </div>
                         <BottomNavbar
                             activeScreen={activeScreen}
-                            setActiveScreen={setActiveScreen}
+                            setActiveScreen={handleScreen}
                             onEventsRefresh={handleEventsRefresh}
                         />
                     </div>
@@ -77,7 +89,7 @@ export default function Home() {
                         </div>
                         <BottomNavbar
                             activeScreen={activeScreen}
-                            setActiveScreen={setActiveScreen}
+                            setActiveScreen={handleScreen}
                             onEventsRefresh={handleEventsRefresh}
                         />
                     </div>
@@ -96,7 +108,7 @@ export default function Home() {
                         </div>
                         <BottomNavbar
                             activeScreen={activeScreen}
-                            setActiveScreen={setActiveScreen}
+                            setActiveScreen={handleScreen}
                             onEventsRefresh={handleEventsRefresh}
                         />
                     </div>
@@ -122,7 +134,7 @@ export default function Home() {
                     </div>
                     <BottomNavbar
                         activeScreen={activeScreen}
-                        setActiveScreen={setActiveScreen}
+                        setActiveScreen={handleScreen}
                         onEventsRefresh={handleEventsRefresh}
                     />
                 </div>

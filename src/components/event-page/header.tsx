@@ -27,17 +27,8 @@ const headerItems: HeaderItem[] = [
 ]
 
 export const SingleEventHeader = ({
-                                      title = "Manage Event",
-                                      isCoHostComponent = false,
-                                      isCoHost,
-                                      event,
-                                      activeScreen,
-                                      setActiveScreen,
-                                      prev,
-                                      onBackClick, // New prop
-                                      className,
-                                      ...props
-                                  }: SingleEventHeaderProps) => {
+    title = "Manage Event", isCoHostComponent = false, isCoHost, event, activeScreen, setActiveScreen, prev, onBackClick, className, ...props
+}: SingleEventHeaderProps) => {
     const router = useRouter();
 
     const handleBackClick = () => {
@@ -56,7 +47,7 @@ export const SingleEventHeader = ({
     if (isCoHost) {
         return (
             <div className={cn(
-                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 bg-white justify-center",
+                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 justify-center",
                 className
             )} {...props}>
                 <div className="flex flex-row items-center px-8 py-6">

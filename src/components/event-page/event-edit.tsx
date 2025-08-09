@@ -8,20 +8,10 @@ import {LocationSearchDialog} from "@/components/event-page/location-search-dial
 import {Switch} from "@/components/ui/switch";
 import {DateTimePicker} from "@/components/event-page/date-time-input";
 import {toast} from "react-toastify";
-import {CiEdit} from "react-icons/ci";
 import {ImageSnapshots} from "@/components/ui/image-snapshot";
 import {EventTagDialog} from "@/components/event-page/event-tag-edit";
 import {Button} from "@/components/ui/button";
-import {
-    Dialog,
-    DialogClose,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
+import {TicketCard} from "@/components/event-page/edit-ticket-card";
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -41,6 +31,7 @@ export const EventEdit = ({
     event, className, ...props
 }: EventEditProps) => {
     const[activeScreen, setActiveScreen] = useState<string>("details");
+
 
     const [titleImage, setTitleImage] = useState<string | undefined>(
         event.titleImage
@@ -105,49 +96,23 @@ export const EventEdit = ({
         setIsAgeRestricted(true);
     }
 
+    const handleTicketsChange = (updated: { [key: string]: any }) => {
+        setTickets(prev =>
+            prev.map(t => (t.id === updated.id ? { ...t, ...updated } : t))
+        );
+    };
+
     const renderScreen = () => {
         switch (activeScreen) {
             case "tickets":
                 return (
                     <div className="px-3 flex flex-col gap-3 pt-2">
                         {tickets.map((ticket) => (
-                            <div key={ticket.id} className="bg-neutral-200 rounded-md px-4 py-3 flex flex-col gap-2">
-                                <div className="w-full flex items-center justify-between text-lg">
-                                    <p className="font-semibold capitalize">{ticket.title}</p>
-                                    <p>{ticket.price === 0 ? "Free" : "₦" + ticket.price.toFixed(2)}</p>
-                                </div>
-                                <p className="w-full text-sm text-neutral-500">Quantity: {ticket.totalQuantity}</p>
-                                <p className="w-full text-sm text-neutral-500">Purchased: {ticket.purchasedQuantity}</p>
-                                <p className="w-full text-sm text-blue-600">Available: {ticket.totalQuantity - ticket.purchasedQuantity}</p>
-                                <div className="w-full flex items-center justify-end mt-4 gap-3">
-                                    <Button className="bg-neutral-300 text-black" type="button">Edit</Button>
-                                    <Dialog>
-                                        <DialogTrigger asChild>
-                                            <Button className="bg-red-400" type="button">Delete</Button>
-                                        </DialogTrigger>
-                                        <DialogContent className="w-full flex flex-col gap-6">
-                                            <DialogHeader>
-                                                <DialogTitle className="text-xl">Delete Ticket</DialogTitle>
-                                                <DialogDescription className="text-md">
-                                                    Are you sure you want to delete this ticket category?
-                                                </DialogDescription>
-                                            </DialogHeader>
-                                            <DialogFooter className="w-full flex flex-row sm:justify-between justify-between px-4 sm:px-20">
-                                                <DialogClose asChild>
-                                                    <Button type="button" variant="secondary" className="text-xl bg-neutral-300 py-6 px-8 font-semibold">
-                                                        Cancel
-                                                    </Button>
-                                                </DialogClose>
-                                                <Button type="button" variant="secondary" className="text-xl py-6 px-8 bg-red-500 text-white font-semibold" >
-                                                    Confirm
-                                                </Button>
-                                            </DialogFooter>
-                                        </DialogContent>
-                                    </Dialog>
-                                </div>
-                            </div>
+                            <TicketCard key={ticket.id} ticket={ticket} onChange={handleTicketsChange} removeTicket={(ticketId: string) => {
+                                setTickets((tickets) => tickets.filter((i) => i.id !== ticketId));
+                            }} />
                         ))}
-                        <Button variant="outline" className="text-lg text-blue-600 py-7 border-blue-600" type="button">
+                        <Button variant="outline" className="text-lg text-blue-600 py-7 border-blue-600 hover:border-blue-600 hover:text-blue-600" type="button">
                             + Add Ticket
                         </Button>
                     </div>
@@ -170,7 +135,6 @@ export const EventEdit = ({
                                     placeholder="Title"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    required
                                     className="py-6 bg-neutral-200"
                                 />
                             </div>
@@ -181,7 +145,6 @@ export const EventEdit = ({
                                     placeholder="Description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    required
                                     className="py-2 px-3 bg-neutral-200 rounded-md focus:border-blue-600 focus:border-1 focus:outline-hidden"
                                 />
                             </div>
@@ -225,7 +188,6 @@ export const EventEdit = ({
                                     placeholder="Minimum Age"
                                     value={minimumAge}
                                     onChange={e => handleMinimumAgeChange(Number(e.target.value))}
-                                    required
                                     className="py-2 bg-neutral-200"
                                 />
                             </div>
@@ -246,7 +208,7 @@ export const EventEdit = ({
     }
 
     return (
-        <div className="w-full min-h-[85vh]">
+        <div className="w-full min-h-[85vh]" {...props}>
             <ul className="w-full flex flex-row justify-between pt-2">
                 {headerItems.map((item) => (
                     <li key={item.value} className="w-full">
@@ -266,10 +228,13 @@ export const EventEdit = ({
                     </li>
                 ))}
             </ul>
-            <form className="w-full flex flex-col gap-5 pb-10">
+            <form className="w-full flex flex-col gap-5 pb-18">
                 {
                     renderScreen()
                 }
+                <div className="bg-white pt-2 border-none border-t border-white w-full fixed inset-x-0 bottom-0 z-60 pb-4 flex items-center justify-center safe-area-inset-bottom">
+                    <Button type="submit" className="w-[90%] text-md py-6 font-bold">Confirm Changes</Button>
+                </div>
             </form>
         </div>
     )

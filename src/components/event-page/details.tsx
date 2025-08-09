@@ -105,20 +105,20 @@ export const SingleEventDetails = ({
     if(event.eventDisplayStatus === "ACTIVE") {
         eventDisplayDetails = {
             icon: <IoPizzaOutline size={26}/>,
-            value: event.eventDisplayStatus,
+            value: "active",
             description: `Tickets are now available`
         }
     }else if (event.eventDisplayStatus === "HOT") {
         eventDisplayDetails = {
             icon: <FaHotjar size={20} className="text-orange-600"/>,
-            value: event.eventDisplayStatus,
+            value: "hot",
             description: `Tickets are almost sold out`
         }
     } else if (event.eventDisplayStatus === "SOLD_OUT") {
         eventDisplayDetails = {
             icon: <TbTicketOff size={22} className="text-red-600"/>,
-            value: event.eventDisplayStatus,
-            description: `Tickets are almost sold out`
+            value: "sold o  ut",
+            description: `Tickets are sold out`
         }
     }
 
@@ -160,7 +160,7 @@ export const SingleEventDetails = ({
                         </EventSingleContentText>
                         <EventSingleContentText isLine={false} headText={"Location:"} className="shadow-xl">
                             <p className="capitalize font-black text-lg w-full text-neutral-400">
-                                {event.address}, {event.city}, {event.state}
+                                {`${event.address}, ${event.city}, ${event.state}`}
                             </p>
                         </EventSingleContentText>
                         <EventSingleContentText isLine={false} headText={"Event Time:"} className="shadow-xl items-start">
@@ -327,17 +327,19 @@ export const SingleEventDetails = ({
                     <FaRegCalendar size={18}/>
                     <div className="flex flex-col gap-1">
                         <p className="text-md font-semibold text-neutral-500">{formattedStartDate} - {formattedStopDate}</p>
-                        <p className="text-md font-medium text-neutral-400 text-neutral-500">{formattedStartTime} - {formattedStopTime}</p>
+                        <p className="text-md font-medium text-neutral-500">{formattedStartTime} - {formattedStopTime}</p>
                     </div>
                 </EventSingleContent>
                 <EventSingleContent>
                     <IoLocationOutline size={26}/>
-                    <p className="font-semibold text-sm">{event.address}, {event.city}, {event.state}</p>
+                    <p className="font-semibold text-sm">
+                        {event.locationSecure ? `${event.city}, ${event.state}` : `${event.address}, ${event.city}, ${event.state}`}
+                    </p>
                 </EventSingleContent>
                 <EventSingleContent>
                     {eventDisplayDetails.icon}
                     <div className="flex flex-col">
-                        <p className="text-sm font-semibold lowercase">This event is {eventDisplayDetails.value}</p>
+                        <p className="text-sm font-semibold normal-case">This event is {eventDisplayDetails.value}</p>
                         <p className="text-sm font-medium text-neutral-400">{eventDisplayDetails.description}</p>
                     </div>
                 </EventSingleContent>

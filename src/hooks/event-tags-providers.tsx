@@ -2,6 +2,7 @@
 
 import {createContext, ReactNode, useEffect} from "react";
 import {eventTagsActions, useEventTagsStore} from "@/store/event-tag-store";
+import {useAuthStore} from "@/store/auth-store";
 
 const EventTagsContext = createContext<null>(null);
 
@@ -11,12 +12,16 @@ interface EventTagsProviderProps {
 
 export function EventTagsProvider({ children }: EventTagsProviderProps) {
 
+    const { isAuthenticated } = useAuthStore();
+
     useEffect(() => {
-        console.log('EventTagsProvider: Starting to fetch tags...');
+        if(!isAuthenticated) {
+            return;
+        }
 
         eventTagsActions.fetchTags();
 
-    }, []); // Empty dependency array - only run once
+    }, [isAuthenticated]); // Empty dependency array - only run once
 
     return (
         <EventTagsContext.Provider value={null}>

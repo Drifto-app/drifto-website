@@ -1,7 +1,7 @@
 import * as React from "react";
 import {cn} from "@/lib/utils";
 import {CoverImageUploader} from "@/components/ui/cover-image";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {LocationSearchDialog} from "@/components/event-page/location-search-dialog";
@@ -12,9 +12,14 @@ import {ImageSnapshots} from "@/components/ui/image-snapshot";
 import {EventTagDialog} from "@/components/event-page/event-tag-edit";
 import {Button} from "@/components/ui/button";
 import {TicketCard} from "@/components/event-page/edit-ticket-card";
+import {NewTicketCard} from "@/components/event-page/new-ticket-card";
+import {authApi} from "@/lib/axios";
+import {LoaderSmall} from "@/components/ui/loader";
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
+    setEvent: (event: {[key: string]: any}) => void;
+    setMainActiveScreen: (activeScreen: string, title?: string) => void;
 }
 
 interface HeaderItem {
@@ -28,10 +33,14 @@ const headerItems: HeaderItem[] = [
 ]
 
 export const EventEdit = ({
-    event, className, ...props
+    event, className, setEvent, setMainActiveScreen, ...props
 }: EventEditProps) => {
     const[activeScreen, setActiveScreen] = useState<string>("details");
 
+
+    const [loading, setLoading] = useState<boolean>(false);
+    const [startDateError, setStartDateError] = useState<boolean>(false);
+    const [stopDateError, setStopDateError] = useState<boolean>(false);
 
     const [titleImage, setTitleImage] = useState<string | undefined>(
         event.titleImage
@@ -47,7 +56,7 @@ export const EventEdit = ({
     const [startTime, setStartTime] = React.useState<Date>(new Date(event.startTime));
     const [stopTime, setStopTime] = React.useState<Date>(new Date(event.stopTime));
     const [isAgeRestricted, setIsAgeRestricted] = useState<boolean>(event.ageRestricted);
-    const [minimumAge, setMinimumAge] = useState<number>(event.minimumAge || 0);
+    const [minimumAge, setMinimumAge] = useState<string>(String(event.minimumAge ?? "0"));
     const [eventTags, setEventTags] = useState<string[]>(event.eventTags)
     const [screenshots, setScreenshots] = useState<string[]>(event.screenshots)
     const [tickets, setTickets] = useState<any[]>(event.tickets);
@@ -55,6 +64,10 @@ export const EventEdit = ({
     const handleTitleImageChange = useCallback((newUrl: string) => {
         setTitleImage(newUrl);
     }, []);
+
+    useEffect(() => {
+        setEvent(prev => ({ ...prev, tickets }));
+    }, [tickets, setEvent]);
 
     const handleLocationChange = (locationData: {[key: string]: any}) => {
         setCoordinates({
@@ -68,33 +81,34 @@ export const EventEdit = ({
 
     const handleStartDateChange = (value: Date) => {
         if(value > stopTime || value < new Date(Date.now())) {
-            toast.error("Invalid start date");
+            setStartDateError(true)
             return;
         }
 
+        setStartDateError(false)
         setStartTime(value);
     }
 
     const handleStopDateChange = (value: Date) => {
         if(value < startTime || value < new Date(Date.now())) {
-            toast.error("Invalid stop date");
+            setStopDateError(true)
             return;
         }
 
+        setStopDateError(false)
         setStopTime(value);
     }
 
-    const handleMinimumAgeChange = (value: number) => {
-        if(!value) {
-            setIsAgeRestricted(false);
-            setMinimumAge(0);
+    const handleMinimumAgeChange = (raw: string) => {
+        // integers only
+        const numericStr = raw.replace(/\D/g, "");
+        // normalize leading zeros (optional)
+        const normalized = numericStr.replace(/^0+(?=\d)/, "");
+        setMinimumAge(normalized);
 
-            return;
-        }
-
-        setMinimumAge(value);
-        setIsAgeRestricted(true);
-    }
+        const value = normalized === "" ? 0 : parseInt(normalized, 10);
+        setIsAgeRestricted(value > 0);
+    };
 
     const handleTicketsChange = (updated: { [key: string]: any }) => {
         setTickets(prev =>
@@ -102,19 +116,63 @@ export const EventEdit = ({
         );
     };
 
+    const handleUpdateSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+
+        setLoading(true);
+
+        const params = {
+            title,
+            description,
+            isLocationSecure: locationSecure,
+            isPublic,
+            startTime,
+            stopTime,
+            screenshots,
+            titleImage,
+            city,
+            state,
+            location: coordinates,
+            address,
+            isAgeRestricted,
+            minimumAge:  minimumAge === "" ? null : parseInt(minimumAge, 10),
+            tags: eventTags,
+        }
+
+        try {
+            const response = await authApi.patch(`/event/${event.id}`, params);
+            toast.success("Updated successfully");
+            setEvent(response.data.data);
+            setMainActiveScreen("")
+        } catch (error: any) {
+            toast.error(error.message);
+        }finally {
+            setLoading(false);
+        }
+    }
+
     const renderScreen = () => {
         switch (activeScreen) {
             case "tickets":
                 return (
                     <div className="px-3 flex flex-col gap-3 pt-2">
-                        {tickets.map((ticket) => (
-                            <TicketCard key={ticket.id} ticket={ticket} onChange={handleTicketsChange} removeTicket={(ticketId: string) => {
-                                setTickets((tickets) => tickets.filter((i) => i.id !== ticketId));
+                        {tickets.map((ticket, index) => (
+                            <TicketCard
+                                key={index}
+                                ticket={ticket}
+                                onChange={handleTicketsChange}
+                                removeTicket={(ticketId: string) => {
+                                setTickets((tickets) => {
+                                    return tickets.filter((i) => i.id !== ticketId)
+                                });
                             }} />
                         ))}
-                        <Button variant="outline" className="text-lg text-blue-600 py-7 border-blue-600 hover:border-blue-600 hover:text-blue-600" type="button">
-                            + Add Ticket
-                        </Button>
+                        <NewTicketCard
+                            eventId={event.id}
+                            addTicket={(newTicket: {[key: string]: any}) => {
+                                setTickets([...tickets, newTicket]);
+                            }}
+                        />
                     </div>
                 )
 
@@ -176,30 +234,54 @@ export const EventEdit = ({
                                     <Switch id="event-visible" size="medium" checked={isPublic} onCheckedChange={() => {setIsPublic(!isPublic)}} />
                                 </div>
                             </div>
-                            <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date" />
-                            <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date" />
+                           <div className="w-full flex flex-col gap-1">
+                               <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date" />
+                               {
+                                   startDateError && <p className="text-xs text-red-600">Start time cannot be past the stop time</p>
+                               }
+                           </div>
+                            <div className="w-full">
+                                <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date" />
+                                {
+                                    stopDateError && <p className="text-xs text-red-600">Stop time cannot be before the stop time</p>
+                                }
+                            </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="m-age" className="text-neutral-500">Minimum Age</Label>
                                 <Input
                                     id="m-age"
                                     name="m-age"
-                                    type="number"
-                                    min={0}
+                                    type="text"
+                                    inputMode="numeric"
+                                    pattern="\d*"
                                     placeholder="Minimum Age"
                                     value={minimumAge}
-                                    onChange={e => handleMinimumAgeChange(Number(e.target.value))}
+                                    onChange={(e) => handleMinimumAgeChange(e.target.value)}
                                     className="py-2 bg-neutral-200"
                                 />
                             </div>
                             <div className="grid gap-2">
                                 <div className="text-neutral-500">Event Tags</div>
-                                <EventTagDialog currentEventTags={eventTags} onTagAdd={
+                                <EventTagDialog
+                                    currentEventTags={eventTags}
+                                    onTagAdd={
                                     (tag: string) => setEventTags([...eventTags, tag])
-                                } onTagRemove={(tag: string) => setEventTags((value) => value.filter((i) => i !== tag)) } />
+                                    }
+                                    onTagRemove={(tag: string) => setEventTags((value) => value.filter((i) => i !== tag)) }
+                                />
                             </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
                                 <ImageSnapshots initialImages={screenshots} maxImages={50} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
+                            </div>
+                            <div className="bg-white pt-2 border-none border-t border-white w-full fixed inset-x-0 bottom-0 z-60 pb-4 flex items-center justify-center safe-area-inset-bottom">
+                                <Button
+                                    type="submit"
+                                    className="w-[90%] text-md py-6 font-bold"
+                                    disabled={loading || startDateError || stopDateError}
+                                    onClick={handleUpdateSubmit}>
+                                    {loading ? <LoaderSmall /> : "Confirm Changes"}
+                                </Button>
                             </div>
                         </div>
                     </>
@@ -208,7 +290,10 @@ export const EventEdit = ({
     }
 
     return (
-        <div className="w-full min-h-[85vh]" {...props}>
+        <div className={cn(
+            "w-full min-h-[85vh]",
+            className
+        )} {...props}>
             <ul className="w-full flex flex-row justify-between pt-2">
                 {headerItems.map((item) => (
                     <li key={item.value} className="w-full">
@@ -232,9 +317,6 @@ export const EventEdit = ({
                 {
                     renderScreen()
                 }
-                <div className="bg-white pt-2 border-none border-t border-white w-full fixed inset-x-0 bottom-0 z-60 pb-4 flex items-center justify-center safe-area-inset-bottom">
-                    <Button type="submit" className="w-[90%] text-md py-6 font-bold">Confirm Changes</Button>
-                </div>
             </form>
         </div>
     )

@@ -2,29 +2,6 @@
 
 import * as React from "react";
 import {cn} from "@/lib/utils";
-import {HiOutlineGlobe} from "react-icons/hi";
-import {FaRegUser} from "react-icons/fa";
-import {TbBuildings} from "react-icons/tb";
-import {IoGameControllerOutline, IoMusicalNotes, IoStorefrontOutline} from "react-icons/io5";
-import {MdOutlineSportsBasketball} from "react-icons/md";
-import {CiChat1} from "react-icons/ci";
-import {GiMountainClimbing, GiWeightLiftingUp} from "react-icons/gi";
-import {
-    FaUtensils,
-    FaLaptopCode,
-    FaHandHoldingHeart,
-    FaPlane,
-    FaBookOpen,
-    FaCameraRetro,
-    FaHandsHelping,
-    FaPaw,
-    FaBriefcase,
-    FaMoon,
-    FaChild,
-} from 'react-icons/fa';
-import { GiPalmTree, GiPaintBrush, GiCrafting } from 'react-icons/gi';
-import { MdSpa, MdOutlineMovie } from 'react-icons/md';
-import {v4 as uuidv4} from "uuid";
 import {forwardRef, useEffect, useImperativeHandle, useRef} from "react";
 import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
@@ -33,6 +10,21 @@ import {Loader} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
 import {useEventTagsStore} from "@/store/event-tag-store";
+import {Tabs} from "@/components/event-display/tabs";
+import {HiOutlineGlobe} from "react-icons/hi";
+import {IoGameControllerOutline, IoMusicalNotes} from "react-icons/io5";
+import {MdOutlineMovie, MdOutlineSportsBasketball, MdSpa} from "react-icons/md";
+import {GiCrafting, GiMountainClimbing, GiPaintBrush, GiPalmTree, GiWeightLiftingUp} from "react-icons/gi";
+import {
+    FaBookOpen,
+    FaBriefcase,
+    FaCameraRetro,
+    FaChild,
+    FaHandHoldingHeart,
+    FaHandsHelping, FaLaptopCode,
+    FaMoon, FaPaw, FaPlane,
+    FaUtensils
+} from "react-icons/fa";
 
 interface EventDisplayProps extends React.ComponentProps<"div"> {
     location: string | null;
@@ -42,7 +34,7 @@ interface EventDisplayRef {
     refresh: () => void;
 }
 
-interface EventItem {
+export interface EventItem {
     value: string | null;
     icon: React.ReactNode
     label: string;
@@ -215,25 +207,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 )}
                 {...props}
             >
-                <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4 no-scrollbar">
-                    {eventItems.map((item) => (
-                        <li key={item.value} className="flex-shrink-0">
-                            <div
-                                className={cn(
-                                    "flex flex-col items-center hover:text-neutral-900 pb-1 border-b-2 cursor-pointer px-4",
-                                    activeEventItem === item.value
-                                        ? "border-neutral-900 text-neutral-900"
-                                        : "border-transparent text-neutral-400"
-                                )}
-                            >
-                                {item.icon}
-                                <span className="text-sm mt-1 whitespace-nowrap">
-                                    {item.label}
-                                </span>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <Tabs active={activeEventItem} eventItems={eventItems} />
 
                 <div className="flex justify-center py-8">
                     <Loader className="h-10 w-10"/>
@@ -252,26 +226,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 )}
                 {...props}
             >
-                <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4 no-scrollbar">
-                    {eventItems.map((item) => (
-                        <li key={item.value} className="flex-shrink-0">
-                            <div
-                                onClick={() => setActiveEventItem(item.value)}
-                                className={cn(
-                                    "flex flex-col items-center hover:text-neutral-900 pb-1 border-b-2 cursor-pointer px-4",
-                                    activeEventItem === item.value
-                                        ? "border-neutral-900 text-neutral-900"
-                                        : "border-transparent text-neutral-400"
-                                )}
-                            >
-                                {item.icon}
-                                <span className="text-sm mt-1 whitespace-nowrap">
-                                    {item.label}
-                                </span>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
+                <Tabs active={activeEventItem} onClick={setActiveEventItem} eventItems={eventItems} />
 
                 <div className="flex flex-col items-center justify-center py-8 px-4w-full">
                     <Button
@@ -294,26 +249,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
             )}
             {...props}
         >
-            <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4 no-scrollbar">
-                {eventItems.map((item) => (
-                    <li key={item.value} className="flex-shrink-0">
-                        <div
-                            onClick={() => setActiveEventItem(item.value)}
-                            className={cn(
-                                "flex flex-col items-center hover:text-neutral-900 pb-1 border-b-2 cursor-pointer px-4",
-                                activeEventItem === item.value
-                                    ? "border-neutral-900 text-neutral-900"
-                                    : "border-transparent text-neutral-400"
-                            )}
-                        >
-                            {item.icon}
-                            <span className="text-sm mt-1 whitespace-nowrap">
-                                {item.label}
-                            </span>
-                        </div>
-                    </li>
-                ))}
-            </ul>
+            <Tabs active={activeEventItem} onClick={setActiveEventItem} eventItems={eventItems} />
 
             <div className="flex flex-col gap-10 px-4 mt-4 w-full max-w-7xl ">
                 {events.map((evt, index) => (

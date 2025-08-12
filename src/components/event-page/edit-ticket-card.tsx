@@ -129,7 +129,6 @@ export const TicketCard = ({ ticket, removeTicket, onChange }: TicketCardProps) 
 
     return (
         <div
-            key={ticket.id}
             className="bg-neutral-200 rounded-md px-4 py-3 flex flex-col gap-2"
         >
             {/* Title & Price */}

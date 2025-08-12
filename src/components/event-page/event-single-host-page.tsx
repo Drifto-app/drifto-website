@@ -9,22 +9,24 @@ import CommentManagePage from "@/components/comment/comment-manage";
 import { useNavigationHistory } from "@/hooks/use-navigation-history";
 import {EventEarnings} from "@/components/event-page/event-earnings";
 import {EventEdit} from "@/components/event-page/event-edit";
+import {FindAttendees} from "@/components/event-page/find-attendees";
 
 interface SingleEventHostPageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
     prev: string | null;
     setLoading: (state: boolean) => void;
+    setEvent: (event: {[key: string]: any}) => void;
 }
 
 export default function SingleEventHostPage(
-    {event, prev, setLoading, className, ...props}: SingleEventHostPageProps
+    {event, prev, setEvent, setLoading, className, ...props}: SingleEventHostPageProps
 ) {
     const {
         navigateTo,
         goBack,
         getCurrentScreen,
         canGoBack,
-        resetToScreen
+        resetToScreen,
     } = useNavigationHistory('details');
 
     const currentScreen = getCurrentScreen();
@@ -41,7 +43,7 @@ export default function SingleEventHostPage(
         // Define screen titles
         const screenTitles: Record<string, string> = {
             'likes': 'Event Likes',
-            'tickets': 'Find Attendees',
+            'tickets': 'Ticket Sales',
             'event-earnings': 'Event Earnings',
             'edit': 'Edit Event',
             'delete': 'Delete Event',
@@ -69,14 +71,7 @@ export default function SingleEventHostPage(
         switch (activeScreen) {
             case 'tickets':
                 return (
-                    <div className="w-full min-h-[85vh] px-4">
-                        <div className="w-full flex flex-col gap-4">
-                            <h1 className="text-xl font-semibold text-neutral-800 pt-4">
-                                Find Attendees
-                            </h1>
-                            {/* Add your ticket search component here */}
-                        </div>
-                    </div>
+                    <FindAttendees event={event} />
                 );
 
             case 'event-earnings':
@@ -86,7 +81,7 @@ export default function SingleEventHostPage(
 
             case 'edit':
                 return (
-                    <EventEdit event={event} />
+                    <EventEdit event={event} setEvent={setEvent} setMainActiveScreen={setActiveScreen} />
                 );
 
             case 'co-host-manage':

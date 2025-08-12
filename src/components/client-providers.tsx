@@ -5,6 +5,7 @@ import { Bounce, ToastContainer } from 'react-toastify';
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { EventTagsProvider } from "@/hooks/event-tags-providers";
+import {Toaster} from "sonner";
 
 interface ClientProvidersProps {
     children: ReactNode;
@@ -29,6 +30,7 @@ export function ClientProviders({ children }: ClientProvidersProps) {
                         theme="colored"
                         transition={Bounce}
                     />
+                    <Toaster />
                 </EventTagsProvider>
             </AuthProvider>
         </GoogleOAuthProvider>

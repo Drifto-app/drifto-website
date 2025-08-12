@@ -332,9 +332,16 @@ export const SingleEventDetails = ({
                 </EventSingleContent>
                 <EventSingleContent>
                     <IoLocationOutline size={26}/>
-                    <p className="font-semibold text-sm">
-                        {event.locationSecure ? `${event.city}, ${event.state}` : `${event.address}, ${event.city}, ${event.state}`}
-                    </p>
+                    {event.locationSecure && !event.address ? (
+                        <p className="font-semibold text-sm capitalize">
+                            <span className="text-blue-500">Purchase ticket to see full location: </span>
+                            {`${event.city}, ${event.state}`}
+                        </p>
+                    ) :
+                        <p className="font-semibold text-sm">
+                            {`${event.address}, ${event.city}, ${event.state}`}
+                        </p>
+                    }
                 </EventSingleContent>
                 <EventSingleContent>
                     {eventDisplayDetails.icon}

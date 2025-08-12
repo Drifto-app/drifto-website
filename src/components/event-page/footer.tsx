@@ -64,7 +64,7 @@ export const SingleEventFooter = ({
         if(newPrice === 0) {
             setPrice("Free");
         }else {
-            setPrice(newPrice.toString());
+            setPrice(newPrice.toFixed(2).toString());
         }
     }, [price])
 

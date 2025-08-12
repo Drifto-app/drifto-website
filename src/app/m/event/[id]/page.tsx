@@ -64,7 +64,7 @@ export default function EventPage() {
             <ProtectedRoute>
                 <ScreenProvider>
                     <div className="w-full">
-                        <SingleEventHostPage event={event} prev={prev} setLoading={setLoading} />
+                        <SingleEventHostPage event={event} setEvent={setEvent} prev={prev} setLoading={setLoading} />
                     </div>
                 </ScreenProvider>
             </ProtectedRoute>

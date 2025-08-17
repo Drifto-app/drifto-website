@@ -36,7 +36,6 @@ export const FindAttendees = ({
     const [showModal, setShowModal] = useState(false);
     const [markingUsed, setMarkingUsed] = useState(false);
     const [scannerOpen, setScannerOpen] = useState(false);
-    const [banner, setBanner] = useState<BannerState>(null);
 
     const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -177,7 +176,7 @@ export const FindAttendees = ({
 
     return (
         <div
-            className={cn("w-full min-h-[90vh] px-4 flex flex-col", className)}
+            className={cn("w-full min-h-[100vh] px-4 flex justify-center flex-col ", className)}
             {...props}
         >
             <div className="w-full flex flex-col gap-4 pt-5 no-scrollbar">
@@ -267,19 +266,31 @@ export const FindAttendees = ({
                 <QrScannerDialog
                     open={scannerOpen}
                     onOpenChange={setScannerOpen}
-                    // onResult={handleQrResult}
+                    onResult={(ticketReference: string) => {
+                        setTickets(tickets =>
+                            tickets.map(ticket =>
+                                ticket.ticketReference === ticketReference
+                                    ? { ...ticket, markedUsed: true }
+                                    : ticket
+                            )
+                        );
+                    }}
                 />
             </div>
 
             {/* Modal using shadcn Dialog */}
             <Dialog open={showModal} onOpenChange={setShowModal}>
-                <DialogContent className="w-full max-w-sm mx-4">
+                <DialogContent
+                    className="w-full max-w-sm sm:rounded-lg flex flex-col items-center justify-center"
+                >
                     <DialogHeader>
                         <DialogTitle className="text-lg text-center">
                             Mark Ticket as Used
                         </DialogTitle>
-                        <DialogDescription>
-                            Are you sure you want to mark {selectedTicket?.userPlaceHolderResponse?.username}{"'"}s {selectedTicket?.ticketType} ticket as used?
+                        <DialogDescription className="text-center">
+                            Are you sure you want to mark{" "}
+                            {selectedTicket?.userPlaceHolderResponse?.username}
+                            {"'"}s {selectedTicket?.ticketType} ticket as used?
                         </DialogDescription>
                     </DialogHeader>
 
@@ -289,7 +300,7 @@ export const FindAttendees = ({
                                 type="button"
                                 variant="outline"
                                 disabled={markingUsed}
-                                className="flex-1 text-md border-neutral-400 text-neutral-500 hover:bg-neutral-300 py-3 font-semibold"
+                                className="flex-1 text-lg py-6 border-neutral-400 text-neutral-500 hover:bg-neutral-300 font-semibold"
                             >
                                 Cancel
                             </Button>
@@ -298,9 +309,9 @@ export const FindAttendees = ({
                             type="button"
                             onClick={confirmMarkAsUsed}
                             disabled={markingUsed}
-                            className="flex-1 text-md py-3 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                            className="flex-1 text-lg py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
                         >
-                            {markingUsed ? <LoaderSmall /> : 'OK'}
+                            {markingUsed ? <LoaderSmall /> : "OK"}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

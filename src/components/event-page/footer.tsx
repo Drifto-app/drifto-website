@@ -87,7 +87,9 @@ export const SingleEventFooter = ({
                 <div className="w-[80%] flex flex-row items-center justify-between sm:px-6 py-3">
                     <Button
                         className="border-neutral-950 rounded-full px-12 py-7 text-md font-semibold cursor-pointer"
-                        onClick={() => setActiveScreen!("edit")} >
+                        onClick={() => setActiveScreen!("edit")}
+                        disabled={new Date(event.stopTime) < new Date(Date.now())}
+                    >
                         Edit
                     </Button>
                     <Dialog>

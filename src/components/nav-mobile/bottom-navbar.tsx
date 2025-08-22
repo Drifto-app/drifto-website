@@ -4,7 +4,7 @@ import {PiFireSimpleBold} from "react-icons/pi";
 import {BiCalendarAlt} from "react-icons/bi";
 import {HiOutlineSparkles} from "react-icons/hi";
 import {LuInbox} from "react-icons/lu";
-import {FaRegUser} from "react-icons/fa";
+import {FaHashtag, FaRegUser} from "react-icons/fa";
 import { v4 as uuidv4 } from 'uuid';
 import {useRouter} from "next/navigation";
 
@@ -23,7 +23,7 @@ interface BottomNavbarProps extends React.ComponentProps<"nav"> {
 const navItems: NavItem[] = [
     { value: "events", icon: <PiFireSimpleBold size="25" />, label: "Events" },
     { value: "plans", icon: <BiCalendarAlt size="25" />, label: "Plans" },
-    { value: "posts", icon: <HiOutlineSparkles size="25" />, label: "Posts" },
+    { value: "posts", icon: <FaHashtag size="25" />, label: "Posts" },
     { value: "update", icon: <LuInbox size="25" />, label: "Updates" },
     { value: "profile", icon: <FaRegUser size="25" />, label: "Profile" },
 ];

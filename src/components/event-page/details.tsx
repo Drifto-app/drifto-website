@@ -246,13 +246,13 @@ export const SingleEventDetails = ({
                                 <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
                                     <p
                                         className="underline font-bold underline-offset-3 cursor-pointer hover:text-blue-800 transition-colors"
-                                        onClick={() => setActiveScreen!('co-host-manage', 'Manage Co-Host')}
+                                        onClick={() => setActiveScreen!('co-host-manage')}
                                     >
                                         Manage Co-Host
                                     </p>
                                     <p
                                         className="underline font-bold underline-offset-3 cursor-pointer hover:text-blue-800 transition-colors"
-                                        onClick={() => setActiveScreen!('host-invites', 'Host Invites')}
+                                        onClick={() => setActiveScreen!('host-invites')}
                                     >
                                         See All Host Invites
                                     </p>

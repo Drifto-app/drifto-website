@@ -205,13 +205,23 @@ export const FindAttendees = ({
                         >
                             <div className="flex items-center gap-3 w-full">
                                 <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
-                                    <AspectRatio ratio={1/1}>
-                                        <Image
-                                            src={ticket.userPlaceHolderResponse?.profileImageUrl}
-                                            alt={ticket.userPlaceHolderResponse.username}
-                                            fill
-                                            className="object-cover rounded-full" />
-                                    </AspectRatio>
+                                    {
+                                        ticket.userPlaceHolderResponse?.profileImageUrl !== null ?
+                                            <AspectRatio ratio={1/1}>
+                                                <Image
+                                                    src={ticket.userPlaceHolderResponse?.profileImageUrl}
+                                                    alt={ticket.userPlaceHolderResponse.username}
+                                                    fill
+                                                    className="object-cover rounded-full" />
+                                            </AspectRatio> :
+                                            <AspectRatio ratio={1/1}>
+                                                <Image
+                                                    src={"/default.jpeg "}
+                                                    alt={ticket.userPlaceHolderResponse.username}
+                                                    fill
+                                                    className="object-cover rounded-full" />
+                                            </AspectRatio>
+                                    }
                                 </div>
                                 <div className="w-full">
                                     <div className="flex flex-row justify-between w-full">

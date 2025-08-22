@@ -4,27 +4,11 @@ import * as React from "react";
 import {cn} from "@/lib/utils";
 import {forwardRef, useEffect, useImperativeHandle, useRef} from "react";
 import {authApi} from "@/lib/axios";
-import {toast} from "react-toastify";
 import {EventCard} from "@/components/event-display/event-card";
 import {Loader} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
 import {useRouter} from "next/navigation";
-import {useEventTagsStore} from "@/store/event-tag-store";
 import {Tabs} from "@/components/event-display/tabs";
-import {HiOutlineGlobe} from "react-icons/hi";
-import {IoGameControllerOutline, IoMusicalNotes} from "react-icons/io5";
-import {MdOutlineMovie, MdOutlineSportsBasketball, MdSpa} from "react-icons/md";
-import {GiCrafting, GiMountainClimbing, GiPaintBrush, GiPalmTree, GiWeightLiftingUp} from "react-icons/gi";
-import {
-    FaBookOpen,
-    FaBriefcase,
-    FaCameraRetro,
-    FaChild,
-    FaHandHoldingHeart,
-    FaHandsHelping, FaLaptopCode,
-    FaMoon, FaPaw, FaPlane,
-    FaUtensils
-} from "react-icons/fa";
 
 interface EventDisplayProps extends React.ComponentProps<"div"> {
     location: string | null;
@@ -33,40 +17,6 @@ interface EventDisplayProps extends React.ComponentProps<"div"> {
 interface EventDisplayRef {
     refresh: () => void;
 }
-
-export interface EventItem {
-    value: string | null;
-    icon: React.ReactNode
-    label: string;
-}
-
-const eventItems: EventItem[] = [
-    { value: null,        icon: <HiOutlineGlobe size={27} />,         label: "Explore" },
-    { value: "gaming",          icon: <IoGameControllerOutline size={27} />, label: "Games" },
-    { value: "music",          icon: <IoMusicalNotes size={27} />,          label: "Music" },
-    { value: "sports",          icon: <MdOutlineSportsBasketball size={27} />, label: "Sports" },
-    { value: "adventure",      icon: <GiMountainClimbing size={27} />,      label: "Adventure" },
-    { value: "art & culture",    icon: <GiPaintBrush size={27} />,            label: "Art & Culture" },
-    { value: "business & talks", icon: <FaBriefcase size={27} />,             label: "Business & Talks" },
-    { value: "causes",         icon: <FaHandHoldingHeart size={27} />,      label: "Causes" },
-    { value: "diy & crafts",     icon: <GiCrafting size={27} />,              label: "DIY & Crafts" },
-    { value: "family",         icon: <FaChild size={27} />,                label: "Family" },
-    { value: "fashion",        icon: <GiPalmTree size={27} />,             label: "Fashion" },
-    { value: "fitness",        icon: <GiWeightLiftingUp size={27} />,      label: "Fitness" },
-    { value: "food & drinks",    icon: <FaUtensils size={27} />,             label: "Food & Drinks" },
-    { value: "learning",       icon: <FaBookOpen size={27} />,             label: "Learning" },
-    { value: "meetups",        icon: <FaHandsHelping size={27} />,         label: "Meetups" },
-    { value: "movies & film",    icon: <MdOutlineMovie size={27} />,         label: "Movies & Film" },
-    { value: "nightlife",      icon: <FaMoon size={27} />,                 label: "Nightlife" },
-    { value: "photography",    icon: <FaCameraRetro size={27} />,          label: "Photography" },
-    { value: "pets & animals",   icon: <FaPaw size={27} />,                  label: "Pets & Animals" },
-    { value: "recreation",     icon: <GiPalmTree size={27} />,             label: "Recreation" },
-    { value: "shows",          icon: <GiCrafting size={27} />,             label: "Shows" },
-    { value: "tech",           icon: <FaLaptopCode size={27} />,           label: "Tech" },
-    { value: "travel",         icon: <FaPlane size={27} />,                label: "Travel" },
-    { value: "volunteering",   icon: <FaHandsHelping size={27} />,         label: "Volunteering" },
-    { value: "wellness",       icon: <MdSpa size={27} />,                  label: "Wellness" },
-];
 
 export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                                                                                 location, className, ...props
@@ -207,7 +157,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 )}
                 {...props}
             >
-                <Tabs active={activeEventItem} eventItems={eventItems} />
+                <Tabs active={activeEventItem} />
 
                 <div className="flex justify-center py-8">
                     <Loader className="h-10 w-10"/>
@@ -226,7 +176,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 )}
                 {...props}
             >
-                <Tabs active={activeEventItem} onClick={setActiveEventItem} eventItems={eventItems} />
+                <Tabs active={activeEventItem} onClick={setActiveEventItem} />
 
                 <div className="flex flex-col items-center justify-center py-8 px-4w-full">
                     <Button
@@ -249,7 +199,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
             )}
             {...props}
         >
-            <Tabs active={activeEventItem} onClick={setActiveEventItem} eventItems={eventItems} />
+            <Tabs active={activeEventItem} onClick={setActiveEventItem} />
 
             <div className="flex flex-col gap-10 px-4 mt-4 w-full max-w-7xl ">
                 {events.map((evt, index) => (
@@ -299,7 +249,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                         </h3>
                         <p className="text-neutral-500 mb-4">
                             {activeEventItem
-                                ? `No events found for ${eventItems.find(item => item.value === activeEventItem)?.label || 'this category'}`
+                                ? `No events found for ${activeEventItem.toUpperCase() || 'this category'}`
                                 : location
                                     ? `No events found in ${location}`
                                     : "No events available at the moment"

@@ -239,8 +239,8 @@ export const SingleEventDetails = ({
                             <SnapshotCarousel snapshots={event.screenshots} />
                         </EventSingleContentText>
                         <EventSingleContentText isLine={false} headText="Hosted By" className="flex-col items-start shadow-xl">
-                            {event.coHosts.map((coHost: {[key: string]: any}) => (
-                                <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={true} />
+                            {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
+                                <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={(i + 1) === event.coHosts.length} />
                             ))}
                             {event.hostCollaborationStatus == "HOST" && (
                                 <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
@@ -378,11 +378,11 @@ export const SingleEventDetails = ({
                     <SnapshotCarousel snapshots={event.screenshots} />
                 </EventSingleContentText>
                 <EventSingleContentText headText="Hosted By" className="flex-col items-start">
-                    {event.coHosts.map((coHost: {[key: string]: any}) => (
+                    {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
                         <UserEventSinglePlaceholder
                             user={coHost}
                             key={coHost.id}
-                            isHost={true}
+                            isHost={(i + 1) === event.coHosts.length}
                             onClick={() => {router.push(`/user/m/${coHost.id}?prev=${pathname}?${searchParams}`)}} />
                     ))}
                 </EventSingleContentText>

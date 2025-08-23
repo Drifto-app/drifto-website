@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react";
 import {cn} from "@/lib/utils";
 import {useSpotGradient} from "@/lib/util";
@@ -10,6 +12,8 @@ import {EventEdit} from "@/components/event-page/event-edit";
 import {FindAttendees} from "@/components/event-page/find-attendees";
 import {HostInvites} from "@/components/event-page/host-invites";
 import {CoHostManage} from "@/components/event-page/co-host-manage";
+import {useRouter, useSearchParams} from "next/navigation";
+import {useEffect} from "react";
 
 interface SingleEventHostPageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -21,6 +25,22 @@ interface SingleEventHostPageProps extends React.ComponentProps<"div">{
 export default function SingleEventHostPage(
     {event, prev, setEvent, setLoading, className, ...props}: SingleEventHostPageProps
 ) {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [isInitialized, setIsInitialized] = React.useState(false);
+
+    const urlScreen = searchParams.get("screen");
+
+    // Define screen titles
+    const screenTitles: Record<string, string> = {
+        'tickets': 'Ticket Sales',
+        'event-earnings': 'Event Earnings',
+        'edit': 'Edit Event',
+        'co-host-manage': 'Manage Co-Host',
+        'host-invites': 'Co-Host Invites',
+        'details': 'Manage Event'
+    };
+
     const {
         navigateTo,
         goBack,
@@ -32,6 +52,29 @@ export default function SingleEventHostPage(
     const currentScreen = getCurrentScreen();
     const activeScreen = currentScreen.screen;
 
+    // Initialize navigation history based on URL on first load
+    useEffect(() => {
+        if (!isInitialized) {
+            const initialScreen = urlScreen || 'details';
+            const screenTitle = screenTitles[initialScreen] || 'Manage Event';
+            resetToScreen(initialScreen, screenTitle);
+            setIsInitialized(true);
+        }
+    }, [urlScreen, isInitialized, resetToScreen, screenTitles]);
+
+    // Sync URL with navigation history when activeScreen changes programmatically
+    useEffect(() => {
+        if (isInitialized && activeScreen && urlScreen !== activeScreen) {
+            const params = new URLSearchParams(searchParams.toString());
+            if (activeScreen === 'details') {
+                params.delete("screen");
+            } else {
+                params.set("screen", activeScreen);
+            }
+            router.replace(`?${params.toString()}`, { scroll: false });
+        }
+    }, [activeScreen, urlScreen, searchParams, router, isInitialized]);
+
     const gradient = useSpotGradient(event.eventTheme);
     const style = event.eventTheme
         ? {
@@ -40,15 +83,6 @@ export default function SingleEventHostPage(
         : undefined;
 
     const setActiveScreen = (screen: string, title?: string) => {
-        // Define screen titles
-        const screenTitles: Record<string, string> = {
-            'tickets': 'Ticket Sales',
-            'event-earnings': 'Event Earnings',
-            'edit': 'Edit Event',
-            'co-host-manage': 'Manage Co-Host',
-            'host-invites': 'Co-Host Invites'
-        };
-
         const screenTitle = title || screenTitles[screen] || 'Manage Event';
         navigateTo(screen, screenTitle);
     };
@@ -57,12 +91,22 @@ export default function SingleEventHostPage(
         if (canGoBack()) {
             goBack();
         } else {
-            // If no history, go to the original prev route
+            // If no history, go to the original prev route or browser back
             if (typeof window !== 'undefined') {
                 window.history.back();
+                // router.push("/")
             }
         }
     };
+
+    const handleScreen = (value: string, title?: string) => {
+        setActiveScreen(value, title);
+    };
+
+    // Don't render until initialized to avoid flash
+    if (!isInitialized) {
+        return null;
+    }
 
     // Render different screens based on activeScreen
     const renderScreen = () => {
@@ -79,7 +123,7 @@ export default function SingleEventHostPage(
 
             case 'edit':
                 return (
-                    <EventEdit event={event} setEvent={setEvent} setMainActiveScreen={setActiveScreen} />
+                    <EventEdit event={event} setEvent={setEvent} setMainActiveScreen={handleScreen} />
                 );
 
             case 'co-host-manage':
@@ -98,12 +142,12 @@ export default function SingleEventHostPage(
                         <SingleEventDetails
                             isCoHost={true}
                             event={event}
-                            setActiveScreen={setActiveScreen}
+                            setActiveScreen={handleScreen}
                         />
                         <SingleEventFooter
                             isCoHost={true}
                             event={event}
-                            setActiveScreen={setActiveScreen}
+                            setActiveScreen={handleScreen}
                             setLoading={setLoading}
                         />
                     </>
@@ -118,7 +162,7 @@ export default function SingleEventHostPage(
                 className,
                 event.eventTheme !== null ? "" : "bg-neutral-100",
             )}
-            style={activeScreen === "details" || activeScreen === "edit" ? style : null}
+            style={activeScreen === "details" || activeScreen === "edit" ? style : undefined}
             {...props}
         >
             <SingleEventHeader

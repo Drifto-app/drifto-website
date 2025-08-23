@@ -176,7 +176,7 @@ export const FindAttendees = ({
 
     return (
         <div
-            className={cn("w-full min-h-[100vh] px-4 flex justify-center flex-col ", className)}
+            className={cn("w-full min-h-[100vh] px-4 ", className)}
             {...props}
         >
             <div className="w-full flex flex-col gap-4 pt-5 no-scrollbar">
@@ -293,16 +293,16 @@ export const FindAttendees = ({
                 <DialogContent
                     className="w-full max-w-sm sm:rounded-lg flex flex-col items-center justify-center"
                 >
-                    <DialogHeader>
-                        <DialogTitle className="text-lg text-center">
-                            Mark Ticket as Used
-                        </DialogTitle>
-                        <DialogDescription className="text-center">
-                            Are you sure you want to mark{" "}
-                            {selectedTicket?.userPlaceHolderResponse?.username}
-                            {"'"}s {selectedTicket?.ticketType} ticket as used?
-                        </DialogDescription>
-                    </DialogHeader>
+                        <DialogHeader>
+                            <DialogTitle className="text-lg text-center">
+                                Mark Ticket as Used
+                            </DialogTitle>
+                            <DialogDescription className="text-center">
+                                Are you sure you want to mark{" "}
+                                {selectedTicket?.userPlaceHolderResponse?.username}
+                                {"'"}s {selectedTicket?.ticketType} ticket as used?
+                            </DialogDescription>
+                        </DialogHeader>
 
                     <DialogFooter className="w-full flex flex-row sm:justify-between justify-between gap-3">
                         <DialogClose asChild>

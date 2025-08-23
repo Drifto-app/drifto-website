@@ -8,6 +8,7 @@ import {AspectRatio} from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 import {Loader, LoaderSmall} from "@/components/ui/loader";
 import {toast} from "react-toastify";
+import {UserVerificationBadge} from "@/components/ui/user-placeholder";
 
 interface HostInvitesProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -44,7 +45,6 @@ export const HostInvites = ({
             // Remove the invite from the list after successful revocation
             setInvites(prev => prev.filter(invite => invite.inviteId !== inviteId))
         } catch(error: any) {
-            console.error("Error revoking invite:", error)
             toast.error("Error revoking invite")
         } finally {
             setCancellingInvites(prev => {
@@ -71,11 +71,6 @@ export const HostInvites = ({
                 {...props}
             >
                 <div className="w-full flex flex-col gap-4">
-                    <div className="flex items-center justify-between pt-4 pb-2">
-                        <h1 className="text-xl font-semibold text-neutral-800">
-                            Co-Host Invites
-                        </h1>
-                    </div>
                     <div className="flex justify-center items-center py-8">
                         <Loader />
                     </div>
@@ -116,7 +111,7 @@ export const HostInvites = ({
     return (
         <div
             className={cn(
-                "w-full min-h-[91vh] bg-gray-50 pt-2",
+                "w-full min-h-[90vh] bg-gray-50 pt-2",
                 className
             )}
             {...props}
@@ -156,9 +151,12 @@ export const HostInvites = ({
 
                                     {/* User Info */}
                                     <div className="flex flex-col">
-                                        <span className="font-bold text-neutral-900">
+                                        <div className="flex gap-1 items-center">
+                                            <span className="font-bold text-neutral-900">
                                             {invite.userPlaceHolder.username}
                                         </span>
+                                            <UserVerificationBadge user={invite.userPlaceHolder} />
+                                        </div>
                                         <span className="text-xs text-neutral-500 uppercase font-medium">
                                             {invite.invitationStatus}
                                         </span>

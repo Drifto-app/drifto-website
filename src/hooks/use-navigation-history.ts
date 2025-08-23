@@ -13,7 +13,17 @@ export const useNavigationHistory = (initialScreen: string = '') => {
     ]);
 
     const navigateTo = useCallback((screen: string, title?: string, data?: any) => {
-        setHistory(prev => [...prev, { screen, title, data }]);
+        setHistory(prev => {
+            // Check if the new screen is the same as current screen
+            const currentScreen = prev[prev.length - 1];
+            if (currentScreen.screen === screen) {
+                // Update the current screen instead of adding a new entry
+                const updated = [...prev];
+                updated[updated.length - 1] = { screen, title, data };
+                return updated;
+            }
+            return [...prev, { screen, title, data }];
+        });
     }, []);
 
     const goBack = useCallback(() => {
@@ -35,8 +45,19 @@ export const useNavigationHistory = (initialScreen: string = '') => {
         return history.length > 1;
     }, [history]);
 
-    const resetToScreen = useCallback((screen: string, title?: string) => {
-        setHistory([{ screen, title }]);
+    const resetToScreen = useCallback((screen: string, title?: string, data?: any) => {
+        setHistory([{ screen, title, data }]);
+    }, []);
+
+    const replaceCurrentScreen = useCallback((screen: string, title?: string, data?: any) => {
+        setHistory(prev => {
+            if (prev.length === 0) {
+                return [{ screen, title, data }];
+            }
+            const updated = [...prev];
+            updated[updated.length - 1] = { screen, title, data };
+            return updated;
+        });
     }, []);
 
     return {
@@ -46,6 +67,7 @@ export const useNavigationHistory = (initialScreen: string = '') => {
         getCurrentScreen,
         getPreviousScreen,
         canGoBack,
-        resetToScreen
+        resetToScreen,
+        replaceCurrentScreen
     };
 };

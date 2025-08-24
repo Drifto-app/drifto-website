@@ -1,0 +1,14 @@
+[
+  {
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.drifto",
+      "sha256_cert_fingerprints": [
+        "2E:80:32:8F:64:0C:CB:FD:6B:FF:E8:6B:30:0E:97:BC:F9:E2:BA:B8:C9:4E:1C:9E:9E:E4:74:63:81:ED:F7:21"
+      ]
+    }
+  }
+]

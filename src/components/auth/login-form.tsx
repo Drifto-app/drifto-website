@@ -121,7 +121,7 @@ export function LoginForm({
                   try {
                     const idToken = credentialResponse.credential;
                     await googleLogin(idToken!);
-                  } catch (err) {
+                  } catch (err: any) {
                     setError(err.response?.data?.description || 'Google Auth failed');
                     toast.error(err.response?.data?.description || 'Google Auth failed');
                   }

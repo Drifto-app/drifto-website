@@ -66,7 +66,7 @@ export const EventEdit = ({
     }, []);
 
     useEffect(() => {
-        setEvent(prev => ({ ...prev, tickets }));
+        setEvent((prev: any) => ({ ...prev, tickets }));
     }, [tickets, setEvent]);
 
     const handleLocationChange = (locationData: {[key: string]: any}) => {

@@ -115,7 +115,7 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     useEffect(() => {
         if (mapInstanceRef.current) {
             setTimeout(() => {
-                google.maps.event.trigger(mapInstanceRef.current, 'resize');
+                google.maps.event.trigger(mapInstanceRef.current!, 'resize');
                 mapInstanceRef.current?.setCenter(center);
             }, 300);
         }

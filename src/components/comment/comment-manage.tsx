@@ -27,7 +27,7 @@ export default function CommentManagePage(
     const router = useRouter();
 
     // State for infinite scroll
-    const [mainComment, setMainComment] = useState<{[key: string]: any}>(null);
+    const [mainComment, setMainComment] = useState<{[key: string]: any}>({});
     const [comments, setComments] = useState<any[]>([]);
     const [numOfComments, setNumOfComments] = useState<number>(0);
     const [title, setTitle] = useState<string>("");
@@ -152,16 +152,16 @@ export default function CommentManagePage(
         if (!window.visualViewport || !inputRef.current) return;
 
         const onResize = () => {
-            const offset = window.innerHeight - window.visualViewport.height;
-            // only treat as keyboard if it’s a big change
+            const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+            const offset = window.innerHeight - viewportHeight;
             setKeyboardOffset(offset > 100 ? offset : 0);
         };
 
         const onFocus = () => {
-            window.visualViewport.addEventListener("resize", onResize);
+            window.visualViewport?.addEventListener("resize", onResize);
         };
         const onBlur = () => {
-            window.visualViewport.removeEventListener("resize", onResize);
+            window.visualViewport?.removeEventListener("resize", onResize);
             setKeyboardOffset(0);
         };
 
@@ -172,7 +172,7 @@ export default function CommentManagePage(
         return () => {
             inp.removeEventListener("focus", onFocus);
             inp.removeEventListener("blur", onBlur);
-            window.visualViewport.removeEventListener("resize", onResize);
+            window.visualViewport?.removeEventListener("resize", onResize);
         };
     }, []);
 

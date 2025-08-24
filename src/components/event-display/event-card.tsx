@@ -20,7 +20,7 @@ interface EventCardProps extends React.ComponentProps<"div">{
 export const EventCard = ({ event, currentPathUrl, className, ...props }: EventCardProps) => {
     const router = useRouter();
 
-    const [price, setPrice] = useState<string>(null);
+    const [price, setPrice] = useState<string>("");
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
 

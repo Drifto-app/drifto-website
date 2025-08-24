@@ -192,7 +192,7 @@ export default function QrScannerDialog({ open, onOpenChange, onResult }: Props)
             controlsRef.current = null;
 
             if (readerRef.current) {
-                readerRef.current.reset();
+                // readerRef.current.reset();
                 readerRef.current = null;
             }
 

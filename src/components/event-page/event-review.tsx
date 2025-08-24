@@ -121,16 +121,16 @@ export const SingleEventReviews = ({
         if (!window.visualViewport || !inputRef.current) return;
 
         const onResize = () => {
-            const offset = window.innerHeight - window.visualViewport.height;
-            // only treat as keyboard if it's a big change
+            const viewportHeight = window.visualViewport?.height ?? window.innerHeight;
+            const offset = window.innerHeight - viewportHeight;
             setKeyboardOffset(offset > 100 ? offset : 0);
         };
 
         const onFocus = () => {
-            window.visualViewport.addEventListener("resize", onResize);
+            window.visualViewport?.addEventListener("resize", onResize);
         };
         const onBlur = () => {
-            window.visualViewport.removeEventListener("resize", onResize);
+            window.visualViewport?.removeEventListener("resize", onResize);
             setKeyboardOffset(0);
         };
 
@@ -141,7 +141,7 @@ export const SingleEventReviews = ({
         return () => {
             inp.removeEventListener("focus", onFocus);
             inp.removeEventListener("blur", onBlur);
-            window.visualViewport.removeEventListener("resize", onResize);
+            window.visualViewport?.removeEventListener("resize", onResize);
         };
     }, []);
 

@@ -7,7 +7,7 @@ import {authApi} from "@/lib/axios";
 import {EventCard} from "@/components/event-display/event-card";
 import {Loader} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Tabs} from "@/components/event-display/tabs";
 
 interface EventDisplayProps extends React.ComponentProps<"div"> {
@@ -19,9 +19,11 @@ interface EventDisplayRef {
 }
 
 export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
-                                                                                location, className, ...props
-                                                                            }, ref) => {
+    location, className, ...props
+}, ref) => {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const [activeEventItem, setActiveEventItem] = React.useState<string | null>(null);
     const [events, setEvents] = React.useState<any[]>([]);
@@ -203,7 +205,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
 
             <div className="flex flex-col gap-10 px-4 mt-4 w-full max-w-7xl ">
                 {events.map((evt, index) => (
-                    <EventCard key={evt.id} event={evt} />
+                    <EventCard key={evt.id} event={evt} currentPathUrl={pathname + "?" + searchParams}/>
                 ))}
             </div>
 

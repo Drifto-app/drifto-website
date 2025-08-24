@@ -66,10 +66,10 @@ export const SingleEventHeader = ({
 
     return (
         <div className={cn(
-            "w-full border-b-1 border-b-neutral-300 flex flex-col gap-5",
+            "w-full border-b-1 border-b-neutral-300 flex flex-col gap-5 h-[15vh] justify-between",
             className
         )} {...props}>
-            <div className="flex flex-row items-center pt-6 px-8">
+            <div className="flex flex-row items-center pt-8 px-8">
                 <FaArrowLeft
                     size={20}
                     onClick={handleBackClick}

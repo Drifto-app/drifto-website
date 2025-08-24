@@ -8,7 +8,9 @@ import * as React from "react";
 import {cn} from "@/lib/utils";
 import {useSpotGradient} from "@/lib/util";
 import {SingleEventMap} from "@/components/event-page/event-map";
-import {useRouter, useSearchParams} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {SingleEventReviews} from "@/components/event-page/event-review";
+import {SingleEventRelated} from "@/components/event-page/event-related";
 
 interface SingleEventProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -21,6 +23,7 @@ export default function EventSinglePage(
 ) {
     const router = useRouter();
     const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const screen = searchParams.get("screen");
 
@@ -45,35 +48,19 @@ export default function EventSinglePage(
         switch (activeScreen) {
             case "map":
                 return (
-                    <SingleEventMap event={event} style={style} />
+                    <SingleEventMap
+                        event={event}
+                        googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
+                        style={style}
+                    />
                 )
             case "reviews":
                 return (
-                    <div
-                        className={cn(
-                            "w-full ",
-                            className,
-                            event.eventTheme !== null ? "" : "bg-neutral-100",
-                        )}
-                        style={style}
-                        {...props}
-                    >
-                        <div>reviews</div>
-                    </div>
+                    <SingleEventReviews event={event} style={style} currentPathUrl={pathname + "?" + searchParams}/>
                 )
             case "related":
                 return (
-                    <div
-                        className={cn(
-                            "w-full ",
-                            className,
-                            event.eventTheme !== null ? "" : "bg-neutral-100",
-                        )}
-                        style={style}
-                        {...props}
-                    >
-                        <div>related</div>
-                    </div>
+                    <SingleEventRelated event={event} style={style} currentPathUrl={pathname + "?" + searchParams}/>
                 )
             default:
                 return(

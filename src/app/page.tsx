@@ -41,86 +41,34 @@ export default function Home() {
         }
     };
 
-    if(activeScreen === "plans") {
-        return (
-            <ProtectedRoute>
-                <ScreenProvider>
+    const render = () => {
+        switch (activeScreen) {
+            case "plans":
+                return (
                     <div className="w-full">
-                        <div className="w-full">
-                            <div>plans</div>
-                        </div>
-                        <BottomNavbar
-                            activeScreen={activeScreen}
-                            setActiveScreen={handleScreen}
-                            onEventsRefresh={handleEventsRefresh}
-                        />
+                        <div>plans</div>
                     </div>
-                </ScreenProvider>
-            </ProtectedRoute>
-        )
-    }
-
-    if(activeScreen === "posts") {
-        return (
-            <ProtectedRoute>
-                <ScreenProvider>
+                )
+            case "posts":
+                return (
                     <div className="w-full">
-                        <div className="w-full">
-                            <div>posts</div>
-                        </div>
-                        <BottomNavbar
-                            activeScreen={activeScreen}
-                            setActiveScreen={handleScreen}
-                            onEventsRefresh={handleEventsRefresh}
-                        />
+                        <div>posts</div>
                     </div>
-                </ScreenProvider>
-            </ProtectedRoute>
-        )
-    }
-
-    if(activeScreen === "update") {
-        return (
-            <ProtectedRoute>
-                <ScreenProvider>
+                )
+            case "updates":
+                return (
                     <div className="w-full">
-                        <div className="w-full">
-                            <div>update</div>
-                        </div>
-                        <BottomNavbar
-                            activeScreen={activeScreen}
-                            setActiveScreen={handleScreen}
-                            onEventsRefresh={handleEventsRefresh}
-                        />
+                        <div>update</div>
                     </div>
-                </ScreenProvider>
-            </ProtectedRoute>
-        )
-    }
-
-    if(activeScreen === "profile") {
-        return (
-            <ProtectedRoute>
-                <ScreenProvider>
+                )
+            case "profile":
+                return (
                     <div className="w-full">
-                        <div className="w-full">
-                            <div>profile</div>
-                        </div>
-                        <BottomNavbar
-                            activeScreen={activeScreen}
-                            setActiveScreen={handleScreen}
-                            onEventsRefresh={handleEventsRefresh}
-                        />
+                        <div>profile</div>
                     </div>
-                </ScreenProvider>
-            </ProtectedRoute>
-        )
-    }
-
-    return (
-        <ProtectedRoute>
-            <ScreenProvider>
-                <div className="w-full">
+                )
+            default:
+                return (
                     <div className="w-full">
                         <HeaderMobile
                             location={location}
@@ -132,6 +80,15 @@ export default function Home() {
                             location={location}
                         />
                     </div>
+                )
+        }
+    }
+
+    return (
+        <ProtectedRoute>
+            <ScreenProvider>
+                <div className="w-full">
+                    {render()}
                     <BottomNavbar
                         activeScreen={activeScreen}
                         setActiveScreen={handleScreen}

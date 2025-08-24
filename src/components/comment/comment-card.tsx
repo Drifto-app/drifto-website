@@ -3,7 +3,6 @@
 import * as React from "react";
 import Image from "next/image";
 import {
-    FaCheckCircle,
     FaRegHeart,
     FaRegComment,
 } from "react-icons/fa";
@@ -56,7 +55,7 @@ export function CommentCard({ comment, currentPathUrl, className, ...props}: Com
 
     return (
         <div className={cn(
-            "flex flex-col gap-3 py-6 px-8 border border-neutral-200 rounded-lg",
+            "flex flex-col gap-3 py-6 px-8 border border-neutral-200 rounded-lg bg-white",
             className
         )} {...props}>
             {/* author + date */}

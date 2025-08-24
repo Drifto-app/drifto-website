@@ -14,25 +14,28 @@ import {toast} from "react-toastify";
 
 interface EventCardProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
+    currentPathUrl: string;
 }
 
-export const EventCard = ({ event, className, ...props }: EventCardProps) => {
+export const EventCard = ({ event, currentPathUrl, className, ...props }: EventCardProps) => {
     const router = useRouter();
 
-    const [price, setPrice] = useState<string>("5000");
+    const [price, setPrice] = useState<string>(null);
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const newPrice: number = event.tickets.reduce((min: number, ticket: { price: number; }) => {
-            return ticket.price < min ? ticket.price : min;
-        }, Infinity);
+       if(event.tickets) {
+           const newPrice: number = event.tickets.reduce((min: number, ticket: { price: number; }) => {
+               return ticket.price < min ? ticket.price : min;
+           }, Infinity);
 
-        if(newPrice === 0) {
-            setPrice("Free");
-        }else {
-            setPrice(newPrice.toString());
-        }
+           if(newPrice === 0) {
+               setPrice("Free");
+           }else {
+               setPrice(newPrice.toString());
+           }
+       }
     }, [price])
 
     const dt = new Date(event.startTime);
@@ -71,11 +74,16 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
                     <Image
                         src={event.titleImage}
                         alt={event.title}
-                        width={800} // Or any base width — adjust as needed
-                        height={500} // Controls aspect ratio
+                        width={800}
+                        height={500}
                         className="w-full h-auto object-cover rounded-lg"
-                        style={{ maxHeight: '75vh' }}
-                        onClick={() => router.push(`/m/event/${event.id}?prev=/`)}
+                        style={{ maxHeight: "75vh" }}
+                        onClick={() => {
+                            window.open(
+                                `/m/event/${event.id}?prev=${encodeURIComponent(currentPathUrl)}`,
+                                "_blank"
+                            );
+                        }}
                     />
                     {event.original && <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">
                         Drifto Original
@@ -97,9 +105,9 @@ export const EventCard = ({ event, className, ...props }: EventCardProps) => {
                     <span className="flex flex-row gap-1 items-center"><IoTicket size={15}/>{event.numberOfPurchasedTickets}</span>
                 </p>
             </div>
-            <div className="flex items-center text-xl font-bold w-full justify-end mt-2 text-neutral-500">
+            {price && <div className="flex items-center text-xl font-bold w-full justify-end mt-2 text-neutral-500">
                 {price === "Free" ? price : "₦ "+price}
-            </div>
+            </div>}
         </div>
     );
 }

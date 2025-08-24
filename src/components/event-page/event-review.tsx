@@ -2,8 +2,6 @@
 
 import * as React from "react";
 import {cn} from "@/lib/utils";
-import {useRouter} from "next/navigation";
-import {FaArrowLeft} from "react-icons/fa";
 import {CommentCard} from "@/components/comment/comment-card";
 import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
@@ -13,24 +11,16 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {IoSend} from "react-icons/io5";
 
-interface CommentManageProps extends React.ComponentProps<"div">{
-    entityId: string;
-    type: string;
-    onBackClick?: () => void;
-    prev: string | null;
-    currentPathUrl: string
+interface SingleEventReviewsProps extends React.ComponentProps<"div">{
+    event: {[key: string]: any};
+    currentPathUrl: string;
 }
 
-export default function CommentManagePage(
-    {entityId, currentPathUrl, onBackClick, prev, type, className, ...props}: CommentManageProps
-) {
-    const router = useRouter();
-
+export const SingleEventReviews = ({
+  event, currentPathUrl, className, ...props}: SingleEventReviewsProps) => {
     // State for infinite scroll
-    const [mainComment, setMainComment] = useState<{[key: string]: any}>(null);
     const [comments, setComments] = useState<any[]>([]);
     const [numOfComments, setNumOfComments] = useState<number>(0);
-    const [title, setTitle] = useState<string>("");
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [initialLoading, setInitialLoading] = useState(true);
@@ -47,27 +37,21 @@ export default function CommentManagePage(
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
 
-    const handleCommentSubmit =   async (e: React.FormEvent) => {
+    const handleCommentSubmit = async (e: React.FormEvent) => {
         e.preventDefault()
 
         setSubmitCommentLoading(true);
 
         if(comment == null || comment == ""){
-           toast.error("Comment must specify a comment");
-           return;
+            toast.error("Comment must specify a comment");
+            setSubmitCommentLoading(false);
+            return;
         }
 
-        const params: {[key: string]: string} = {
+        const params = {
             comment,
-            commentType: type,
-        }
-
-        if(type === "EVENT") {
-            params.eventId = entityId
-        } else if(type === "POST") {
-            params.postId = entityId
-        } else if(type === "COMMENT_REPLY") {
-            params.commentId = entityId
+            commentType: "EVENT",
+            eventId: event.id
         }
 
         try {
@@ -96,22 +80,15 @@ export default function CommentManagePage(
         setError(null);
 
         try {
-            if(resetData) {
-                if (type === "COMMENT_REPLY") {
-                    const response = await authApi.get(`/comment/${entityId}`);
-                    setMainComment(response.data.data);
-                }
-            }
-
             const currentPage = resetData ? 1 : pageRef.current;
 
-            const params: {[key: string]: string | number} = {
+            const params = {
                 pageSize: 10,
                 pageNumber: currentPage,
-                commentType: type
+                commentType: "EVENT"
             };
 
-            const response = await authApi.get(`/comment/entity/${entityId}`, {
+            const response = await authApi.get(`/comment/entity/${event.id}`, {
                 params
             });
 
@@ -126,14 +103,6 @@ export default function CommentManagePage(
                 pageRef.current = currentPage + 1;
             }
 
-            if(type === "COMMENT_REPLY") {
-                setTitle("Comment Replies");
-            } else if(type === "POST") {
-                setTitle("Post Comments")
-            }else if(type === "EVENT") {
-                setTitle("Event Comments")
-            }
-
             const isLast = response.data.data.isLast;
             setHasMore(!isLast);
             hasMoreRef.current = !isLast;
@@ -146,14 +115,14 @@ export default function CommentManagePage(
             setInitialLoading(false);
             loadingRef.current = false;
         }
-    }, [entityId, type]);
+    }, [event.id]);
 
     useEffect(() => {
         if (!window.visualViewport || !inputRef.current) return;
 
         const onResize = () => {
             const offset = window.innerHeight - window.visualViewport.height;
-            // only treat as keyboard if it’s a big change
+            // only treat as keyboard if it's a big change
             setKeyboardOffset(offset > 100 ? offset : 0);
         };
 
@@ -204,39 +173,15 @@ export default function CommentManagePage(
         return () => window.removeEventListener("scroll", onScroll);
     }, [loadComments, error]);
 
-    const handleBackClick = () => {
-        if (onBackClick) {
-            // Use custom back navigation if provided
-            onBackClick();
-        } else {
-            // Default router navigation
-            router.push(prev != null ? prev : "/");
-        }
-    }
-
     // Loading state for initial load
     if (initialLoading) {
         return (
             <div className={cn(
-                "w-full flex flex-col items-center justify-center",
-                className
+                "w-full flex flex-col items-center justify-center min-h-[85vh]",
+                className,
+                event.eventTheme !== null ? "" : "bg-neutral-100",
             )} {...props}>
-                <div className={cn(
-                    "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
-                    className
-                )} {...props}>
-                    <div className="flex flex-row items-center px-8">
-                        <FaArrowLeft
-                            size={20}
-                            onClick={handleBackClick}
-                            className="cursor-pointer hover:text-neutral-700 transition-colors"
-                        />
-                        <p className="font-semibold text-neutral-950 text-xl w-full text-center capitalize truncate ml-4">
-                            {title}
-                        </p>
-                    </div>
-                </div>
-                <div className="w-full h-screen flex flex-col items-center justify-center">
+                <div className="w-full h-full flex flex-col items-center justify-center">
                     <Loader className="h-10 w-10"/>
                 </div>
             </div>
@@ -247,70 +192,30 @@ export default function CommentManagePage(
     if (error && comments.length === 0) {
         return (
             <div className={cn(
-                "w-full flex flex-col items-center justify-center",
-                className
+                "w-full flex flex-col items-center justify-center min-h-[85vh]",
+                className,
+                event.eventTheme !== null ? "" : "bg-neutral-100",
             )} {...props}>
-                <div className={cn(
-                    "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
-                    className
-                )} {...props}>
-                    <div className="flex flex-row items-center px-8">
-                        <FaArrowLeft
-                            size={20}
-                            onClick={handleBackClick}
-                            className="cursor-pointer hover:text-neutral-700 transition-colors"
-                        />
-                        <p className="font-semibold text-neutral-950 text-xl w-full text-center capitalize truncate ml-4">
-                            {<title></title>}
-                        </p>
-                    </div>
-                </div>
-                <div className="w-full h-screen flex flex-col items-center justify-center">
+                <div className="w-full h-full flex flex-col items-center justify-center">
                     <h2>Unable to load comments</h2>
                 </div>
             </div>
         );
     }
 
-    const renderMainEntity = () => {
-        switch (type) {
-            case "COMMENT_REPLY":
-                return(
-                    <div className="w-full pt-2">
-                        <CommentCard comment={mainComment} currentPathUrl={currentPathUrl} className="rounded-none" />
-                    </div>
-                )
-        }
-    }
-
     return (
         <div className={cn(
-            "w-full flex flex-col items-center justify-center pb-20",
-            className
+            "w-full min-h-[85vh] pb-20",
+            className,
+            event.eventTheme !== null ? "" : "bg-neutral-100",
         )} {...props}>
-            <div className={cn(
-                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
-                className
-            )} {...props}>
-                <div className="flex flex-row items-center px-8">
-                    <FaArrowLeft
-                        size={20}
-                        onClick={handleBackClick}
-                        className="cursor-pointer hover:text-neutral-700 transition-colors"
-                    />
-                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
-                        {title}
-                    </p>
-                </div>
-            </div>
+
             <div className="w-full flex flex-col gap-4 px-4">
                 <h1 className="text-md font-semibold text-neutral-800 pt-4">
-                    {title} ({numOfComments})
+                    Event Reviews ({numOfComments})
                 </h1>
             </div>
-            {
-                renderMainEntity()
-            }
+
             <div className="w-full flex flex-col gap-6 px-4 py-4">
                 {comments.map((c) => (
                     <CommentCard key={c.id} comment={c} currentPathUrl={currentPathUrl} />
@@ -355,22 +260,17 @@ export default function CommentManagePage(
                 </div>
             )}
 
-            {/* End of content indicator */}
-            {/*{!hasMore && comments.length > 0 && (*/}
-            {/*    <p className="py-4 text-gray-500">You have reached the end!</p>*/}
-            {/*)}*/}
-
             {/* No comments message */}
             {!loading && !initialLoading && comments.length === 0 && (
                 <div className="w-full flex flex-col items-center justify-center py-8">
-                    <p className="text-gray-500">No comments found</p>
+                    <p className="text-gray-500">No reviews found</p>
                 </div>
             )}
 
             {error && comments.length > 0 && (
                 <div className="flex flex-col items-center justify-center py-4 pt-4 pb-15 w-full">
                     <p className="text-orange-700 text-sm mb-2">
-                        Failed to load more comments
+                        Failed to load more reviews
                     </p>
                     <Button
                         onClick={() => loadComments(false)}

@@ -18,9 +18,10 @@ import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
 interface CommentCardProps extends React.ComponentProps<"div"> {
     comment: { [key: string]: any };
     currentPathUrl: string;
+    disabled?: boolean;
 }
 
-export function CommentCard({ comment, currentPathUrl, className, ...props}: CommentCardProps) {
+export function CommentCard({ comment, currentPathUrl, disabled, className, ...props}: CommentCardProps) {
     const router = useRouter();
 
     const [isLiked, setIsLiked] = useState<boolean>(comment.likedByUser);
@@ -75,7 +76,7 @@ export function CommentCard({ comment, currentPathUrl, className, ...props}: Com
                     <span className="text-md">{totalReactions}</span>
                     <button
                         onClick={handleReaction}
-                        disabled={isLikedLoading}
+                        disabled={isLikedLoading || disabled}
                         className="font-inherit"
                     >
                         {isLiked ? (
@@ -86,11 +87,15 @@ export function CommentCard({ comment, currentPathUrl, className, ...props}: Com
                     </button>
                 </div>
 
-                <div className="flex items-center gap-2" onClick={() => router.push(
-                    `/m/comment/${comment.id}` +
-                    `?prev=${encodeURIComponent(currentPathUrl)}` +
-                    `&type=COMMENT_REPLY`
-                    )}>
+                <div className="flex items-center gap-2" onClick={() => {
+                    if(!disabled) {
+                        router.push(
+                            `/m/comment/${comment.id}` +
+                            `?prev=${encodeURIComponent(currentPathUrl)}` +
+                            `&type=COMMENT_REPLY`
+                        )
+                    }
+                }}>
                     <span className="text-md">{comment.totalComments}</span>
                     <FaRegComment className="w-6 h-6" />
                 </div>

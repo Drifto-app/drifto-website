@@ -277,7 +277,7 @@ export default function CommentManagePage(
             case "COMMENT_REPLY":
                 return(
                     <div className="w-full pt-2">
-                        <CommentCard comment={mainComment} currentPathUrl={currentPathUrl} className="rounded-none" />
+                        <CommentCard comment={mainComment} currentPathUrl={currentPathUrl} disabled={true} className="rounded-none" />
                     </div>
                 )
         }

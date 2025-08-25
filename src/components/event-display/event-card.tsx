@@ -79,10 +79,7 @@ export const EventCard = ({ event, currentPathUrl, className, ...props }: EventC
                         className="w-full h-auto object-cover rounded-lg"
                         style={{ maxHeight: "75vh" }}
                         onClick={() => {
-                            window.open(
-                                `/m/event/${event.id}?prev=${encodeURIComponent(currentPathUrl)}`,
-                                "_blank"
-                            );
+                            router.push(`/m/event/${event.id}?prev=${encodeURIComponent(currentPathUrl)}`)
                         }}
                     />
                     {event.original && <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">

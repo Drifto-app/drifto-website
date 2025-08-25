@@ -92,34 +92,37 @@ export const SingleEventFooter = ({
                     >
                         Edit
                     </Button>
-                    {new Date(event.stopTime) < new Date(Date.now()) && <Dialog>
-                        <DialogTrigger asChild>
-                            <Button
-                                variant="outline"
-                                className="border-neutral-950 rounded-full px-12 py-7 text-md font-semibold cursor-pointer"
-                            >
-                                Delete
-                            </Button>
-                        </DialogTrigger>
-                        <DialogContent className="w-full flex flex-col gap-6">
-                            <DialogHeader>
-                                <DialogTitle className="text-xl">Delete Event</DialogTitle>
-                                <DialogDescription className="text-md">
-                                    Are you sure you want to delete this event? This action cannot be undone.
-                                </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter className="w-full flex flex-row sm:justify-between justify-between px-4 sm:px-20">
-                                <DialogClose asChild>
-                                    <Button type="button" variant="secondary" className="text-xl bg-neutral-300 py-6 px-8 font-semibold">
-                                        Cancel
-                                    </Button>
-                                </DialogClose>
-                                <Button type="button" variant="secondary" className="text-xl py-6 px-8 bg-red-500 text-white font-semibold" onClick={handleEventDelete}>
-                                    Confirm
+                    {new Date(event.stopTime) > new Date(Date.now()) && event.hostCollaborationStatus === "HOST"
+                    ? <Dialog>
+                            <DialogTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    className="border-neutral-950 rounded-full px-12 py-7 text-md font-semibold cursor-pointer"
+                                >
+                                    Delete
                                 </Button>
-                            </DialogFooter>
-                        </DialogContent>
-                    </Dialog>}
+                            </DialogTrigger>
+                            <DialogContent className="w-full flex flex-col gap-6">
+                                <DialogHeader>
+                                    <DialogTitle className="text-xl">Delete Event</DialogTitle>
+                                    <DialogDescription className="text-md">
+                                        Are you sure you want to delete this event? This action cannot be undone.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <DialogFooter className="w-full flex flex-row sm:justify-between justify-between px-4 sm:px-20">
+                                    <DialogClose asChild>
+                                        <Button type="button" variant="secondary" className="text-xl bg-neutral-300 py-6 px-8 font-semibold">
+                                            Cancel
+                                        </Button>
+                                    </DialogClose>
+                                    <Button type="button" variant="secondary" className="text-xl py-6 px-8 bg-red-500 text-white font-semibold" onClick={handleEventDelete}>
+                                        Confirm
+                                    </Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog> :
+                    null
+                    }
 
 
                 </div>

@@ -24,7 +24,7 @@ const navItems: NavItem[] = [
     { value: "events", icon: <PiFireSimpleBold size="25" />, label: "Events" },
     { value: "plans", icon: <BiCalendarAlt size="25" />, label: "Plans" },
     { value: "posts", icon: <FaHashtag size="25" />, label: "Posts" },
-    { value: "update", icon: <LuInbox size="25" />, label: "Updates" },
+    { value: "updates", icon: <LuInbox size="25" />, label: "Updates" },
     { value: "profile", icon: <FaRegUser size="25" />, label: "Profile" },
 ];
 

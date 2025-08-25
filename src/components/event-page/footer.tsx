@@ -85,13 +85,13 @@ export const SingleEventFooter = ({
                  }
                  {...props}>
                 <div className="w-[80%] flex flex-row items-center justify-between sm:px-6 py-3">
-                    {event.hostCollaborationStatus === "HOST" && <Button
+                    <Button
                         className="border-neutral-950 rounded-full px-12 py-7 text-md font-semibold cursor-pointer"
                         onClick={() => setActiveScreen!("edit")}
                         disabled={new Date(event.stopTime) < new Date(Date.now())}
                     >
                         Edit
-                    </Button>}
+                    </Button>
                     {new Date(event.stopTime) < new Date(Date.now()) && <Dialog>
                         <DialogTrigger asChild>
                             <Button

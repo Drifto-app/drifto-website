@@ -58,8 +58,8 @@ export const BottomNavbar = ({
                             onClick={() => handleClick(item.value)}
 
                             className={cn(
-                                "flex flex-col items-center hover:text-neutral-900",
-                                activeScreen === item.value ? "text-neutral-900" : "text-neutral-400"
+                                "flex flex-col items-center hover:text-blue-800",
+                                activeScreen === item.value ? "text-blue-800" : "text-neutral-400"
                             )}
                         >
                             {item.icon}

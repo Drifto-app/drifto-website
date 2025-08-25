@@ -20,12 +20,20 @@ export default function RootLayout({
 }>) {
 
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <ClientProviders>
-            <main>{children}</main>
-        </ClientProviders>
-      </body>
-    </html>
+      <html lang="en">
+          <head>
+              <meta charSet="UTF-8"/>
+              <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+              <title>Drifto</title>
+              <meta name="description"
+                    content="The ultimate mobile platform for discovering, booking, and managing experiences. Coming soon to iOS and Android."/>
+              <meta name="author" content="Drifto"/>
+          </head>
+          <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <ClientProviders>
+              <main>{children}</main>
+          </ClientProviders>
+          </body>
+      </html>
   );
 }

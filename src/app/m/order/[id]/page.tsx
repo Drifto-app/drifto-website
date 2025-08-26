@@ -1,3 +1,5 @@
+"use client"
+
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
 import {ScreenProvider} from "@/components/screen/screen-provider";
 

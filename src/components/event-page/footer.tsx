@@ -49,7 +49,7 @@ export const SingleEventFooter = ({
 
             setLoading!(false);
 
-            router.push("http://localhost:3000/?screen=plans");
+            router.push("/?screen=plans");
         }catch (err: any) {
             toast.error(err.message || "Error deleting event");
             setLoading!(false);

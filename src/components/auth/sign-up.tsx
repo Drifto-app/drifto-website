@@ -521,7 +521,7 @@ export const SignUpForm = ({
                 Or
               </span>
             </div>
-            <div>
+            <div  className="w-full flex justify-center items-center">
                 <GoogleLogin
                     onSuccess={async (credentialResponse) => {
                         try {

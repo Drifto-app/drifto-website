@@ -15,6 +15,7 @@ import {useRouter} from "next/navigation";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Calendar28} from "@/components/ui/date-input";
 import {Autocomplete, useLoadScript} from "@react-google-maps/api";
+import GoogleButton from "@/components/ui/google-button";
 
 interface SignUpFormProps extends React.ComponentProps<"form"> {
     setIsSignUp: (value: boolean) => void;
@@ -522,28 +523,16 @@ export const SignUpForm = ({
               </span>
             </div>
             <div  className="w-full flex justify-center items-center">
-                <GoogleLogin
-                    onSuccess={async (credentialResponse) => {
-                        try {
-                            const idToken = credentialResponse.credential;
-                            await googleLogin(idToken!);
+                <GoogleButton onSuccess={async (credentialResponse) => {
+                    try {
+                        const idToken = credentialResponse.credential;
+                        await googleLogin(idToken!);
 
-                            router.push("/");
-                        } catch (err: any) {
-                            toast.error(err.response?.data?.description || 'Google Auth failed');
-                        }
-                    }}
-                    onError={() => {
-                        toast.error('Google Auth failed');
-                    }}
-                    useOneTap={false}
-                    theme="outline"
-                    width="100%"
-                    size="large"
-                    text="continue_with"
-                    shape="rectangular"
-                    logo_alignment="center"
-                />
+                        router.push("/");
+                    } catch (err: any) {
+                        toast.error(err.response?.data?.description || 'Google Auth failed');
+                    }
+                }} />
             </div>
         </form>
     )

@@ -13,6 +13,7 @@ import {toast} from "react-toastify";
 import * as React from "react";
 import {emailRegex} from "@/lib/utils";
 import {GoogleLogin} from "@react-oauth/google";
+import GoogleButton from "@/components/ui/google-button";
 
 interface LoginFormProps extends React.ComponentProps<"form"> {
   setLoginPrincipal: (value: string) => void;
@@ -116,28 +117,15 @@ export function LoginForm({
               </span>
           </div>
           <div className="w-full flex justify-center items-center">
-            <GoogleLogin
-                onSuccess={async (credentialResponse) => {
-                  try {
+            <GoogleButton onSuccess={async (credentialResponse) => {
+                try {
                     const idToken = credentialResponse.credential;
                     await googleLogin(idToken!);
-                  } catch (err: any) {
+                } catch (err: any) {
                     setError(err.response?.data?.description || 'Google Auth failed');
                     toast.error(err.response?.data?.description || 'Google Auth failed');
-                  }
-                }}
-                onError={() => {
-                  setError('Google Auth failed');
-                  toast.error('Google Auth failed');
-                }}
-                useOneTap={false}
-                theme="outline"
-                width="100%"
-                size="large"
-                text="continue_with"
-                shape="rectangular"
-                logo_alignment="center"
-            />
+                }
+            }} />
           </div>
         </div>
         <div className="text-center text-sm flex flex-row justify-center gap-2">

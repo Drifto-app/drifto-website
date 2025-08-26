@@ -29,7 +29,7 @@ export default function GoogleButton({onSuccess}: GoogleButtonProps) {
                     onError={() => toast.error('Google Auth failed')}
                     useOneTap={false}
                     theme="outline"
-                    width={width} // dynamically matches container
+                    width={width}
                     size="large"
                     text="continue_with"
                     shape="rectangular"

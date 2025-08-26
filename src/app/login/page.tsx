@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import Image from "next/image";
 import {ForgotPassword} from "@/components/auth/forgot-password";
 import { SignUpForm } from "@/components/auth/sign-up";
+import {ScreenProvider} from "@/components/screen/screen-provider";
 
 export default function LoginPage() {
     const { isAuthenticated } = useAuthStore();
@@ -102,33 +103,35 @@ export default function LoginPage() {
     }
 
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
-        <div className="flex flex-1 items-center justify-center">
-          <div className="w-full max-w-sm flex flex-col gap-12">
-              <div className="relative w-12 h-12">
-                  <Image
-                      src="/logo.png"
-                      alt="Logo Extend"
-                      fill
-                      className="object-contain"
-                  />
-              </div>
-            <LoginForm
-                setLoginPrincipal={setLoginPrincipal}
-                setForgotPassword={handleIsForgotPassword}
-                setIsSignUp={handleIsSignUp}
-            />
-          </div>
+    <ScreenProvider>
+        <div className="grid min-h-svh lg:grid-cols-2">
+            <div className="flex flex-col gap-4 p-6 md:p-10">
+                <div className="flex flex-1 items-center justify-center">
+                    <div className="w-full max-w-sm flex flex-col gap-12">
+                        <div className="relative w-12 h-12">
+                            <Image
+                                src="/logo.png"
+                                alt="Logo Extend"
+                                fill
+                                className="object-contain"
+                            />
+                        </div>
+                        <LoginForm
+                            setLoginPrincipal={setLoginPrincipal}
+                            setForgotPassword={handleIsForgotPassword}
+                            setIsSignUp={handleIsSignUp}
+                        />
+                    </div>
+                </div>
+            </div>
+            <div className="bg-muted relative hidden lg:block">
+                <img
+                    src="/login-side-pic.jpeg"
+                    alt="Image"
+                    className="absolute inset-0 h-full w-full object-cover"
+                />
+            </div>
         </div>
-      </div>
-      <div className="bg-muted relative hidden lg:block">
-        <img
-          src="/login-side-pic.jpeg"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-      </div>
-    </div>
+    </ScreenProvider>
   )
 }

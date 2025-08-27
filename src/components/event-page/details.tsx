@@ -84,7 +84,6 @@ export const SingleEventDetails = ({
     const eventUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/event/${event.id}`;
     const {
         isShareDialogOpen,
-        openShareDialog,
         closeShareDialog,
         handleQuickShare,
     } = useShare({

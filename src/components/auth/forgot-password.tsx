@@ -87,7 +87,6 @@ export const ForgotPassword = ({
             }
 
             setLoading(false);
-            toast.success(response.data.message);
             setIsVerifyForgotPassword(true);
         } catch (err: any) {
             setLoading(false);
@@ -112,7 +111,6 @@ export const ForgotPassword = ({
             }
 
             setLoading(false);
-            toast.success(response.data.message);
         } catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Request failed');
@@ -141,7 +139,6 @@ export const ForgotPassword = ({
             }
 
             setLoading(false);
-            toast.success(response.data.message);
             setIsVerifyForgotPassword(false);
             setIsResetPassword(true);
             setOtpValue("");
@@ -184,7 +181,6 @@ export const ForgotPassword = ({
             }
 
             setLoading(false);
-            toast.success(response.data.message);
             setPassword("")
             setConfirmPassword("")
             setForgotPassword(false);

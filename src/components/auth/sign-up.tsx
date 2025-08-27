@@ -159,7 +159,6 @@ export const SignUpForm = ({
             })
 
             setLoading(false);
-            toast.success(response.data.message);
         }catch (err: any) {
             setLoading(false);
             toast.error(err.response?.data?.description || 'Email Request Failed');
@@ -180,7 +179,6 @@ export const SignUpForm = ({
             })
 
             setLoading(false);
-            toast.success(response.data.message);
             setEmailOtp(true);
         }catch (err: any) {
             setLoading(false);
@@ -197,7 +195,6 @@ export const SignUpForm = ({
             })
 
             setLoading(false);
-            toast.success(response.data.message);
             setEmailOtp(false);
             setOtpValue("");
             setIsRegister(true)

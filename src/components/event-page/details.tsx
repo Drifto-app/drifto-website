@@ -19,6 +19,8 @@ import {Dialog} from "@headlessui/react";
 import {Input} from "@/components/ui/input";
 import {router} from "next/client";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {useShare} from "@/hooks/share-option";
+import {ShareDialog} from "@/components/share-button/share-option";
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -78,6 +80,18 @@ export const SingleEventDetails = ({
         value: event.eventDisplayStatus,
         description: `This event is now ${event.eventDisplayStatus}`
     }
+
+    const eventUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/event/${event.id}`;
+    const {
+        isShareDialogOpen,
+        openShareDialog,
+        closeShareDialog,
+        handleQuickShare,
+    } = useShare({
+        title: event.title,
+        url: eventUrl,
+        description: event.description
+    });
 
     const openModal = (src: string) => {
         setActiveSrc(src);
@@ -290,108 +304,121 @@ export const SingleEventDetails = ({
     }
 
     return (
-        <div className={cn(
-            "w-full px-4",
-            className,
-        )} {...props}>
-            <div className="w-full py-4 flex flex-col items-center gap-4 pt-5 pb-25">
-                <div className="relative w-full max-h-[40vh] overflow-hidden rounded-lg">
-                    <Image
-                        src={event.titleImage}
-                        alt={event.title}
-                        width={800}
-                        height={500}
-                        className="w-full h-auto rounded-lg object-cover"
-                        style={{ maxHeight: '40vh' }}
-                    />
+        <>
+            <div className={cn(
+                "w-full px-4",
+                className,
+            )} {...props}>
+                <div className="w-full py-4 flex flex-col items-center gap-4 pt-5 pb-25">
+                    <div className="relative w-full max-h-[40vh] overflow-hidden rounded-lg">
+                        <Image
+                            src={event.titleImage}
+                            alt={event.title}
+                            width={800}
+                            height={500}
+                            className="w-full h-auto rounded-lg object-cover"
+                            style={{ maxHeight: '40vh' }}
+                        />
 
-                    {event.original && (
-                        <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">
-                            Drifto Original
-                        </div>
-                    )}
+                        {event.original && (
+                            <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">
+                                Drifto Original
+                            </div>
+                        )}
 
-                    <div className="absolute top-3 right-2 flex flex-row gap-3">
-                        <button className=" text-white rounded-full bg-neutral-800 p-2 opacity-90" onClick={handleReaction} disabled={isLikedLoading}>
-                            {isLiked ? (
-                                <FaHeart size={25} className="text-red-500" />
-                            ) : (
-                                <IoMdHeartEmpty size={25} />
-                            )}
-                        </button>
-                        <button className=" text-white rounded-full bg-neutral-800 p-2 opacity-90" disabled>
-                            <IoShareSocialOutline size={25} />
-                        </button>
-                    </div>
-                </div>
-                <h1 className="capitalize font-black text-2xl w-full text-neutral-950">{event.title}</h1>
-                <EventSingleContent>
-                    <FaRegCalendar size={18}/>
-                    <div className="flex flex-col gap-1">
-                        <p className="text-md font-semibold text-neutral-500">{formattedStartDate} - {formattedStopDate}</p>
-                        <p className="text-md font-medium text-neutral-500">{formattedStartTime} - {formattedStopTime}</p>
-                    </div>
-                </EventSingleContent>
-                <EventSingleContent>
-                    <IoLocationOutline size={26}/>
-                    {event.locationSecure && !event.address ? (
-                        <p className="font-semibold text-sm capitalize">
-                            <span className="text-blue-500">Purchase ticket to see full location: </span>
-                            {`${event.city}, ${event.state}`}
-                        </p>
-                    ) :
-                        <p className="font-semibold text-sm">
-                            {`${event.address}, ${event.city}, ${event.state}`}
-                        </p>
-                    }
-                </EventSingleContent>
-                <EventSingleContent>
-                    {eventDisplayDetails.icon}
-                    <div className="flex flex-col">
-                        <p className="text-sm font-semibold normal-case">This event is {eventDisplayDetails.value}</p>
-                        <p className="text-sm font-medium text-neutral-400">{eventDisplayDetails.description}</p>
-                    </div>
-                </EventSingleContent>
-                {event.ageRestricted && (
-                    <EventSingleContent>
-                        <HiMiniUsers size={26}/>
-                        <p className="font-semibold text-sm">This event is suitable for ages {event.minimumAge} and above</p>
-                    </EventSingleContent>
-                )}
-                <EventSingleContentText
-                    headText="Event Vibe"
-                    className="flex flex-col space-y-2 items-start"
-                >
-                    <div className="flex flex-wrap gap-2">
-                        {event.eventTags.map((tag: string) => (
-                            <span
-                                key={tag}
-                                className="inline-block text-sm font-semibold px-3 py-1 bg-neutral-950 text-white rounded-full"
+                        <div className="absolute top-3 right-2 flex flex-row gap-3">
+                            <button className=" text-white rounded-full bg-neutral-800 p-2 opacity-90" onClick={handleReaction} disabled={isLikedLoading}>
+                                {isLiked ? (
+                                    <FaHeart size={25} className="text-red-500" />
+                                ) : (
+                                    <IoMdHeartEmpty size={25} />
+                                )}
+                            </button>
+                            <button
+                                className="text-white rounded-full bg-neutral-800 p-2 opacity-90"
+                                onClick={handleQuickShare}
                             >
+                                <IoShareSocialOutline size={25} />
+                            </button>
+                        </div>
+                    </div>
+                    <h1 className="capitalize font-black text-2xl w-full text-neutral-950">{event.title}</h1>
+                    <EventSingleContent>
+                        <FaRegCalendar size={18}/>
+                        <div className="flex flex-col gap-1">
+                            <p className="text-md font-semibold text-neutral-500">{formattedStartDate} - {formattedStopDate}</p>
+                            <p className="text-md font-medium text-neutral-500">{formattedStartTime} - {formattedStopTime}</p>
+                        </div>
+                    </EventSingleContent>
+                    <EventSingleContent>
+                        <IoLocationOutline size={26}/>
+                        {event.locationSecure && !event.address ? (
+                                <p className="font-semibold text-sm capitalize">
+                                    <span className="text-blue-500">Purchase ticket to see full location: </span>
+                                    {`${event.city}, ${event.state}`}
+                                </p>
+                            ) :
+                            <p className="font-semibold text-sm">
+                                {`${event.address}, ${event.city}, ${event.state}`}
+                            </p>
+                        }
+                    </EventSingleContent>
+                    <EventSingleContent>
+                        {eventDisplayDetails.icon}
+                        <div className="flex flex-col">
+                            <p className="text-sm font-semibold normal-case">This event is {eventDisplayDetails.value}</p>
+                            <p className="text-sm font-medium text-neutral-400">{eventDisplayDetails.description}</p>
+                        </div>
+                    </EventSingleContent>
+                    {event.ageRestricted && (
+                        <EventSingleContent>
+                            <HiMiniUsers size={26}/>
+                            <p className="font-semibold text-sm">This event is suitable for ages {event.minimumAge} and above</p>
+                        </EventSingleContent>
+                    )}
+                    <EventSingleContentText
+                        headText="Event Vibe"
+                        className="flex flex-col space-y-2 items-start"
+                    >
+                        <div className="flex flex-wrap gap-2">
+                            {event.eventTags.map((tag: string) => (
+                                <span
+                                    key={tag}
+                                    className="inline-block text-sm font-semibold px-3 py-1 bg-neutral-950 text-white rounded-full"
+                                >
                                 {tag}
                             </span>
+                            ))}
+                        </div>
+                    </EventSingleContentText>
+                    <EventSingleContentText headText="About" className="flex-col">
+                        <p className="text-sm w-full text-left">{event.description}</p>
+                    </EventSingleContentText>
+                    <EventSingleContentText headText="Snapshots" className="flex-col">
+                        <SnapshotCarousel snapshots={event.screenshots} />
+                    </EventSingleContentText>
+                    <EventSingleContentText headText="Hosted By" className="flex-col items-start">
+                        {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
+                            <UserEventSinglePlaceholder
+                                user={coHost}
+                                key={coHost.id}
+                                isHost={(i + 1) === event.coHosts.length}
+                                onClick={() => {router.push(`/user/m/${coHost.id}?prev=${pathname}?${searchParams}`)}} />
                         ))}
+                    </EventSingleContentText>
+                    <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">
+                        Report Event
                     </div>
-                </EventSingleContentText>
-                <EventSingleContentText headText="About" className="flex-col">
-                    <p className="text-sm w-full text-left">{event.description}</p>
-                </EventSingleContentText>
-                <EventSingleContentText headText="Snapshots" className="flex-col">
-                    <SnapshotCarousel snapshots={event.screenshots} />
-                </EventSingleContentText>
-                <EventSingleContentText headText="Hosted By" className="flex-col items-start">
-                    {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
-                        <UserEventSinglePlaceholder
-                            user={coHost}
-                            key={coHost.id}
-                            isHost={(i + 1) === event.coHosts.length}
-                            onClick={() => {router.push(`/user/m/${coHost.id}?prev=${pathname}?${searchParams}`)}} />
-                    ))}
-                </EventSingleContentText>
-                <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">
-                    Report Event
                 </div>
             </div>
-        </div>
+
+            <ShareDialog
+                isOpen={isShareDialogOpen}
+                onClose={closeShareDialog}
+                eventTitle={event.title}
+                eventUrl={eventUrl}
+                eventDescription={event.description}
+            />
+        </>
     )
 }

@@ -34,7 +34,6 @@ export default function EventPage() {
                    setCoHost(response.data.data.hostCollaborationStatus);
                }
             } catch (err: any) {
-                toast.error(err.message);
                 setError(err.message);
             } finally {
                 setLoading(false);

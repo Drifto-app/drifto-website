@@ -6,8 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { AuthProvider } from "@/components/auth/auth-provider";
 import { EventTagsProvider } from "@/hooks/event-tags-providers";
 import {Toaster} from "sonner";
-import {SpeedInsights} from "@vercel/speed-insights/next";
-import {Analytics} from "@vercel/analytics/next";
+
 
 interface ClientProvidersProps {
     children: ReactNode;
@@ -19,8 +18,6 @@ export function ClientProviders({ children }: ClientProvidersProps) {
             <AuthProvider>
                 <EventTagsProvider>
                     {children}
-                    <Analytics />
-                    <SpeedInsights />
                     <ToastContainer
                         position="top-right"
                         autoClose={3000}

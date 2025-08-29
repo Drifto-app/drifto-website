@@ -25,10 +25,11 @@ interface SingleEventFooterProps extends React.ComponentProps<"div">{
     setActiveScreen?: (activeScreen: string) => void;
     isCoHost?: boolean;
     setLoading?: (state: boolean) => void;
+    currentPathUrl?: string;
 }
 
 export const SingleEventFooter = ({
-    event, isCoHost, setLoading, setActiveScreen, className, ...props
+    currentPathUrl, event, isCoHost, setLoading, setActiveScreen, className, ...props
 }: SingleEventFooterProps) => {
     const router = useRouter();
 
@@ -150,7 +151,7 @@ export const SingleEventFooter = ({
                     <p className="text-xs text-neutral-600">Starting:</p>
                     <h3 className="font-bold text-xl">{price === "Free" ? price : "₦ "+ price}</h3>
                 </div>
-                <Button className="rounded-full px-5 py-6" onClick={() => {router.push(`/m/order/${event.id}`)}}>
+                <Button className="rounded-full px-5 py-6" onClick={() => {router.push(`/m/order/${event.id}?prev=${encodeURIComponent(currentPathUrl!)}`)}}>
                     Get Tickets
                 </Button>
             </div>

@@ -145,13 +145,23 @@ export const SingleEventDetails = ({
                     className,
                 )} {...props}>
                     <div className="w-full flex flex-col items-center gap-6 pt-5 pb-25">
-                        <div className="w-full max-w-xl h-12 flex flex-row items-center border rounded-full px-4 shadow-md cursor-pointer" onClick={() => setActiveScreen!("tickets")} >
-                            <IoMdSearch size={20} />
-                            <Input
-                                className="h-full w-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-black"
-                                placeholder="Find people who booked"
-                                disabled
-                            />
+                        <div className="flex w-full gap-2 items-center">
+                            <div className="w-full max-w-xl h-12 flex flex-row items-center border rounded-full px-4 shadow-md cursor-pointer" onClick={() => setActiveScreen!("tickets")} >
+                                <IoMdSearch size={20} />
+                                <Input
+                                    className="h-full w-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-black"
+                                    placeholder="Find people who booked"
+                                    disabled
+                                />
+                            </div>
+                            <div className="flex flex-row gap-3">
+                                <button
+                                    className="text-white rounded-full bg-neutral-800 p-2 opacity-90"
+                                    onClick={handleQuickShare}
+                                >
+                                    <IoShareSocialOutline size={25} />
+                                </button>
+                            </div>
                         </div>
                         <div className="relative w-full max-h-[40vh] overflow-hidden rounded-lg" onClick={() => openModal(event.titleImage)}>
                             <Image
@@ -276,6 +286,14 @@ export const SingleEventDetails = ({
                         </EventSingleContentText>
                     </div>
                 </div>
+
+                <ShareDialog
+                    isOpen={isShareDialogOpen}
+                    onClose={closeShareDialog}
+                    eventTitle={event.title}
+                    eventUrl={eventUrl}
+                    eventDescription={event.description}
+                />
 
                 <Dialog
                     open={isOpen}

@@ -8,8 +8,8 @@ import {Loader} from "@/components/ui/loader";
 import {ScreenProvider} from "@/components/screen/screen-provider";
 import * as React from "react";
 import EventSinglePage from "@/components/event-page/event-single-page";
-import {toast} from "react-toastify";
 import SingleEventHostPage from "@/components/event-page/event-single-host-page";
+import {MdErrorOutline} from "react-icons/md";
 
 export default function EventPage() {
     const { id } = useParams();
@@ -23,9 +23,12 @@ export default function EventPage() {
     const [coHost, setCoHost] = useState<string | null>(null);
 
     useEffect(() => {
-        if (!id) return;
+        if (!id) {
+            return
+        }
 
         const fetchEvent = async () => {
+            setLoading(true);
             try {
                const response = await authApi.get(`/event/${id}`)
                 setEvent(response.data.data);
@@ -42,6 +45,17 @@ export default function EventPage() {
 
         fetchEvent();
     }, [id]);
+
+    if(error) {
+        return (
+            <div className="w-full h-screen flex justify-center items-center">
+                <div className="flex justify-center items-center gap-2">
+                    <MdErrorOutline size={30} className="text-red-500" />
+                    <p className="font-semibold text-lg">No event found</p>
+                </div>
+            </div>
+        )
+    }
 
     if(loading) {
         return (

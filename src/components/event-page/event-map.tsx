@@ -9,6 +9,8 @@ import { useLoadScript } from "@react-google-maps/api";
 import {Loader} from "@/components/ui/loader";
 import {renderToStaticMarkup} from "react-dom/server";
 import {RiMapPin2Fill} from "react-icons/ri";
+import {CiLock} from "react-icons/ci";
+import {MdLockOutline} from "react-icons/md";
 
 // Move libraries array outside component to prevent reloading
 const GOOGLE_MAPS_LIBRARIES: ("places")[] = ["places"];
@@ -29,9 +31,6 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     const mapInstanceRef = useRef<google.maps.Map | null>(null);
     const markerRef = useRef<google.maps.Marker | null>(null);
     const infoWindowRef = useRef<google.maps.InfoWindow | null>(null);
-
-    // Detect mobile device
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
     useEffect(() => {
         if (!mapRef.current || !window.google) return;
@@ -162,26 +161,6 @@ export const SingleEventMap = ({
 }: SingleEventMapProps) => {
     const [isMapFullscreen, setIsMapFullscreen] = useState(false);
 
-    if(event.locationSecure && !event.location) {
-        return (
-            <div
-                className={cn(
-                    "w-full min-h-[85vh] flex items-center justify-center",
-                    className,
-                    event.eventTheme !== null ? "" : "bg-neutral-100",
-                )}
-                {...props}
-            >
-                <div className="flex flex-col justify-center items-center w-full">
-                    <AlertCircle className="w-8 h-8 mx-auto mb-4 text-red-600" />
-                    <div className="font-bold text-md sm:text-xl">
-                        Purchase tickets to view full location details.
-                    </div>
-                </div>
-            </div>
-        );
-    }
-
     // Detect mobile device
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
@@ -229,12 +208,32 @@ export const SingleEventMap = ({
     const mapCenter = { lat: latitude, lng: longitude };
     const markerPosition = { lat: latitude, lng: longitude };
 
+    if(event.locationSecure && !event.location) {
+        return (
+            <div
+                className={cn(
+                    "w-full min-h-[85vh] flex items-start",
+                    className,
+                    event.eventTheme !== null ? "" : "bg-neutral-100",
+                )}
+                {...props}
+            >
+                <div className="flex gap-2 w-full bg-white px-4 py-4 items-center">
+                    <MdLockOutline size={25} />
+                    <p className="font-semibold text-md">
+                        Address shared after ticket purchase.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     // Handle loading error
     if (loadError) {
         return (
             <div
                 className={cn(
-                    "w-full min-h-[87vh] flex items-center justify-center",
+                    "w-full min-h-[85vh] flex items-center justify-center",
                     className,
                     event.eventTheme !== null ? "" : "bg-neutral-100",
                 )}

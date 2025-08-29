@@ -66,7 +66,7 @@ export default function EventSinglePage(
                 return(
                     <>
                         <SingleEventDetails isCoHost={false} event={event}/>
-                        <SingleEventFooter  isCoHost={false} event={event} />
+                        <SingleEventFooter  isCoHost={false} event={event} currentPathUrl={pathname + "?" + searchParams} />
                     </>
                 )
         }

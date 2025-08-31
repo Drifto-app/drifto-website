@@ -2,14 +2,31 @@ import * as React from "react";
 import {cn} from "@/lib/utils";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {FaArrowLeft} from "react-icons/fa";
-import {MdOutlineDateRange} from "react-icons/md";
-import {FiBell} from "react-icons/fi";
+import {FiBell, FiPhone} from "react-icons/fi";
+import {IoCardOutline} from "react-icons/io5";
+import {TbArrowsLeftRight} from "react-icons/tb";
+import {AiOutlineQrcode} from "react-icons/ai";
+import {BsBank} from "react-icons/bs";
 
 interface PaymentContentProps extends React.ComponentProps<"div"> {
     order: {[key: string]: any};
     orderContent: {[key: string]: any};
     prev: string | null;
 }
+
+interface PaymentOptions {
+    title: string;
+    icon: React.ReactNode,
+    value: string;
+}
+
+const paymentsOptions: PaymentOptions[] = [
+    {title: "Pay with Card", icon: <IoCardOutline size={30} className="text-blue-800" />, value: "card"},
+    {title: "Pay with Bank Transfer", icon: <TbArrowsLeftRight size={30} className="text-blue-800" />, value: "bank_transfer"},
+    {title: "Pay with USSD", icon: <FiPhone size={30} className="text-blue-800" />, value: "ussd"},
+    {title: "Pay with QR Code", icon: <AiOutlineQrcode size={30} className="text-blue-800" />, value: "qrcode"},
+    {title: "Pay with Bank", icon: <BsBank size={30} className="text-blue-800" />, value: "bank"}
+]
 
 export const PaymentContent = ({
     order,orderContent, prev, className, ...props
@@ -51,7 +68,7 @@ export const PaymentContent = ({
                     <FiBell size={30} className="text-green-500" />
                     <p className="text-neutral-500 font-medium text-lg">Want to pay differently? Just reselect ticket first</p>
                 </div>
-                <div className="w-full flex flex-col items-center px-4 py-5 gap-4 border-neutral-300 border-1 rounded-md">
+                <div className="w-full flex flex-col items-center px-4 py-4 gap-4 border-neutral-300 border-1 rounded-md">
                     <h3 className="w-full text-left font-bold text-xl">
                         Order Summary
                     </h3>
@@ -65,6 +82,12 @@ export const PaymentContent = ({
                         <p>₦ {orderContent.totalPrice}</p>
                     </div>
                 </div>
+                {paymentsOptions.map((item: PaymentOptions, index: number) => (
+                    <div key={index} className="w-full flex flex-row justify-start gap-6 border-1 border-neutral-200 p-4 rounded-md">
+                        {item.icon}
+                        <span className="text-lg font-semibold">{item.title}</span>
+                    </div>
+                ))}
             </div>
         </div>
     )

@@ -13,7 +13,7 @@ export const OrderSuccessDetails = ({
 
     return (
         <div className={cn(
-            "w-full min-h-screen flex flex-col justify-between items-center px-4 py-8 gap-8",
+            "w-full flex flex-col justify-between items-center px-4 py-8 gap-8",
             className
         )} {...props}>
            <div className="flex flex-col items-center justify-center w-full sm:max-w-[70vw] gap-6 mt-10">

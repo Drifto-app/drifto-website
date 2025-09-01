@@ -185,7 +185,7 @@ export const PaymentContent = ({
     return (
         <div
             className={cn(
-                "w-full flex flex-col items-center min-h-screen",
+                "w-full flex flex-col items-center",
                 className
             )}
             {...props}

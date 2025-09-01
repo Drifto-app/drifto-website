@@ -158,7 +158,7 @@ export default function SingleEventHostPage(
     return (
         <div
             className={cn(
-                "w-full",
+                "flex flex-col w-full min-h-screen",
                 className,
                 event.eventTheme !== null ? "" : "bg-neutral-100",
             )}

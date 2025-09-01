@@ -110,7 +110,7 @@ export const OrderContent = ({
 
     return (
         <div className={cn(
-            "w-full flex flex-col items-center justify-center",
+            "w-full min-h-screen",
             className
         )} {...props}>
             <div className={cn(

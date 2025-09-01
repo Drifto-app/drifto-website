@@ -78,7 +78,7 @@ export const EventEarnings = ({
 
     if(loading) {
         return (
-            <div className="w-full h-screen flex flex-col items-center justify-center">
+            <div className="w-full flex-1 flex flex-col items-center justify-center">
                 <Loader className="h-10 w-10"/>
             </div>
         )

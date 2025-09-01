@@ -39,9 +39,6 @@ export const PaymentContent = ({
 }: PaymentContentProps) => {
     const router = useRouter();
 
-    const searchParams = useSearchParams();
-    const pathname = usePathname();
-
     const {user} = useAuthStore()
 
     const [activeScreen, setActiveScreen] = useState<string>("payment");
@@ -71,7 +68,7 @@ export const PaymentContent = ({
         )
     }
 
-    const rederPayButton = (buttonValue: string, paymentType: "card" | "bank" | "ussd" | "qr" | "bank_transfer") => {
+    const renderPayButton = (buttonValue: string, paymentType: "card" | "bank" | "ussd" | "qr" | "bank_transfer") => {
         return (
             <PayButton
                 email={user?.email}
@@ -96,7 +93,7 @@ export const PaymentContent = ({
                             <p>Total:</p>
                             <p>₦ {orderContent.totalPrice}</p>
                         </div>
-                        {rederPayButton("Pay with Card", "card")}
+                        {renderPayButton("Pay with Card", "card")}
                     </div>
                 )
             case "bank_transfer":
@@ -107,7 +104,7 @@ export const PaymentContent = ({
                             <p>Total:</p>
                             <p>₦ {orderContent.totalPrice}</p>
                         </div>
-                        {rederPayButton("Initiate Bank Transfer", "bank_transfer")}
+                        {renderPayButton("Initiate Bank Transfer", "bank_transfer")}
                     </div>
                 )
             case "ussd":
@@ -119,7 +116,7 @@ export const PaymentContent = ({
                             <p>₦ {orderContent.totalPrice}</p>
                         </div>
                         <p>Dial the USSD code provide to proceed with payment</p>
-                        {rederPayButton("Initiate USSD Payment", "ussd")}
+                        {renderPayButton("Initiate USSD Payment", "ussd")}
                     </div>
                 )
             case "qr":
@@ -130,7 +127,7 @@ export const PaymentContent = ({
                             <p>Total:</p>
                             <p>₦ {orderContent.totalPrice}</p>
                         </div>
-                        {rederPayButton("Pay with QR Code", "qr")}
+                        {renderPayButton("Pay with QR Code", "qr")}
                     </div>
                 )
             case "bank":
@@ -141,7 +138,7 @@ export const PaymentContent = ({
                             <p>Total:</p>
                             <p>₦ {orderContent.totalPrice}</p>
                         </div>
-                        {rederPayButton("Pay with Bank", "bank")}
+                        {renderPayButton("Pay with Bank", "bank")}
                     </div>
                 )
             default:
@@ -185,7 +182,7 @@ export const PaymentContent = ({
     return (
         <div
             className={cn(
-                "w-full flex flex-col items-center",
+                "w-full flex flex-col items-center min-h-screen",
                 className
             )}
             {...props}

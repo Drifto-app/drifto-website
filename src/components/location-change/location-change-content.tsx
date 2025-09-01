@@ -15,7 +15,7 @@ import {LoaderSmall} from "@/components/ui/loader";
 import {useAuthStore} from "@/store/auth-store";
 
 interface LocationChangeContentProps extends React.ComponentProps<"div"> {
-    prev?: string;
+    prev: string | null;
 }
 
 export const LocationChangeContent = ({

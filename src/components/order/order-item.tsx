@@ -39,10 +39,10 @@ export const OrderItem = ({
     return (
         <div className={cn("flex flex-col items-center gap-6 px-4 py-4 border-b-neutral-400 border-1 w-full rounded-md", className)} {...props}>
             <div className="w-full flex flex-col gap-2">
-                <h1 className="w-full text-left text-2xl font-bold">
+                <h1 className="w-full text-left text-xl font-bold">
                     {ticket.title}
                 </h1>
-                <p className="w-full text-left text-gray-700 text-xl">
+                <p className="w-full text-left text-gray-700 text-lg">
                     {ticket.price ? `₦ ${ticket.price}` : "Free"}
                 </p>
                 <p className="w-full text-left text-gray-400 text-lg">
@@ -53,7 +53,7 @@ export const OrderItem = ({
                 <Button
                     variant="outline"
                     size="icon"
-                    className="h-14 w-14 rounded-full"
+                    className="h-12 w-12 rounded-full"
                     onClick={() => onClick(-1)}
                     disabled={value <= 0}
                 >
@@ -62,13 +62,13 @@ export const OrderItem = ({
                 </Button>
 
                 <div className="flex-1 text-center">
-                    <div className="text-3xl font-bold tracking-tighter">{value}</div>
+                    <div className="text-2xl font-bold tracking-tighter">{value}</div>
                 </div>
 
                 <Button
                     variant="outline"
                     size="icon"
-                    className="h-14 w-14 rounded-full"
+                    className="h-12 w-12 rounded-full"
                     onClick={() => onClick(1)}
                     disabled={value >= max}
                 >

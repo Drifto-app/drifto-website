@@ -55,11 +55,11 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 pageNumber: currentPage,
             }
 
-            if(activeEventItem != null) {
+            if(activeEventItem) {
                 params.eventTag = activeEventItem;
             }
 
-            if(location != null) {
+            if(location) {
                 params.location = location;
             }
 

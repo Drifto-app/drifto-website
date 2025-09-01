@@ -188,7 +188,7 @@ export const CoHostManage = ({
     return (
         <div
             className={cn(
-                "w-full min-h-[91vh] px-4",
+                "w-full flex-1 px-4",
                 className
             )}
             {...props}

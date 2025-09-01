@@ -4,6 +4,7 @@ import * as React from "react";
 import {Button} from "@/components/ui/button";
 import {cn} from "@/lib/utils";
 import {useCallback} from "react";
+import { PaystackOptions } from "@paystack/inline-js";
 
 interface PayButtonProps extends React.ComponentProps<"button">{
     email: string,
@@ -25,16 +26,16 @@ export const PayButton = ({
         const PaystackPopClass = (await import("@paystack/inline-js")).default;
         const paystack = new PaystackPopClass();
 
-        const param: {[key: string]: any} = {
+        const param: PaystackOptions = {
             key: process.env.NEXT_PUBLIC_PAYSTACK_PK!,
             amount: Math.round(amount * 100),
             email,
             channels: [paymentType ?? "card"],
             reference,
-            onSuccess: (success) => {
+            onSuccess: () => {
                 if (onSuccess) onSuccess();
             },
-            onError: (error) => {
+            onError: () => {
                 if (onError) onError();
             },
             onClose: () => {

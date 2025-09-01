@@ -19,8 +19,8 @@ interface LocationChangeContentProps extends React.ComponentProps<"div"> {
 }
 
 export const LocationChangeContent = ({
-  prev, className, ...props
-}: LocationChangeContentProps) => {
+                                          prev, className, ...props
+                                      }: LocationChangeContentProps) => {
     const router = useRouter();
 
     const {setUser, user} = useAuthStore()
@@ -81,10 +81,10 @@ export const LocationChangeContent = ({
     };
 
     return (
-        <div className={cn("w-full min-h-screen flex flex-col", className)} {...props}>
+        <div className={cn("w-full min-h-[100dvh] flex flex-col", className)} {...props}>
             <div
                 className={cn(
-                    "w-full border-b border-b-neutral-300 flex flex-col gap-3 h-20 justify-center"
+                    "w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-20 flex-shrink-0"
                 )}
             >
                 <div className="flex flex-row items-center px-8">
@@ -104,9 +104,9 @@ export const LocationChangeContent = ({
 
             <form
                 onSubmit={handleSubmit}
-                className="flex flex-col justify-between w-full flex-1 pt-6 px-4 pb-4"
+                className="flex flex-col justify-between w-full flex-1 pt-6 px-4 pb-6 overflow-hidden"
             >
-                <div className="w-full flex flex-col gap-4">
+                <div className="w-full flex flex-col gap-4 flex-shrink-0">
                     <div className="flex flex-col gap-2">
                         <h1 className="font-bold text-2xl">Select your City</h1>
                         <p className="font-semibold text-neutral-400">
@@ -135,7 +135,7 @@ export const LocationChangeContent = ({
                                 <Input
                                     name="city"
                                     type="text"
-                                    className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-semibold text-xl"
+                                    className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-semibold text-lg"
                                     placeholder="Search your city"
                                     value={city}
                                     onChange={(e) => setCity(e.target.value)}
@@ -151,7 +151,7 @@ export const LocationChangeContent = ({
                 <Button
                     type="submit"
                     disabled={ !!loadError || !isLoaded || loading}
-                    className="bg-blue-800 hover:bg-blue-800 text-lg font-bold py-8 rounded-md disabled:opacity-60"
+                    className="bg-blue-800 hover:bg-blue-800 text-lg font-bold py-8 rounded-md disabled:opacity-60 flex-shrink-0"
                 >
                     {loading ? <LoaderSmall /> : "Continue"}
                 </Button>

@@ -110,7 +110,7 @@ export const OrderContent = ({
 
     return (
         <div className={cn(
-            "w-full min-h-screen",
+            "w-full min-h-[100dvh]",
             className
         )} {...props}>
             <div className={cn(

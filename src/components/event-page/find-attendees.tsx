@@ -24,7 +24,7 @@ interface FindAttendeesProps extends React.ComponentProps<"div"> {
     event: { [key: string]: any };
 }
 
-export const FindAttendees = ({
+export const    FindAttendees = ({
     event, className, ...props
 }: FindAttendeesProps) => {
     const [tickets, setTickets] = useState<any[]>([]);
@@ -176,7 +176,7 @@ export const FindAttendees = ({
 
     return (
         <div
-            className={cn("w-full min-h-[100vh] px-4 ", className)}
+            className={cn("w-full flex-1 px-4 ", className)}
             {...props}
         >
             <div className="w-full flex flex-col gap-4 pt-5 no-scrollbar">

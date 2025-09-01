@@ -159,6 +159,20 @@ a {
   75% { transform: translateX(-2px); }
 }
 
+@keyframes slideUpFromBottom {
+  0% {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+.slide-up-animation {
+  animation: slideUpFromBottom 0.7s ease-out;
+}
+
 @utility no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

@@ -11,6 +11,7 @@ import {Button} from "@/components/ui/button";
 import {toast} from "react-toastify";
 import {LoaderSmall} from "@/components/ui/loader";
 import {authApi} from "@/lib/axios";
+import {OrderSuccessDetails} from "@/components/order/order-sucess";
 
 interface OrderContentProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -30,6 +31,7 @@ export const OrderContent = ({
     const searchParams = useSearchParams();
     const pathname = usePathname();
 
+    const [isOrderSucessful, setIsOrderSucessful] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [total, setTotal] = useState<number>(0);
     const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -67,7 +69,7 @@ export const OrderContent = ({
     }
 
     const handleOrderSubmit = async () => {
-        if(totalAmount <= 0) return
+        if(total <= 0) return
 
         setLoading(true);
 
@@ -76,24 +78,34 @@ export const OrderContent = ({
             eventId: event.id,
             ticketRequests: []
         }
-
         for(const item of orderItems) {
             param.ticketRequests = [...param.ticketRequests, {
                 ticketId: item.ticket.id,
                 quantity: item.quantity,
             }];
+
         }
 
         try {
-            const repsonse = await authApi.post("/order", param);
+            const response = await authApi.post("/order", param);
             setLoading(false);
 
-            router.push(`/m/payment/${repsonse.data.data.orderId}?prev=${encodeURIComponent(pathname + "?" + searchParams)}`);
+            if(!response.data.data.completed) {
+                router.push(`/m/payment/${response.data.data.orderId}?prev=${encodeURIComponent(pathname + "?" + searchParams)}`);
+            } else {
+                setIsOrderSucessful(true);
+            }
         } catch (error: any) {
             toast.error(error.message);
         } finally {
             setLoading(false);
         }
+    }
+
+    if(isOrderSucessful) {
+        return (
+            <OrderSuccessDetails />
+        )
     }
 
     return (
@@ -128,13 +140,13 @@ export const OrderContent = ({
                 </div>
             </div>
             <div className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 w-full">
-                <div className="w-full flex flex-row justify-between items-center px-6 py-6">
+                <div className="w-full flex flex-row justify-between items-center px-6 py-4">
                     <div>
                         <p className="text-neutral-500 text-base">Total</p>
                         <p className="font-bold text-2xl">{total}</p>
                     </div>
                     <Button
-                        className="text-xl px-8 py-8 rounded-lg"
+                        className="text-lg px-6 py-7 rounded-lg"
                         onClick={handleOrderSubmit}
                         disabled={total <= 0 || loading}
                     >

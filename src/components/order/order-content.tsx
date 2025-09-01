@@ -133,13 +133,13 @@ export const OrderContent = ({
                     <MdOutlineDateRange size={45} className="text-green-500" />
                     <p className="text-neutral-500 font-medium">Need to cancel? Do so before the event starts for a refund (10% fee applies).</p>
                 </div>
-                <div className="flex flex-col items-center gap-4 w-full pt-4">
+                <div className="flex flex-col items-center gap-4 w-full pt-4 mb-10">
                     {event.tickets.map((item: {[key: string]: any}) => (
                         <OrderItem key={item.id} ticket={item} onChangeChange={handleOrderItemChange} />
                     ))}
                 </div>
             </div>
-            <div className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 w-full">
+            <div className="fixed inset-x-0 bottom-0 z-50 border-t border-neutral-200 w-full bg-white">
                 <div className="w-full flex flex-row justify-between items-center px-6 py-4">
                     <div>
                         <p className="text-neutral-500 text-base">Total</p>

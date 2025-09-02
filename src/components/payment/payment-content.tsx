@@ -13,6 +13,7 @@ import {useMemo, useState} from "react";
 import {PayButton} from "@/components/payment/pay-button";
 import {useAuthStore} from "@/store/auth-store";
 import {OrderSuccessDetails} from "@/components/order/order-sucess";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface PaymentContentProps extends React.ComponentProps<"div"> {
     order: {[key: string]: any};
@@ -78,7 +79,10 @@ export const PaymentContent = ({
                 paymentType={paymentType}
                 onSuccess={() => setIsSuccess(true)}
                 onError={() => setActiveScreen("payment")}
-                onClose={() => setActiveScreen("payment")}
+                onClose={() => {
+                    setActiveScreen("payment")
+                    showTopToast("error", "The payment was Cancelled!")
+                }}
             />
         )
     }
@@ -87,56 +91,56 @@ export const PaymentContent = ({
         switch (activeScreen) {
             case "card":
                 return (
-                    <div className="w-full flex flex-col gap-4 px-4 pt-4">
-                        <h2 className="font-bold text-xl">Order Summary</h2>
-                        <div className="w-full flex justify-between text-xl font-medium">
-                            <p>Total:</p>
-                            <p>₦ {orderContent.totalPrice}</p>
-                        </div>
+                    <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
+                       <div className="w-full mt-15 flex flex-col">
+                           <h2 className="font-bold text-xl">Proceed with Card payment</h2>
+                           <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
+                           <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                               <p>Total:</p>
+                               <p>₦ {orderContent.totalPrice}</p>
+                           </div>
+                       </div>
                         {renderPayButton("Pay with Card", "card")}
                     </div>
                 )
             case "bank_transfer":
                 return (
-                    <div className="w-full flex flex-col gap-4 px-4 pt-4">
-                        <p className="text-lg">Please complete bank transfer for order with ID: {orderContent.id}</p>
-                        <div className="w-full flex justify-between text-xl font-medium">
-                            <p>Total:</p>
-                            <p>₦ {orderContent.totalPrice}</p>
+                    <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
+                        <div className="w-full mt-15 flex flex-col">
+                            <h2 className="font-bold text-xl">Proceed with Bank Transfer payment</h2>
+                            <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                                <p>Total:</p>
+                                <p>₦ {orderContent.totalPrice}</p>
+                            </div>
                         </div>
                         {renderPayButton("Initiate Bank Transfer", "bank_transfer")}
                     </div>
                 )
             case "ussd":
                 return (
-                    <div className="w-full flex flex-col gap-4 px-4 pt-4">
-                        <p className="text-lg">Please complete bank transfer for order with ID: {orderContent.id}</p>
-                        <div className="w-full flex justify-between text-xl font-medium">
-                            <p>Total:</p>
-                            <p>₦ {orderContent.totalPrice}</p>
+                    <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
+                        <div className="w-full mt-15 flex flex-col">
+                            <h2 className="font-bold text-xl">Proceed with USSD payment</h2>
+                            <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                                <p>Total:</p>
+                                <p>₦ {orderContent.totalPrice}</p>
+                            </div>
                         </div>
-                        <p>Dial the USSD code provide to proceed with payment</p>
                         {renderPayButton("Initiate USSD Payment", "ussd")}
-                    </div>
-                )
-            case "qr":
-                return (
-                    <div className="w-full flex flex-col gap-4 px-4 pt-4">
-                        <h2 className="font-bold text-xl">Order Summary</h2>
-                        <div className="w-full flex justify-between text-xl font-medium">
-                            <p>Total:</p>
-                            <p>₦ {orderContent.totalPrice}</p>
-                        </div>
-                        {renderPayButton("Pay with QR Code", "qr")}
                     </div>
                 )
             case "bank":
                 return (
-                    <div className="w-full flex flex-col gap-4 px-4 pt-4">
-                        <h2 className="font-bold text-xl">Order Summary</h2>
-                        <div className="w-full flex justify-between text-xl font-medium">
-                            <p>Total:</p>
-                            <p>₦ {orderContent.totalPrice}</p>
+                    <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
+                        <div className="w-full mt-15 flex flex-col">
+                            <h2 className="font-bold text-xl">Proceed with Bank Account payment</h2>
+                            <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                                <p>Total:</p>
+                                <p>₦ {orderContent.totalPrice}</p>
+                            </div>
                         </div>
                         {renderPayButton("Pay with Bank", "bank")}
                     </div>

@@ -21,6 +21,7 @@ import {router} from "next/client";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useShare} from "@/hooks/share-option";
 import {ShareDialog} from "@/components/share-button/share-option";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -110,7 +111,7 @@ export const SingleEventDetails = ({
                 eventId: event.id,
             })
         } catch (err: any) {
-            toast.error(err.message);
+            showTopToast("error", err.message);
             setIsLiked(!isLiked);
         } finally {
             setIsLikedLoading(false);
@@ -147,9 +148,9 @@ export const SingleEventDetails = ({
                     <div className="w-full flex flex-col items-center gap-6 pt-5 pb-25">
                         <div className="flex w-full gap-2 items-center">
                             <div className="w-full max-w-xl h-12 flex flex-row items-center border rounded-full px-4 shadow-md cursor-pointer" onClick={() => setActiveScreen!("tickets")} >
-                                <IoMdSearch size={20} />
+                                <IoMdSearch size={20} className="text-blue-800" />
                                 <Input
-                                    className="h-full w-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-black"
+                                    className="h-full w-full shadow-none border-none placeholder:font-black placeholder:text-lg placeholder:text-blue-800"
                                     placeholder="Find people who booked"
                                     disabled
                                 />

@@ -17,6 +17,7 @@ import {toast} from "react-toastify";
 import {LoaderSmall} from "@/components/ui/loader";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface NewTicketCardProps {
     addTicket: (updated: { [key: string]: any }) => void;
@@ -97,9 +98,9 @@ export const NewTicketCard = ({ addTicket, eventId }: NewTicketCardProps) => {
             addTicket(response.data.data);
 
 
-            toast.success("Ticket created successfully");
+            showTopToast("success", "Ticket created successfully");
         } catch (error: any) {
-            toast.error("Error updating ticket");
+            showTopToast("error", "Error updating ticket");
         } finally {
             setIsLoading(false);
         }

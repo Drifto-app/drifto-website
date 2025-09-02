@@ -14,6 +14,7 @@ import { useState } from "react";
 import {useRouter} from "next/navigation";
 import {cn} from "@/lib/utils";
 import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface CommentCardProps extends React.ComponentProps<"div"> {
     comment: { [key: string]: any };
@@ -48,7 +49,7 @@ export function CommentCard({ comment, currentPathUrl, disabled, className, ...p
         } catch (err: any) {
             setIsLiked(!newLiked);
             setTotalReactions((prev) => prev + (newLiked ? -1 : 1));
-            toast.error(err?.message || "Something went wrong");
+            showTopToast("error", err?.message || "Something went wrong");
         } finally {
             setIsLikedLoading(false);
         }

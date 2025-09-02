@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {devtools, persist} from 'zustand/middleware';
 import {api, authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface EventTagsState {
     // State
@@ -56,7 +57,7 @@ export const useEventTagsStore = create<EventTagsState>()(
                         set({
                             error: errorMsg
                         });
-                        toast.error(errorMsg);
+                        showTopToast("error", errorMsg);
                         return;
                     }
 
@@ -67,7 +68,7 @@ export const useEventTagsStore = create<EventTagsState>()(
                         set({
                             error: errorMsg
                         });
-                        toast.error(errorMsg);
+                        showTopToast("error", errorMsg);
                         return;
                     }
 
@@ -87,7 +88,7 @@ export const useEventTagsStore = create<EventTagsState>()(
                         error: errorMessage,
                     });
 
-                    toast.error(errorMessage);
+                    showTopToast("error", errorMessage);
                 } finally {
                     set({
                         isLoading: false,

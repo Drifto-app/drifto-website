@@ -12,6 +12,7 @@ import {useEffect, useRef, useCallback, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {IoSend} from "react-icons/io5";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface CommentManageProps extends React.ComponentProps<"div">{
     entityId: string;
@@ -53,7 +54,7 @@ export default function CommentManagePage(
         setSubmitCommentLoading(true);
 
         if(comment == null || comment == ""){
-           toast.error("Comment must specify a comment");
+           showTopToast("error", "Comment must specify a comment");
            return;
         }
 
@@ -78,7 +79,7 @@ export default function CommentManagePage(
             setComment("")
         } catch (err: any) {
             setError(err.response?.data?.description || 'Commenting failed');
-            toast.error(err.response?.data?.description || 'Commenting failed');
+            showTopToast("error", err.response?.data?.description || 'Commenting failed');
         } finally {
             setSubmitCommentLoading(false);
         }
@@ -139,7 +140,7 @@ export default function CommentManagePage(
             hasMoreRef.current = !isLast;
 
         } catch (err: any) {
-            toast.error(err.message || "Error loading comments");
+            showTopToast("error", err.message || "Error loading comments");
             setError(err.message);
         } finally {
             setLoading(false);

@@ -18,6 +18,7 @@ import {toast} from "react-toastify";
 import {LoaderSmall} from "@/components/ui/loader";
 import {Input} from "@/components/ui/input";
 import {Label} from "@/components/ui/label";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface TicketCardProps {
     ticket: {[key:string]: any};
@@ -82,10 +83,10 @@ export const TicketCard = ({ ticket, removeTicket, onChange }: TicketCardProps) 
 
         try {
             const response = await authApi.delete(`/ticket/${ticket.id}`);
-            toast.success("Ticket deleted successfully");
+            showTopToast("success", "Ticket deleted successfully");
             removeTicket(ticket.id);
         } catch (err: any) {
-            toast.error(err.response?.data?.description || "Deletion failed");
+            showTopToast("error", err.response?.data?.description || "Deletion failed");
         }finally {
             setIsDeleteLoading(false);
         }
@@ -119,9 +120,9 @@ export const TicketCard = ({ ticket, removeTicket, onChange }: TicketCardProps) 
             await authApi.patch(`/ticket/${ticket.id}`, param)
             setIsEditOpen(false);
             onChange(updatedTicket);
-            toast.success("Ticket updated");
+            showTopToast("success", "Ticket updated");
         } catch (error: any) {
-            toast.error("Error updating ticket");
+            showTopToast("error", "Error updating ticket");
         } finally {
             setIsLoading(false);
         }

@@ -9,6 +9,7 @@ import Image from "next/image";
 import {Loader, LoaderSmall} from "@/components/ui/loader";
 import {toast} from "react-toastify";
 import {UserVerificationBadge} from "@/components/ui/user-placeholder";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface HostInvitesProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -45,7 +46,7 @@ export const HostInvites = ({
             // Remove the invite from the list after successful revocation
             setInvites(prev => prev.filter(invite => invite.inviteId !== inviteId))
         } catch(error: any) {
-            toast.error("Error revoking invite")
+            showTopToast("error", "Error revoking invite")
         } finally {
             setCancellingInvites(prev => {
                 const newSet = new Set(prev)

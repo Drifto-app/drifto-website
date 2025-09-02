@@ -10,6 +10,7 @@ import {useRouter} from "next/navigation";
 import {useEffect, useState} from "react";
 import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
+import {showTopToast} from "@/components/toast/toast-util";
 
 
 interface EventCardProps extends React.ComponentProps<"div">{
@@ -60,7 +61,7 @@ export const EventCard = ({ event, currentPathUrl, className, ...props }: EventC
                 eventId: event.id,
             })
         } catch (err: any) {
-            toast.error(err.message);
+            showTopToast("error", err.message);
             setIsLiked(!isLiked);
         } finally {
             setIsLikedLoading(false);

@@ -10,6 +10,7 @@ import {useEffect, useRef, useCallback, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {IoSend} from "react-icons/io5";
+import { showTopToast } from "../toast/toast-util";
 
 interface SingleEventReviewsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -43,7 +44,7 @@ export const SingleEventReviews = ({
         setSubmitCommentLoading(true);
 
         if(comment == null || comment == ""){
-            toast.error("Comment must specify a comment");
+            showTopToast("error", "Comment must specify a comment");
             setSubmitCommentLoading(false);
             return;
         }
@@ -62,7 +63,7 @@ export const SingleEventReviews = ({
             setComment("")
         } catch (err: any) {
             setError(err.response?.data?.description || 'Commenting failed');
-            toast.error(err.response?.data?.description || 'Commenting failed');
+            showTopToast("error", err.response?.data?.description || 'Commenting failed');
         } finally {
             setSubmitCommentLoading(false);
         }
@@ -108,7 +109,7 @@ export const SingleEventReviews = ({
             hasMoreRef.current = !isLast;
 
         } catch (err: any) {
-            toast.error(err.message || "Error loading comments");
+            showTopToast("error", err.message || "Error loading comments");
             setError(err.message);
         } finally {
             setLoading(false);

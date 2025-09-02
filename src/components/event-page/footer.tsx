@@ -19,6 +19,7 @@ import {
 import {Label} from "@/components/ui/label";
 import {toast} from "react-toastify";
 import {authApi} from "@/lib/axios";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface SingleEventFooterProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -52,7 +53,7 @@ export const SingleEventFooter = ({
 
             router.push("/?screen=plans");
         }catch (err: any) {
-            toast.error(err.message || "Error deleting event");
+            showTopToast("error", err.message || "Error deleting event");
             setLoading!(false);
         }
     }

@@ -30,28 +30,22 @@ export const SnapshotCarousel: React.FC<SnapshotCarouselProps> = ({ snapshots })
 
     return (
         <>
-            <Carousel className="w-full">
-                <CarouselContent className="flex gap-2 overflow-x-auto no-scrollbar">
+            <div className="w-full overflow-x-auto no-scrollbar">
+                <div className="flex gap-2">
                     {snapshots.map((src, idx) => (
-                        <CarouselItem key={idx} className="w-[60%] flex-none">
-                            <div className="cursor-pointer" onClick={() => openModal(src)}>
-                                <Card className="overflow-hidden p-0 rounded-lg">
-                                    <CardContent className="p-0">
-                                        <AspectRatio ratio={4/3}>
-                                            <Image
-                                                src={src}
-                                                alt={`Snapshot ${idx + 1}`}
-                                                fill
-                                                className="object-cover"
-                                            />
-                                        </AspectRatio>
-                                    </CardContent>
-                                </Card>
-                            </div>
-                        </CarouselItem>
+                        <div key={idx} className="cursor-pointer relative w-[60%] min-w-50 rounded-md" onClick={() => openModal(src)}>
+                            <AspectRatio ratio={4/3}>
+                                <Image
+                                    src={src}
+                                    alt={`Snapshot ${idx + 1}`}
+                                    fill
+                                    className="object-cover rounded-md"
+                                />
+                            </AspectRatio>
+                        </div>
                     ))}
-                </CarouselContent>
-            </Carousel>
+                </div>
+            </div>
 
 
             <Dialog

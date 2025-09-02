@@ -97,7 +97,7 @@ export const OrderContent = ({
                 setIsOrderSucessful(true);
             }
         } catch (error: any) {
-            showTopToast("error", error.message);
+            showTopToast("error", error.response?.data?.description);
         } finally {
             setLoading(false);
         }

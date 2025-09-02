@@ -1,7 +1,6 @@
 import { create } from 'zustand';
-import {devtools, persist} from 'zustand/middleware';
-import {api, authApi} from "@/lib/axios";
-import {toast} from "react-toastify";
+import {persist} from 'zustand/middleware';
+import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 
 interface EventTagsState {

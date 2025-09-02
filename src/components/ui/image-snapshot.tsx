@@ -16,10 +16,11 @@ interface ImageSnapshotsProps {
     onImageAdd?: (images: string[]) => void;
     onImageRemove?: (images: string[]) => void;
     maxImages?: number;
+    setSubmitDisabled: (loading: boolean) => void;
 }
 
 export const ImageSnapshots = ({
-    initialImages = [], onImageAdd, onImageRemove, maxImages = 10,
+    initialImages = [], onImageAdd, setSubmitDisabled, onImageRemove, maxImages = 10,
 }: ImageSnapshotsProps ) => {
     const [images, setImages] = React.useState<string[]>(initialImages);
     const [isUploading, setIsUploading] = React.useState(false);
@@ -33,6 +34,7 @@ export const ImageSnapshots = ({
             return;
         }
         setIsUploading(true);
+        setSubmitDisabled(true);
         try {
             const formData = new FormData();
             formData.append("mediaFile", file);
@@ -59,6 +61,7 @@ export const ImageSnapshots = ({
             showTopToast("error", "Upload failed. Please try again.");
         } finally {
             setIsUploading(false);
+            setSubmitDisabled(false);
         }
     };
 
@@ -112,11 +115,11 @@ export const ImageSnapshots = ({
 
     return (
         <>
-            <div className="w-full  rounded-lg ">
-                <Carousel className="w-full">
-                    <CarouselContent className="flex gap-3">
+            <div className="w-full rounded-lg">
+                <div className="w-full overflow-x-auto no-scrollbar">
+                    <div className="flex gap-3">
                         {images.map((src, idx) => (
-                            <CarouselItem key={src} className="w-[60%] flex-none relative">
+                            <div key={src} className="w-[60%] flex-none relative">
                                 <Card
                                     className="overflow-hidden cursor-pointer py-0"
                                     onClick={() => openModal(src)}
@@ -146,12 +149,12 @@ export const ImageSnapshots = ({
                                 >
                                     <X size={22} />
                                 </button>
-                            </CarouselItem>
+                            </div>
                         ))}
 
                         {/* Add-button slide */}
                         {images.length < maxImages && (
-                            <CarouselItem className="w-[60%] flex-none relative">
+                            <div className="w-[60%] flex-none relative">
                                 <Card className="overflow-hidden p-0">
                                     <CardContent className="p-0">
                                         <AspectRatio ratio={4 / 3}>
@@ -175,10 +178,10 @@ export const ImageSnapshots = ({
                                         </AspectRatio>
                                     </CardContent>
                                 </Card>
-                            </CarouselItem>
+                            </div>
                         )}
-                    </CarouselContent>
-                </Carousel>
+                    </div>
+                </div>
                 <p className="mt-2 text-sm text-gray-500">
                     {images.length} of {maxImages} snapshots
                 </p>

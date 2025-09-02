@@ -15,9 +15,10 @@ interface CoverImageUploaderProps {
     /** called with the new URL once upload completes */
     onChange?: (url: string) => void;
     mediaFileType: string;
+    setSubmitDisabled: (loading: boolean) => void;
 }
 
-export function CoverImageUploader({ value, onChange, mediaFileType }: CoverImageUploaderProps) {
+export function CoverImageUploader({ value, setSubmitDisabled, onChange, mediaFileType }: CoverImageUploaderProps) {
     const [localPreview, setLocalPreview] = useState<string>();
     const [uploading, setUploading] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
@@ -39,6 +40,7 @@ export function CoverImageUploader({ value, onChange, mediaFileType }: CoverImag
         const previewUrl = URL.createObjectURL(file);
         setLocalPreview(previewUrl);
         setUploading(true);
+        setSubmitDisabled(true)
 
         try {
             // 2) Send to your API
@@ -71,6 +73,7 @@ export function CoverImageUploader({ value, onChange, mediaFileType }: CoverImag
             URL.revokeObjectURL(previewUrl);
         } finally {
             setUploading(false);
+            setSubmitDisabled(false);
         }
 
         // Reset the input value to allow re-uploading the same file

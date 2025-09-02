@@ -40,6 +40,7 @@ export const EventEdit = ({
 
 
     const [loading, setLoading] = useState<boolean>(false);
+    const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
     const [startDateError, setStartDateError] = useState<boolean>(false);
     const [stopDateError, setStopDateError] = useState<boolean>(false);
 
@@ -136,7 +137,7 @@ export const EventEdit = ({
             location: coordinates,
             address,
             isAgeRestricted,
-            minimumAge:  minimumAge === "" ? null : parseInt(minimumAge, 10),
+            minimumAge:  minimumAge === "" || minimumAge === "0" ? null : parseInt(minimumAge, 10),
             tags: eventTags,
         }
 
@@ -184,6 +185,7 @@ export const EventEdit = ({
                             value={titleImage}
                             onChange={handleTitleImageChange}
                             mediaFileType={"EVENT_HEADER"}
+                            setSubmitDisabled={setSubmitDisabled}
                         />
                         <div className="w-full flex flex-col gap-5 px-4">
                             <div className="grid gap-2">
@@ -204,6 +206,7 @@ export const EventEdit = ({
                                     placeholder="Description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
+                                    rows={5}
                                     className="py-2 px-3 bg-neutral-200 rounded-md focus:border-blue-600 focus:border-1 focus:outline-hidden"
                                 />
                             </div>
@@ -273,13 +276,13 @@ export const EventEdit = ({
                             </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
-                                <ImageSnapshots initialImages={screenshots} maxImages={50} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
+                                <ImageSnapshots setSubmitDisabled={setSubmitDisabled} initialImages={screenshots} maxImages={50} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
                             </div>
                             <div className="bg-white pt-2 border-none border-t border-white w-full fixed inset-x-0 bottom-0 z-60 pb-4 flex items-center justify-center safe-area-inset-bottom">
                                 <Button
                                     type="submit"
                                     className="w-[90%] text-md py-6 font-bold"
-                                    disabled={loading || startDateError || stopDateError}
+                                    disabled={loading || startDateError || stopDateError || submitDisabled}
                                     onClick={handleUpdateSubmit}>
                                     {loading ? <LoaderSmall /> : "Confirm Changes"}
                                 </Button>

@@ -1,6 +1,7 @@
 import {persist} from "zustand/middleware";
 import {create} from "zustand";
-import {api} from "@/lib/axios";
+import {api, authApi} from "@/lib/axios";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface AuthState {
     user: {[key: string]: any} | null;
@@ -30,6 +31,7 @@ interface AuthStore extends AuthState {
     googleLogin: (credentials: string) => Promise<void>;
     logout: () => void;
     refreshAccessToken: () => Promise<boolean>;
+    getUser: () => Promise<void>;
     setUser: (user: {[key: string]: any}) => void;
     setTokens: (accessToken: string, refreshToken: string) => void;
     clearAuth: () => void;
@@ -130,6 +132,17 @@ export const useAuthStore = create<AuthStore>()(
                     return false;
                 } finally {
                     set({ isLoading: false, hasTriedRefresh: true });
+                }
+            },
+
+            async getUser(): Promise<void> {
+                try {
+                    const response = await authApi.get('/user/current');
+
+                    set({ user: response.data.data })
+                }catch(error: any) {
+                    set({isLoading: false});
+                    throw error
                 }
             },
 

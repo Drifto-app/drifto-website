@@ -17,6 +17,7 @@ import {
 import {REGEXP_ONLY_DIGITS} from "input-otp";
 import {useEffect, useState} from "react";
 import {FaEye, FaEyeSlash} from "react-icons/fa";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface ForgotPasswordProps extends React.ComponentProps<"form"> {
     loginPrincipal: string;
@@ -90,7 +91,7 @@ export const ForgotPassword = ({
             setIsVerifyForgotPassword(true);
         } catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Request failed');
+            showTopToast("error", err.response?.data?.description || 'Request failed');
         }
     };
 
@@ -113,7 +114,8 @@ export const ForgotPassword = ({
             setLoading(false);
         } catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Request failed');
+            showTopToast("error", err.response?.data?.description || 'Request failed');
+
         }
     }
 
@@ -144,7 +146,7 @@ export const ForgotPassword = ({
             setOtpValue("");
         } catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Request failed');
+            showTopToast("error", err.response?.data?.description || 'Request failed');
             setOtpValue("");
         }
     }
@@ -153,12 +155,12 @@ export const ForgotPassword = ({
         e.preventDefault();
 
         if (!passwordsMatch) {
-            toast.error('Passwords do not match');
+            showTopToast("error", 'Passwords do not match');
             return;
         }
 
         if (!isPasswordValid) {
-            toast.error('Password does not meet requirements');
+            showTopToast("error", 'Password does not meet requirements');
             return;
         }
 
@@ -186,7 +188,7 @@ export const ForgotPassword = ({
             setForgotPassword(false);
         } catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Reset failed');
+            showTopToast("error", err.response?.data?.description || 'Reset failed');
         }
     }
 

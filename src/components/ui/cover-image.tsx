@@ -7,6 +7,7 @@ import {authApi} from "@/lib/axios";
 import {toast} from "react-toastify";
 import Image from "next/image";
 import {FaRegEdit} from "react-icons/fa";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface CoverImageUploaderProps {
     /** current cover image URL */
@@ -51,7 +52,7 @@ export function CoverImageUploader({ value, onChange, mediaFileType }: CoverImag
             });
 
             if (!response.data.success) {
-                toast.error(response.data.description)
+                showTopToast("error", response.data.description)
                 return
             }
 

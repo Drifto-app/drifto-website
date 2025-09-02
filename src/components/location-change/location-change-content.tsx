@@ -13,6 +13,7 @@ import {toast} from "react-toastify";
 import {authApi} from "@/lib/axios";
 import {LoaderSmall} from "@/components/ui/loader";
 import {useAuthStore} from "@/store/auth-store";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface LocationChangeContentProps extends React.ComponentProps<"div"> {
     prev: string | null;
@@ -74,7 +75,7 @@ export const LocationChangeContent = ({
             setLoading(false);
             router.push(prev ?? "/");
         } catch (error: any) {
-            toast.error(error.message);
+            showTopToast("error", error.message);
         } finally {
             setLoading(false);
         }

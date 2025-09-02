@@ -6,9 +6,10 @@ import { Dialog } from "@headlessui/react";
 import { MdCancel } from "react-icons/md";
 import { IoShareSocialOutline } from "react-icons/io5";
 import { FaCopy, FaWhatsapp, FaLinkedin, FaTelegram } from "react-icons/fa";
-import { toast } from "react-toastify";
 import { canUseNativeShare, shareViaWeb, copyToClipboard, openSocialShare } from "@/lib/share-utils";
 import {FaXTwitter} from "react-icons/fa6";
+import { toast } from "sonner";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface ShareDialogProps {
     isOpen: boolean;
@@ -45,16 +46,16 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
             url: eventUrl,
         });
         if (ok) onClose();
-        else toast.error("Failed to share");
+        else showTopToast("error", "Failed to share");
     };
 
     const handleCopyLink = async () => {
         const ok = await copyToClipboard(eventUrl);
         if (ok) {
-            toast.success("Link copied to clipboard!");
+            showTopToast("success", "Link copied to clipboard!");
             onClose();
         } else {
-            toast.error("Failed to copy link");
+            showTopToast("error", "Failed to copy link");
         }
     };
 

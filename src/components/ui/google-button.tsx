@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import {CredentialResponse, GoogleLogin} from "@react-oauth/google";
-import {toast} from "react-toastify";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface GoogleButtonProps {
     onSuccess: (credentialResponse: CredentialResponse) => Promise<void>;
@@ -26,7 +26,7 @@ export default function GoogleButton({onSuccess}: GoogleButtonProps) {
             {width > 0 && (
                 <GoogleLogin
                     onSuccess={onSuccess}
-                    onError={() => toast.error('Google Auth failed')}
+                    onError={() => showTopToast("error", 'Google Auth failed')}
                     useOneTap={false}
                     theme="outline"
                     width={width}

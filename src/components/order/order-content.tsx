@@ -12,6 +12,7 @@ import {toast} from "react-toastify";
 import {LoaderSmall} from "@/components/ui/loader";
 import {authApi} from "@/lib/axios";
 import {OrderSuccessDetails} from "@/components/order/order-sucess";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface OrderContentProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -96,7 +97,7 @@ export const OrderContent = ({
                 setIsOrderSucessful(true);
             }
         } catch (error: any) {
-            toast.error(error.message);
+            showTopToast("error", error.message);
         } finally {
             setLoading(false);
         }

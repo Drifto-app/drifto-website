@@ -16,6 +16,7 @@ import {FaEye, FaEyeSlash} from "react-icons/fa";
 import {Calendar28} from "@/components/ui/date-input";
 import {Autocomplete, useLoadScript} from "@react-google-maps/api";
 import GoogleButton from "@/components/ui/google-button";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface SignUpFormProps extends React.ComponentProps<"form"> {
     setIsSignUp: (value: boolean) => void;
@@ -161,7 +162,7 @@ export const SignUpForm = ({
             setLoading(false);
         }catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Email Request Failed');
+            showTopToast("error", err.response?.data?.description || 'Email Request Failed');
         }
     }
 
@@ -182,7 +183,7 @@ export const SignUpForm = ({
             setEmailOtp(true);
         }catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Email Request Failed');
+            showTopToast("error", err.response?.data?.description || 'Email Request Failed');
         }
     }
 
@@ -200,7 +201,7 @@ export const SignUpForm = ({
             setIsRegister(true)
         }catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Email Request Failed');
+            showTopToast("error", err.response?.data?.description || 'Email Request Failed');
             setOtpValue("");
         }
     }
@@ -218,18 +219,18 @@ export const SignUpForm = ({
         e.preventDefault();
 
         if (!isPasswordValid) {
-            toast.error('Password does not meet requirements');
+            showTopToast("error", 'Password does not meet requirements');
             return;
         }
 
         if (!isUsernameValid) {
-            toast.error(usernameError || "Please fix your username first");
+            showTopToast("error", usernameError || "Please fix your username first");
             return;
         }
 
 
         if(!firstName || !lastName || !password || !username || !dob || !city || !isAgreed) {
-            toast.error("Complete all filed")
+            showTopToast("error", "Complete all filed")
             return;
         }
 
@@ -256,7 +257,7 @@ export const SignUpForm = ({
             });
 
             setLoading(false);
-            toast.success(data.message);
+            showTopToast("success", data.message);
             setIsSignUp(false)
 
             setTokens(
@@ -269,7 +270,7 @@ export const SignUpForm = ({
             router.push("/")
         } catch (err: any) {
             setLoading(false);
-            toast.error(err.response?.data?.description || 'Email Request Failed');
+            showTopToast("error", err.response?.data?.description || 'Email Request Failed');
             setOtpValue("");
         }
     }
@@ -527,7 +528,7 @@ export const SignUpForm = ({
 
                         router.push("/");
                     } catch (err: any) {
-                        toast.error(err.response?.data?.description || 'Google Auth failed');
+                        showTopToast("error", err.response?.data?.description || 'Google Auth failed');
                     }
                 }} />
             </div>

@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/dialog";
 import QrScannerDialog from "@/components/event-page/qrcode-dialog";
 import {Transition} from "@headlessui/react";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface FindAttendeesProps extends React.ComponentProps<"div"> {
     event: { [key: string]: any };
@@ -151,12 +152,11 @@ export const    FindAttendees = ({
                         : ticket
                 ));
             } else {
-                toast.error(response.data.description);
+                showTopToast("error", response.data.description);
                 return;
             }
         } catch (error) {
-            // In a real app, you'd show an error message here
-            toast.error('Failed to mark ticket as used. Please try again.')
+            showTopToast("error", 'Failed to mark ticket as used. Please try again.')
         }
 
         setMarkingUsed(false);

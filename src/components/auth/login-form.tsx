@@ -14,6 +14,7 @@ import * as React from "react";
 import {emailRegex} from "@/lib/utils";
 import {GoogleLogin} from "@react-oauth/google";
 import GoogleButton from "@/components/ui/google-button";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface LoginFormProps extends React.ComponentProps<"form"> {
   setLoginPrincipal: (value: string) => void;
@@ -59,7 +60,7 @@ export function LoginForm({
       router.push('/');
     } catch (err: any) {
       setError(err.response?.data?.description || 'Login failed');
-      toast.error(err.response?.data?.description || 'Login failed');
+      showTopToast("error", err.response?.data?.description || 'Login failed')
     }
   };
 
@@ -123,7 +124,7 @@ export function LoginForm({
                     await googleLogin(idToken!);
                 } catch (err: any) {
                     setError(err.response?.data?.description || 'Google Auth failed');
-                    toast.error(err.response?.data?.description || 'Google Auth failed');
+                    showTopToast("error", err.response?.data?.description || 'Google Auth failed')
                 }
             }} />
           </div>

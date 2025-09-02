@@ -14,6 +14,7 @@ import {Input} from "@/components/ui/input";
 import {Loader, LoaderSmall} from "@/components/ui/loader";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import Image from "next/image";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface CoHostManageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -57,7 +58,7 @@ export const CoHostManage = ({
             await authApi.post(`/event/${event.id}/cohost/remove`, params)
             setCoHosts((coHosts) => coHosts.filter((c) => c.username !== username))
         } catch (e: any) {
-            toast.error("Could not remove co-host");
+            showTopToast("error", "Could not remove co-host");
         }
     }
 
@@ -151,10 +152,10 @@ export const CoHostManage = ({
             if (response.data.success) {
                 setInvitedUsers(prev => new Set(prev).add(userId));
             } else {
-                toast.error(response.data.description || 'Failed to send invite');
+                showTopToast("error", response.data.description || 'Failed to send invite');
             }
         } catch (error: any) {
-            toast.error('Failed to send invite. Please try again.');
+            showTopToast("error", 'Failed to send invite. Please try again.');
         }
 
         setInvitingUsers(prev => {

@@ -7,6 +7,7 @@ import { BrowserMultiFormatReader } from "@zxing/browser";
 import {CheckCircle2, X, XCircle} from "lucide-react";
 import {authApi} from "@/lib/axios";
 import { toast } from "sonner"
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface Props {
     open: boolean;
@@ -41,23 +42,9 @@ export default function QrScannerDialog({ open, onOpenChange, onResult }: Props)
     // pop-down helpers
     const showBanner = (type: "success" | "error", text: string) => {
         if (type === "error") {
-            toast(text, {
-                icon: <XCircle  />,
-                classNames: {
-                    toast: "bg-red-500 text-white border border-red-600 shadow-lg",
-                    title: "text-white",
-                    description: "text-red-50",
-                },
-            });
+            showTopToast("error", text);
         } else {
-            toast(text, {
-                icon: <CheckCircle2  />,
-                classNames: {
-                    toast: "bg-green-500 text-white border border-green-600 shadow-lg",
-                    title: "text-white",
-                    description: "text-green-50",
-                },
-            });
+            showTopToast("success", text);
         }
     };
 

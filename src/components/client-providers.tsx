@@ -31,7 +31,16 @@ export function ClientProviders({ children }: ClientProvidersProps) {
                         theme="colored"
                         transition={Bounce}
                     />
-                    <Toaster />
+                    <Toaster
+                        position="top-center"
+                        toastOptions={{
+                            duration: 2000,
+                            style: {
+                                marginTop: '20px',
+                            },
+                        }}
+                        className="top-4"
+                    />
                 </EventTagsProvider>
             </AuthProvider>
         </GoogleOAuthProvider>

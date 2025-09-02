@@ -9,6 +9,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import {LoaderSmall} from "@/components/ui/loader";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface ImageSnapshotsProps {
     initialImages?: string[];
@@ -28,7 +29,7 @@ export const ImageSnapshots = ({
     // Upload handler
     const handleImageAdd = async (file: File) => {
         if (images.length >= maxImages) {
-            toast.error(`Maximum ${maxImages} images allowed`);
+            showTopToast("error", `Maximum ${maxImages} images allowed`);
             return;
         }
         setIsUploading(true);
@@ -46,7 +47,7 @@ export const ImageSnapshots = ({
                 headers: { "Content-Type": "multipart/form-data" },
             });
             if (!res.data.success) {
-                toast.error(res.data.description);
+                showTopToast("error", res.data.description);
                 return;
             }
             const url = res.data.data.url;
@@ -55,7 +56,7 @@ export const ImageSnapshots = ({
             onImageAdd?.(next);
         } catch (err) {
             console.error(err);
-            toast.error("Upload failed. Please try again.");
+            showTopToast("error", "Upload failed. Please try again.");
         } finally {
             setIsUploading(false);
         }
@@ -74,7 +75,7 @@ export const ImageSnapshots = ({
         if (f && f.type.startsWith("image/")) {
             handleImageAdd(f);
         } else {
-            toast.error("Please select a valid image file");
+            showTopToast("error", "Please select a valid image file");
         }
         e.target.value = "";
     };

@@ -11,6 +11,7 @@ import {Loader} from "@/components/ui/loader";
 import {useEffect, useRef, useCallback} from "react";
 import {Button} from "@/components/ui/button";
 import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface ReactionManageProps extends React.ComponentProps<"div">{
     entityId: string;
@@ -85,7 +86,7 @@ export default function ReactionManagePage(
             hasMoreRef.current = !isLast;
 
         } catch (err: any) {
-            toast.error(err.message || "Error loading user reactions");
+            showTopToast("error", err.message || "Error loading user reactions");
             setError(err.message);
         } finally {
             setLoading(false);

@@ -15,6 +15,7 @@ import {TicketCard} from "@/components/event-page/edit-ticket-card";
 import {NewTicketCard} from "@/components/event-page/new-ticket-card";
 import {authApi} from "@/lib/axios";
 import {LoaderSmall} from "@/components/ui/loader";
+import {showTopToast} from "@/components/toast/toast-util";
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -141,11 +142,11 @@ export const EventEdit = ({
 
         try {
             const response = await authApi.patch(`/event/${event.id}`, params);
-            toast.success("Updated successfully");
+            showTopToast("success", "Updated successfully");
             setEvent(response.data.data);
             setMainActiveScreen("")
         } catch (error: any) {
-            toast.error(error.message);
+            showTopToast("error", error.message);
         }finally {
             setLoading(false);
         }

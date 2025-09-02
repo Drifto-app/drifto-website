@@ -4,15 +4,17 @@ import * as React from "react";
 import {cn} from "@/lib/utils";
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {SearchItem} from "@/store/recent-search-store";
+import {SearchItem, useRecentSearchStore} from "@/store/recent-search-store";
 import {IoClose} from "react-icons/io5";
 import {ComponentProps} from "react";
 import {router} from "next/client";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {UserVerificationBadge} from "@/components/ui/user-placeholder";
 
 interface RecentSearchCardProps extends React.ComponentProps<"div"> {
-    searchItem: SearchItem;
-    removeSearch: (id:string) => void;
+    item: {[key: string]: any};
+    removeSearch?: (id:string) => void;
+    type: "event" | "user";
 }
 
 interface SuggestionEventCardProp extends ComponentProps<"div"> {
@@ -20,11 +22,28 @@ interface SuggestionEventCardProp extends ComponentProps<"div"> {
 }
 
 export const RecentSearchCard = ({
-    searchItem, removeSearch,  className, ...props
+    item, type, removeSearch,  className, ...props
 }: RecentSearchCardProps) => {
+    const router = useRouter();
 
-    if (searchItem.type === "event") {
-        const date = new Date(searchItem.query.startTime);
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
+    const {addSearch} = useRecentSearchStore();
+
+    const onClick = () => {
+        const prev = pathname + "?" +searchParams
+
+        addSearch(item, type)
+        if(type === "user") {
+            router.push(`/m/user/${item.id}?prev=${prev}`);
+        } else {
+            router.push(`/m/event/${item.id}?prev=${prev}`);
+        }
+    }
+
+    if (type=== "event") {
+        const date = new Date(item.startTime);
         const formatedDate = date.toLocaleString("en-US", {
             weekday: "short",
             day: "numeric",
@@ -39,32 +58,35 @@ export const RecentSearchCard = ({
         return (
             <div
                 className={cn(
-                    "flex flex-row items-center px-2 gap-3 justify-between",
+                    "flex flex-row items-center px-2 justify-between",
                     className
                 )}
                 {...props}
             >
-                <div className="relative w-14 h-14 rounded-full flex items-center justify-center">
-                    <AspectRatio ratio={1}>
-                        <Image
-                            src={searchItem.query.eventTitleImage || "/default.jpeg"}
-                            alt={searchItem.query.title}
-                            fill
-                            className="object-cover rounded-full"
-                        />
-                    </AspectRatio>
+                <div className="w-full flex gap-3 items-center"
+                     onClick={onClick}>
+                    <div className="relative w-18 h-18 rounded-full flex items-center justify-center">
+                        <AspectRatio ratio={1}>
+                            <Image
+                                src={item.eventTitleImage || "/default.jpeg"}
+                                alt={item.title ?? "Title"}
+                                fill
+                                className="object-cover rounded-md"
+                            />
+                        </AspectRatio>
+                    </div>
+                    <div className="w-full max-w-[70%] flex flex-col">
+                        <p className="w-full capitalize text-black text-sm font-bold line-clamp-2">{item.title}</p>
+                        <ul className="text-neutral-400 text-sm capitalize flex list-disc gap-5 font-medium truncate">
+                            <li className="first:list-none">{type}</li>
+                            <li>{formatedDate}</li>
+                            <li>{formattedTime}</li>
+                        </ul>
+                    </div>
                 </div>
-                <div className="w-[70%] flex flex-col">
-                    <p className="capitalize text-black text-sm font-bold truncate">{searchItem.query.title}</p>
-                    <ul className="text-neutral-400 text-sm capitalize flex list-disc gap-5 font-medium truncate">
-                        <li className="first:list-none">{searchItem.type}</li>
-                        <li>{formatedDate}</li>
-                        <li>{formattedTime}</li>
-                    </ul>
-                </div>
-                <div className="p-2" onClick={() => removeSearch(searchItem.id)}>
+                {removeSearch ? <div className="p-2" onClick={() => removeSearch(item.id)}>
                     <IoClose size={20} className="text-neutral-400" />
-                </div>
+                </div> : null}
             </div>
         );
     }
@@ -72,28 +94,34 @@ export const RecentSearchCard = ({
     return (
         <div
             className={cn(
-                "flex flex-row items-center px-2 gap-3 justify-between",
+                "flex flex-row items-center px-2 justify-between cursor-pointer",
                 className
             )}
             {...props}
         >
-            <div className="relative w-14 h-14 rounded-md flex items-center justify-center">
-                <AspectRatio ratio={1}>
-                    <Image
-                        src={searchItem.query.profileImage || "/default.jpeg"}
-                        alt={searchItem.query.username}
-                        fill
-                        className="object-cover rounded-md"
-                    />
-                </AspectRatio>
+            <div className="w-full flex gap-3 items-center"
+                 onClick={onClick}>
+                <div className="relative w-18 h-18 rounded-md flex items-center justify-center" onClick={onClick}>
+                    <AspectRatio ratio={1}>
+                        <Image
+                            src={item.profileImage || "/default.jpeg"}
+                            alt={item.username}
+                            fill
+                            className="object-cover rounded-md"
+                        />
+                    </AspectRatio>
+                </div>
+                <div className="w-full  max-w-[70%] flex flex-col" onClick={onClick}>
+                    <div className="flex gap-2 items-center">
+                        <p className="capitalize text-black text-sm font-bold truncate">{item.username}</p>
+                        <UserVerificationBadge user={item} />
+                    </div>
+                    <p className="text-sm capitalize text-neutral-400">{type}</p>
+                </div>
             </div>
-            <div className="w-[70%] flex flex-col">
-                <p className="capitalize text-black text-sm font-bold truncate">{searchItem.query.username}</p>
-                <p className="text-sm capitalize text-neutral-400">{searchItem.type}</p>
-            </div>
-            <div className="p-2" onClick={() => removeSearch(searchItem.id)}>
+            {removeSearch ? <div className="p-2" onClick={() => removeSearch(item.id)}>
                 <IoClose size={20} className="text-neutral-400" />
-            </div>
+            </div> : null}
         </div>
     )
 }

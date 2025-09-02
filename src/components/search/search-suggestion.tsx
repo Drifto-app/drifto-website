@@ -160,7 +160,7 @@ export const SearchSuggestion = () => {
                     {
                         isSearchShow
                             ? searches.map(item => (
-                                <RecentSearchCard searchItem={item} key={item.id} removeSearch={deleteSearch} />
+                                <RecentSearchCard item={item.query} type={item.type} key={item.id} removeSearch={deleteSearch} />
                             ))
                             : null
                     }

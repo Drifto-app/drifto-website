@@ -49,13 +49,13 @@ export const PayButton = ({
     return (
         <Button
             className={cn(
-                "bg-neutral-950 text-white font-bold py-8 w-full text-md",
+                "bg-blue-800 hover:bg-blue-800 text-white font-bold py-8 w-full text-md",
                 className,
             )}
             {...props}
             onClick={handleClick}
         >
-            {displayString ?? "Pay"}
+            Continue
         </Button>
     )
 }

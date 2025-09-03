@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import {cn} from "@/lib/utils";
-import {forwardRef, useEffect, useImperativeHandle, useRef} from "react";
+import {ComponentProps, forwardRef, useCallback, useEffect, useImperativeHandle, useRef, useState} from "react";
 import {authApi} from "@/lib/axios";
 import {EventCard} from "@/components/event-display/event-card";
 import {Loader} from "@/components/ui/loader";
@@ -10,7 +10,7 @@ import {Button} from "@/components/ui/button";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Tabs} from "@/components/event-display/tabs";
 
-interface EventDisplayProps extends React.ComponentProps<"div"> {
+interface EventDisplayProps extends ComponentProps<"div"> {
     location: string | null;
 }
 
@@ -25,18 +25,18 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
     const searchParams = useSearchParams();
     const pathname = usePathname();
 
-    const [activeEventItem, setActiveEventItem] = React.useState<string | null>(null);
-    const [events, setEvents] = React.useState<any[]>([]);
-    const [hasMore, setHasMore] = React.useState(true);
-    const [loading, setLoading] = React.useState(false);
-    const [initialLoading, setInitialLoading] = React.useState(true);
-    const [error, setError] = React.useState<string | null>(null);
+    const [activeEventItem, setActiveEventItem] = useState<string | null>(null);
+    const [events, setEvents] = useState<any[]>([]);
+    const [hasMore, setHasMore] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [initialLoading, setInitialLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
 
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
 
-    const loadEvents = React.useCallback(async (resetData = false) => {
+    const loadEvents = useCallback(async (resetData = false) => {
         if (loadingRef.current || !hasMoreRef.current) return;
 
         loadingRef.current = true;
@@ -136,7 +136,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
 
         window.addEventListener("scroll", onScroll);
         return () => window.removeEventListener("scroll", onScroll);
-    }, [loadEvents, error]); // Add error as dependency
+    }, [loadEvents, error]);
 
     // Retry function for error state
     const handleRetry = () => {

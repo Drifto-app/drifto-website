@@ -7,7 +7,7 @@ import { Loader } from "@/components/ui/loader";
 import { showTopToast } from "@/components/toast/toast-util";
 import { RecentSearchCard } from "@/components/search/search-card";
 
-type SearchType = "EVENT" | "USER";
+export type SearchType = "EVENT" | "USER";
 
 interface SearchComponentProps extends ComponentProps<"div"> {
     searchText?: string;
@@ -69,7 +69,7 @@ export const SearchComponent = ({
             } finally {
                 setSuggestionLoading(false);
             }
-        }, 500);
+        }, 400);
         return () => clearTimeout(t);
     }, [searchText, committed]);
 

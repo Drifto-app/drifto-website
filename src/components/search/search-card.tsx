@@ -101,13 +101,13 @@ export const RecentSearchCard = ({
         >
             <div className="w-full flex gap-3 items-center"
                  onClick={onClick}>
-                <div className="relative w-18 h-18 rounded-md flex items-center justify-center" onClick={onClick}>
+                <div className="relative w-18 h-18 rounded-full flex items-center justify-center" onClick={onClick}>
                     <AspectRatio ratio={1}>
                         <Image
                             src={item.profileImage || "/default.jpeg"}
                             alt={item.username}
                             fill
-                            className="object-cover rounded-md"
+                            className="object-cover rounded-full"
                         />
                     </AspectRatio>
                 </div>

@@ -9,15 +9,18 @@ import {IoClose, IoOptionsOutline, IoSearchSharp} from "react-icons/io5";
 import { SearchSuggestion } from "@/components/search/search-suggestion";
 import { useState } from "react";
 import { SearchComponent } from "@/components/search/search-component";
+import {AdvanceSearch} from "@/components/search/advance-search";
 
 interface SearchDetailsProps extends React.ComponentProps<"div"> {
     prev: string | null;
 }
 
+export type ActiveScreenType = "suggestion" | "search" | "advance-search";
+
 export const SearchDetails = ({ prev, className, ...props }: SearchDetailsProps) => {
     const router = useRouter();
 
-    const [activeScreen, setActiveScreen] = useState<"suggestion" | "search" | "advance-search">("suggestion");
+    const [activeScreen, setActiveScreen] = useState<ActiveScreenType>("suggestion");
     const [searchText, setSearchText] = useState<string>("");
     const [committed, setCommitted] = useState(false);
 
@@ -49,9 +52,7 @@ export const SearchDetails = ({ prev, className, ...props }: SearchDetailsProps)
 
     if(activeScreen === "advance-search") {
         return (
-            <div>
-                Advance
-            </div>
+            <AdvanceSearch setActiveScreen={setActiveScreen} />
         )
     }
 

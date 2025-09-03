@@ -10,7 +10,7 @@ import {Button} from "@/components/ui/button";
 import {
     FilterCategoryDialog,
     FilterDateDialog,
-    FilterHostDialog,
+    FilterHostDialog, FilterLocationDialog,
     FilterPriceDialog,
     FilterTypeDialog
 } from "@/components/search/advance-search-filter-dialogs";
@@ -24,24 +24,6 @@ import {GrLocation} from "react-icons/gr";
 interface AdvanceSearchProps extends ComponentProps<"div">{
     setActiveScreen: (activeScreen: ActiveScreenType) => void;
 }
-
-export interface AdvanceSearchFilter {
-    title: string;
-    headerText: string;
-    icon: React.ReactNode;
-    value: string;
-    content: React.ReactNode;
-}
-
-const advanceSearchFilters: AdvanceSearchFilter[] = [
-    {
-        title: "Location",
-        headerText: "Select search type",
-        icon: <GrLocation size={20} />,
-        value: "location",
-        content: <p>Location input goes here</p>,
-    },
-];
 
 export type DateRangeType = {to?: Date, from?: Date}
 
@@ -225,6 +207,7 @@ export const AdvanceSearch = ({
                         <FilterDateDialog dateValue={dateRange} setDateValue={setDateRange} />
                         <FilterPriceDialog isTicketPaid={isTicketPaid} setIsTicketPaid={setIsTicketPaid}/>
                         <FilterHostDialog isHostVerified={isHostVerified} setIsHostVerified={setIsHostVerified} />
+                        <FilterLocationDialog location={location} setLocation={setLocation}  googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}/>
                         <FilterCategoryDialog categories={eventTags} setCategories={setEventTags} />
                     </div>
 

@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { CiEdit } from "react-icons/ci";
 import { MapPin, Search, AlertCircle, Maximize, Minimize } from "lucide-react";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
+import {Loader} from "@/components/ui/loader";
 
 // Move libraries array outside component to prevent reloading
 const GOOGLE_MAPS_LIBRARIES: ("places")[] = ["places"];
@@ -459,11 +460,9 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                     </div>
                 </DialogTrigger>
                 <DialogContent className="w-full max-w-2xl flex flex-col gap-6">
-                    <div className="flex items-center justify-center h-64">
-                        <div className="text-center">
-                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-2"></div>
-                            <p className="text-sm text-gray-600">Loading Google Maps...</p>
-                        </div>
+                    <div className="flex flex-col items-center justify-center h-64">
+                        <Loader />
+                        <p className="text-sm text-gray-600">Loading Google Maps...</p>
                     </div>
                 </DialogContent>
             </Dialog>

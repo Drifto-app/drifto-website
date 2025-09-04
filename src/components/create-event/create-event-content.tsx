@@ -13,6 +13,8 @@ import {Input} from "@/components/ui/input";
 import {DateTimePicker} from "@/components/event-page/date-time-input";
 import {LocationSearchDialog} from "@/components/event-page/location-search-dialog";
 import {EventTagDialog} from "@/components/event-page/event-tag-edit";
+import {EventThemeSelector} from "@/components/event-page/event-theme";
+import {ImageSnapshots} from "@/components/ui/image-snapshot";
 
 interface CreateEventContentProps extends React.ComponentProps<"div"> {
     prev: string | null;
@@ -52,8 +54,8 @@ export const CreateEventContent = ({
     const [activeScreen, setActiveScreen] = useState<ActiveScreenType>("intro");
     const [loading, setLoading] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const [startDateError, setStartDateError] = useState<boolean>(false);
-    const [stopDateError, setStopDateError] = useState<boolean>(false);
+    const [startDateError, setStartDateError] = useState<string | null>(null);
+    const [stopDateError, setStopDateError] = useState<string | null>(null);
 
     const [titleImage, setTitleImage] = useState<string | undefined>(undefined);
     const [title, setTitle] = useState<string>("");
@@ -71,6 +73,9 @@ export const CreateEventContent = ({
     const [eventTags, setEventTags] = useState<string[]>([])
     const [screenshots, setScreenshots] = useState<string[]>([])
     const [tickets, setTickets] = useState<any[]>([]);
+    const [eventTheme, setEventTheme] = useState<[string, string]>(['#fff', '#fff'])
+
+    const isDetailsInValid = !title || !description || !startTime || !!startDateError || !stopTime || !!stopDateError || !address || !city || !state || !coordinates || !eventTags || eventTags.length === 0 || !eventTheme;
 
     const handleBackClick = () => {
         if(activeScreen === "details") {
@@ -99,27 +104,55 @@ export const CreateEventContent = ({
     }
 
     const handleStartDateChange = (value: Date) => {
-        if(!stopTime) return;
+        const valueDate = new Date(value);
+        const stopTimeValue: Date | null = stopTime ? new Date(stopTime) : null;
 
-        if(value > stopTime || value < new Date(Date.now())) {
-            setStartDateError(true)
+        // Always update the state first
+        setStartTime(value);
+
+        // Then validate and set errors
+        setStartDateError(null);
+
+        if (valueDate < new Date()) {
+            setStartDateError("Start date or time cannot be before the current date or time");
             return;
         }
 
-        setStartDateError(false)
-        setStartTime(value);
+        if (stopTimeValue && valueDate >= stopTimeValue) {
+            setStartDateError("Start date or time must be before the stop date or time");
+            return;
+        }
+
+        // Clear stop date error if it's now valid
+        if (stopTimeValue && stopDateError && valueDate < stopTimeValue) {
+            setStopDateError(null);
+        }
     }
 
     const handleStopDateChange = (value: Date) => {
-        if(!startTime) return;
+        const valueDate = new Date(value);
+        const startTimeValue: Date | null = startTime ? new Date(startTime) : null;
 
-        if(value < startTime || value < new Date(Date.now())) {
-            setStopDateError(true)
+        // Always update the state first
+        setStopTime(value);
+
+        // Then validate and set errors
+        setStopDateError(null);
+
+        if (valueDate < new Date()) {
+            setStopDateError("Stop date or time cannot be before the current date or time");
             return;
         }
 
-        setStopDateError(false)
-        setStopTime(value);
+        if (startTimeValue && valueDate <= startTimeValue) {
+            setStopDateError("Stop date or time must be after the start date or time");
+            return;
+        }
+
+        // Clear start date error if it's now valid
+        if (startTimeValue && startDateError && valueDate > startTimeValue) {
+            setStartDateError(null);
+        }
     }
 
     const handleMinimumAgeChange = (raw: string) => {
@@ -154,6 +187,12 @@ export const CreateEventContent = ({
 
     const renderScreen = () => {
         switch (activeScreen) {
+            case "ticket":
+                return (
+                    <div>
+                        Tickets
+                    </div>
+                )
             case "details":
                 return (
                     <>
@@ -173,6 +212,7 @@ export const CreateEventContent = ({
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
                                     className="py-6 "
+                                    required
                                 />
                             </div>
                             <div className="grid gap-2 ">
@@ -184,18 +224,19 @@ export const CreateEventContent = ({
                                     onChange={(e) => setDescription(e.target.value)}
                                     rows={8}
                                     className="py-2 px-3 bg-white rounded-md border-1 border-neutral-200 focus:border-blue-600 focus:border-1 focus:outline-hidden"
+                                    required
                                 />
                             </div>
                             <div className="w-full flex flex-col gap-1">
                                 <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date & time" />
                                 {
-                                    startDateError && <p className="text-xs text-red-600">Start time cannot be past the stop time</p>
+                                    startDateError && <p className="text-xs text-red-600">{startDateError}</p>
                                 }
                             </div>
                             <div className="w-full">
                                 <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date & time" />
                                 {
-                                    stopDateError && <p className="text-xs text-red-600">Stop time cannot be before the stop time</p>
+                                    stopDateError && <p className="text-xs text-red-600">{stopDateError}</p>
                                 }
                             </div>
                             <div className="grid gap-2 w-full">
@@ -233,6 +274,27 @@ export const CreateEventContent = ({
                                     onTagRemove={(tag: string) => setEventTags((value) => value.filter((i) => i !== tag)) }
                                 />
                             </div>
+                            <div className="grid gap-2">
+                                <div className="flex flex-col">
+                                    <div className="font-bold">Event Theme</div>
+                                    <p className="text-neutral-400 text-xs font-semibold">Select a theme that sets the vibe for your event</p>
+                                </div>
+                                <EventThemeSelector currentEventTheme={eventTheme} setEventTheme={setEventTheme} />
+                            </div>
+                            <div className="grid gap-2 w-full">
+                                <div className="flex flex-col">
+                                    <div className="font-bold">Event Snapshots</div>
+                                    <p className="text-neutral-400 text-xs font-semibold">Choose up to 20 pictures that best represent you experience</p>
+                                </div>
+                                <ImageSnapshots setSubmitDisabled={setSubmitDisabled} initialImages={screenshots} maxImages={20} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
+                            </div>
+                            <Button
+                                className="bg-blue-800 hover:bg-blue-800 font-semibold text-sm py-6 rounded-md"
+                                onClick={() => {}}
+                                disabled={isDetailsInValid}
+                            >
+                                Continue
+                            </Button>
                         </div>
                     </>
                 )

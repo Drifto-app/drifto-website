@@ -19,6 +19,7 @@ import { CiEdit } from "react-icons/ci";
 import { MapPin, Search, AlertCircle, Maximize, Minimize } from "lucide-react";
 import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 import {Loader} from "@/components/ui/loader";
+import { IoLocationOutline } from "react-icons/io5";
 
 // Move libraries array outside component to prevent reloading
 const GOOGLE_MAPS_LIBRARIES: ("places")[] = ["places"];
@@ -258,17 +259,22 @@ const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
 
 interface LocationSearchDialogProps {
     currentLocation: {
-        coordinates: {[key: string]: number};
-        address: string;
-        city: string;
-        state: string;
-    };
+        coordinates?: {[key: string]: number};
+        address?: string;
+        city?: string;
+        state?: string;
+    }
     onLocationUpdate: (location: LocationData) => void;
     googleMapsApiKey: string;
 }
 
 export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
-                                                                              currentLocation, onLocationUpdate, googleMapsApiKey
+    currentLocation = {
+        coordinates: { latitude: 6.5244, longitude: 3.3792 }, // Lagos, Nigeria default
+        address: "",
+        city: "",
+        state: ""
+    }, onLocationUpdate, googleMapsApiKey
                                                                           }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
@@ -276,7 +282,10 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
     const [markerPosition, setMarkerPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [isMapFullscreen, setIsMapFullscreen] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState<LocationData>({
-        coordinates: { lat: currentLocation.coordinates.latitude, lng: currentLocation.coordinates.longitude },
+        coordinates: {
+            lat: currentLocation.coordinates?.latitude || 6.5244,
+            lng: currentLocation.coordinates?.longitude || 3.3792
+        },
         address: currentLocation.address || "",
         city: currentLocation.city || "",
         state: currentLocation.state || "",
@@ -399,6 +408,7 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
     const handleMapClick = useCallback((locationData: LocationData) => {
         setSelectedLocation(locationData);
         setMarkerPosition(locationData.coordinates);
+        setMapCenter(locationData.coordinates);
     }, []);
 
     const handleConfirm = useCallback(() => {
@@ -422,14 +432,14 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
         return (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
-                    <div className="py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
+                    <div className="py-3 px-4 bg-white rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors border-1 border-neutral-200">
                         <span className="text-sm">
                             {currentLocation.address && currentLocation.city && currentLocation.state
                                 ? `${currentLocation.address}, ${currentLocation.city}, ${currentLocation.state}`
                                 : "Select Location"
                             }
                         </span>
-                        <CiEdit size={22} />
+                        <IoLocationOutline size={22} />
                     </div>
                 </DialogTrigger>
                 <DialogContent className="w-full max-w-2xl flex flex-col gap-6">
@@ -449,14 +459,14 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
         return (
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
                 <DialogTrigger asChild>
-                    <div className="py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
+                    <div className="py-3 px-4 bg-white rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors border-1 border-neutral-200">
                         <span className="text-sm">
                             {currentLocation.address && currentLocation.city && currentLocation.state
                                 ? `${currentLocation.address}, ${currentLocation.city}, ${currentLocation.state}`
                                 : "Select Location"
                             }
                         </span>
-                        <CiEdit size={22} />
+                        <IoLocationOutline size={22} />
                     </div>
                 </DialogTrigger>
                 <DialogContent className="w-full max-w-2xl flex flex-col gap-6">
@@ -476,14 +486,14 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                 {/* Original dialog trigger for when not fullscreen */}
                 <Dialog open={isOpen} onOpenChange={setIsOpen}>
                     <DialogTrigger asChild>
-                        <div className="py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
+                        <div className="py-3 px-4 bg-white rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors border-1 border-neutral-200">
                             <span className="text-sm">
                                 {currentLocation.address && currentLocation.city && currentLocation.state
                                     ? `${currentLocation.address}, ${currentLocation.city}, ${currentLocation.state}`
                                     : "Select Location"
                                 }
                             </span>
-                            <CiEdit size={22} />
+                            <IoLocationOutline size={22} />
                         </div>
                     </DialogTrigger>
                 </Dialog>
@@ -570,14 +580,14 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
     return (
         <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-                <div className="py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
+                <div className="py-3 px-4 bg-white rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors border-1 border-neutral-200">
                     <span className="text-sm">
                         {currentLocation.address && currentLocation.city && currentLocation.state
                             ? `${currentLocation.address}, ${currentLocation.city}, ${currentLocation.state}`
                             : "Select Location"
                         }
                     </span>
-                    <CiEdit size={22} />
+                    <IoLocationOutline size={22} />
                 </div>
             </DialogTrigger>
             <DialogContent className="w-full max-w-2xl flex flex-col gap-6 max-h-[90vh] overflow-y-auto">

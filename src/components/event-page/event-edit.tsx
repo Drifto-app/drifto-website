@@ -58,7 +58,7 @@ export const EventEdit = ({
     const [startTime, setStartTime] = React.useState<Date>(new Date(event.startTime));
     const [stopTime, setStopTime] = React.useState<Date>(new Date(event.stopTime));
     const [isAgeRestricted, setIsAgeRestricted] = useState<boolean>(event.ageRestricted);
-    const [minimumAge, setMinimumAge] = useState<string>(String(event.minimumAge ?? "0"));
+    const [minimumAge, setMinimumAge] = useState<string>(String(event.minimumAge ?? ""));
     const [eventTags, setEventTags] = useState<string[]>(event.eventTags)
     const [screenshots, setScreenshots] = useState<string[]>(event.screenshots)
     const [tickets, setTickets] = useState<any[]>(event.tickets);
@@ -182,8 +182,8 @@ export const EventEdit = ({
                 return (
                     <>
                         <CoverImageUploader
-                            value={titleImage}
-                            onChange={handleTitleImageChange}
+                            imageValue={titleImage}
+                            onImageValueChange={handleTitleImageChange}
                             mediaFileType={"EVENT_HEADER"}
                             setSubmitDisabled={setSubmitDisabled}
                         />
@@ -196,7 +196,7 @@ export const EventEdit = ({
                                     placeholder="Title"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="py-6 bg-neutral-200"
+                                    className="py-6 bg-white"
                                 />
                             </div>
                             <div className="grid gap-2 ">
@@ -206,8 +206,8 @@ export const EventEdit = ({
                                     placeholder="Description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    rows={5}
-                                    className="py-2 px-3 bg-neutral-200 rounded-md focus:border-blue-600 focus:border-1 focus:outline-hidden"
+                                    rows={8}
+                                    className="py-2 px-3 bg-white rounded-md border-1 border-neutral-200 focus:border-blue-600 focus:border-1 focus:outline-hidden"
                                 />
                             </div>
                             <div className="grid gap-2">
@@ -220,7 +220,7 @@ export const EventEdit = ({
                             </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="secure-location" className="text-neutral-500">Secure Location</Label>
-                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-white gap-2">
                                     <div className="flex flex-col gap-1">
                                         <h3 className="font-bold">Hide Exact Location</h3>
                                         <p className="text-sm text-neutral-500">Enable to hide the exact location fromm attendees until necessary</p>
@@ -230,7 +230,7 @@ export const EventEdit = ({
                             </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="event-visible" className="text-neutral-500">Event Visibility</Label>
-                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-white gap-2">
                                     <div className="flex flex-col gap-1">
                                         <h3 className="font-bold">Public Event</h3>
                                         <p className="text-sm text-neutral-500">Enable to make the event visible to all users.</p>
@@ -261,7 +261,7 @@ export const EventEdit = ({
                                     placeholder="Minimum Age"
                                     value={minimumAge}
                                     onChange={(e) => handleMinimumAgeChange(e.target.value)}
-                                    className="py-2 bg-neutral-200"
+                                    className="py-2 bg-white"
                                 />
                             </div>
                             <div className="grid gap-2">

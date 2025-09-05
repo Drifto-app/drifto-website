@@ -269,18 +269,31 @@ interface LocationSearchDialogProps {
 }
 
 export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
-    currentLocation = {
-        coordinates: { latitude: 6.5244, longitude: 3.3792 }, // Lagos, Nigeria default
-        address: "",
-        city: "",
-        state: ""
-    }, onLocationUpdate, googleMapsApiKey
+                                                                              currentLocation = {
+                                                                                  coordinates: { latitude: 6.5244, longitude: 3.3792 }, // Lagos, Nigeria default
+                                                                                  address: "",
+                                                                                  city: "",
+                                                                                  state: ""
+                                                                              }, onLocationUpdate, googleMapsApiKey
                                                                           }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [mapCenter, setMapCenter] = useState({ lat: 6.5244, lng: 3.3792 }); // Lagos, Nigeria
     const [markerPosition, setMarkerPosition] = useState<{ lat: number; lng: number } | null>(null);
     const [isMapFullscreen, setIsMapFullscreen] = useState(false);
+
+    // Separate state for each field to allow independent editing
+    const [addressField, setAddressField] = useState(currentLocation.address || "");
+    const [cityField, setCityField] = useState(currentLocation.city || "");
+    const [stateField, setStateField] = useState(currentLocation.state || "");
+    const [coordinates, setCoordinates] = useState({
+        lat: currentLocation.coordinates?.latitude || 6.5244,
+        lng: currentLocation.coordinates?.longitude || 3.3792
+    });
+    const [hasValidCoordinates, setHasValidCoordinates] = useState(
+        !!(currentLocation.coordinates?.latitude && currentLocation.coordinates?.longitude)
+    );
+
     const [selectedLocation, setSelectedLocation] = useState<LocationData>({
         coordinates: {
             lat: currentLocation.coordinates?.latitude || 6.5244,
@@ -314,6 +327,38 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
             country: 'ng'
         }
     }), []);
+
+    // Initialize fields when dialog opens
+    useEffect(() => {
+        if (isOpen) {
+            setAddressField(currentLocation.address || "");
+            setCityField(currentLocation.city || "");
+            setStateField(currentLocation.state || "");
+
+            const coords = {
+                lat: currentLocation.coordinates?.latitude || 6.5244,
+                lng: currentLocation.coordinates?.longitude || 3.3792
+            };
+
+            setCoordinates(coords);
+            setMapCenter(coords);
+            setMarkerPosition(coords);
+            setHasValidCoordinates(!!(currentLocation.coordinates?.latitude && currentLocation.coordinates?.longitude));
+        }
+    }, [isOpen, currentLocation]);
+
+    // Update selectedLocation when fields change
+    useEffect(() => {
+        const fullAddress = [addressField, cityField, stateField].filter(Boolean).join(', ');
+
+        setSelectedLocation({
+            coordinates,
+            address: addressField,
+            city: cityField,
+            state: stateField,
+            fullAddress: fullAddress || `${coordinates.lat.toFixed(6)}, ${coordinates.lng.toFixed(6)}`
+        });
+    }, [addressField, cityField, stateField, coordinates]);
 
     // Handle fullscreen toggle
     const handleToggleFullscreen = useCallback(() => {
@@ -365,7 +410,7 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
             return;
         }
 
-        const coordinates = {
+        const newCoordinates = {
             lat: place.geometry.location.lat(),
             lng: place.geometry.location.lng()
         };
@@ -387,32 +432,45 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
             });
         }
 
-        const locationData: LocationData = {
-            coordinates,
-            address: address.trim() || place.name || place.formatted_address?.split(',')[0] || '',
-            city: city || 'Unknown City',
-            state: state || 'Unknown State',
-            fullAddress: place.formatted_address || '',
-            placeId: place.place_id
-        };
-
-        // Batch state updates to reduce re-renders
+        // Update all fields and coordinates
         React.startTransition(() => {
-            setMapCenter(coordinates);
-            setMarkerPosition(coordinates);
-            setSelectedLocation(locationData);
+            setAddressField(address.trim() || place.name || place.formatted_address?.split(',')[0] || '');
+            setCityField(city || 'Unknown City');
+            setStateField(state || 'Unknown State');
+            setCoordinates(newCoordinates);
+            setMapCenter(newCoordinates);
+            setMarkerPosition(newCoordinates);
             setSearchQuery(place.formatted_address || '');
+            setHasValidCoordinates(true);
         });
     }, [autocomplete]);
 
     const handleMapClick = useCallback((locationData: LocationData) => {
-        setSelectedLocation(locationData);
+        // Update fields with new data from map
+        setAddressField(locationData.address);
+        setCityField(locationData.city);
+        setStateField(locationData.state);
+        setCoordinates(locationData.coordinates);
         setMarkerPosition(locationData.coordinates);
         setMapCenter(locationData.coordinates);
+        setHasValidCoordinates(true);
     }, []);
 
     const handleConfirm = useCallback(() => {
-        onLocationUpdate(selectedLocation);
+        if (!hasValidCoordinates) {
+            return;
+        }
+
+        const locationData: LocationData = {
+            coordinates,
+            address: addressField,
+            city: cityField,
+            state: stateField,
+            fullAddress: [addressField, cityField, stateField].filter(Boolean).join(', ') ||
+                `${coordinates.lat.toFixed(6)}, ${coordinates.lng.toFixed(6)}`
+        };
+
+        onLocationUpdate(locationData);
 
         // Reset fullscreen state first, then close dialog
         if (isMapFullscreen) {
@@ -425,7 +483,7 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
         }
 
         setIsOpen(false);
-    }, [selectedLocation, onLocationUpdate, isMapFullscreen, isMobile]);
+    }, [addressField, cityField, stateField, coordinates, hasValidCoordinates, onLocationUpdate, isMapFullscreen, isMobile]);
 
     // Handle loading error
     if (loadError) {
@@ -547,31 +605,33 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                     </div>
 
                     {/* Fullscreen Footer with selected location and actions */}
-                    {selectedLocation.fullAddress && (
-                        <div className="absolute bottom-0 left-0 right-0 z-[10000] bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4">
-                            <div className="mb-3">
-                                <p className="text-sm font-medium text-gray-800">{selectedLocation.fullAddress}</p>
-                                <p className="text-xs text-gray-600">
-                                    {selectedLocation.coordinates.lat.toFixed(6)}, {selectedLocation.coordinates.lng.toFixed(6)}
-                                </p>
-                            </div>
-                            <div className="flex gap-2">
-                                <Button
-                                    onClick={handleToggleFullscreen}
-                                    variant="outline"
-                                    className="text-lg py-6 px-8 flex-1"
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    onClick={handleConfirm}
-                                    className="text-lg py-6 px-8 flex-1 bg-blue-600 text-white hover:bg-blue-700"
-                                >
-                                    Confirm
-                                </Button>
-                            </div>
+                    <div className="absolute bottom-0 left-0 right-0 z-[10000] bg-white/95 backdrop-blur-sm border-t border-gray-200 p-4">
+                        <div className="mb-3">
+                            <p className="text-sm font-medium text-gray-800">
+                                {[addressField, cityField, stateField].filter(Boolean).join(', ') ||
+                                    `${coordinates.lat.toFixed(6)}, ${coordinates.lng.toFixed(6)}`}
+                            </p>
+                            <p className="text-xs text-gray-600">
+                                {coordinates.lat.toFixed(6)}, {coordinates.lng.toFixed(6)}
+                            </p>
                         </div>
-                    )}
+                        <div className="flex gap-2">
+                            <Button
+                                onClick={handleToggleFullscreen}
+                                variant="outline"
+                                className="text-lg py-6 px-8 flex-1"
+                            >
+                                Back
+                            </Button>
+                            <Button
+                                onClick={handleConfirm}
+                                disabled={!hasValidCoordinates}
+                                className="text-lg py-6 px-8 flex-1 bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50"
+                            >
+                                Confirm
+                            </Button>
+                        </div>
+                    </div>
                 </div>
             </>
         );
@@ -594,8 +654,10 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                 <DialogHeader>
                     <DialogTitle className="text-xl">Select Location</DialogTitle>
                     <DialogDescription className="text-sm text-gray-600">
-                        Search for a location or click on the map to place a marker
+                        Search for a location, click on the map, or manually enter address details.
                         {isMobile && " (Tap the expand icon to go fullscreen)"}
+                        <br />
+                        <span className="text-red-600 font-medium">* Coordinates are required</span>
                     </DialogDescription>
                 </DialogHeader>
 
@@ -621,10 +683,13 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                         </Autocomplete>
                     </div>
 
+                    {/* Manual Address Fields */}
+
+
                     {/* Map */}
                     <div>
                         <Label className="text-sm font-medium text-gray-700 mb-2 block">
-                            Map Location
+                            Map Location <span className="text-red-600">*</span>
                         </Label>
                         <GoogleMapComponent
                             center={mapCenter}
@@ -636,20 +701,82 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                                 placesServiceRef.current = new google.maps.places.PlacesService(map);
                             }}
                         />
+                        {!hasValidCoordinates && (
+                            <p className="text-red-600 text-xs mt-1">
+                                Please click on the map to set coordinates
+                            </p>
+                        )}
+                    </div>
+
+                    <div className="grid gap-4">
+                        <div className="grid gap-3">
+                            <div>
+                                <Label htmlFor="address-field" className="text-sm text-gray-600 mb-1 block">
+                                    Address
+                                </Label>
+                                <Input
+                                    id="address-field"
+                                    type="text"
+                                    placeholder="Enter street address"
+                                    value={addressField}
+                                    onChange={(e) => setAddressField(e.target.value)}
+                                    className="w-full"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <Label htmlFor="city-field" className="text-sm text-gray-600 mb-1 block">
+                                        City
+                                    </Label>
+                                    <Input
+                                        id="city-field"
+                                        type="text"
+                                        placeholder="Enter city"
+                                        value={cityField}
+                                        onChange={(e) => setCityField(e.target.value)}
+                                        className="w-full"
+                                    />
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="state-field" className="text-sm text-gray-600 mb-1 block">
+                                        State
+                                    </Label>
+                                    <Input
+                                        id="state-field"
+                                        type="text"
+                                        placeholder="Enter state"
+                                        value={stateField}
+                                        onChange={(e) => setStateField(e.target.value)}
+                                        className="w-full"
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     {/* Selected Location Info */}
-                    {selectedLocation.fullAddress && (
-                        <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
-                            <Label className="text-sm font-medium text-blue-800 mb-1 block">
-                                Selected Location
-                            </Label>
-                            <p className="text-sm text-blue-700">{selectedLocation.fullAddress}</p>
-                            <p className="text-xs text-blue-600 mt-1">
-                                Coordinates: {selectedLocation.coordinates.lat.toFixed(6)}, {selectedLocation.coordinates.lng.toFixed(6)}
+                    <div className="p-3 bg-blue-50 rounded-lg border border-blue-200">
+                        <Label className="text-sm font-medium text-blue-800 mb-1 block">
+                            Current Location Details
+                        </Label>
+                        <div className="space-y-1">
+                            <p className="text-sm text-blue-700">
+                                <span className="font-medium">Address:</span> {addressField || "Not set"}
+                            </p>
+                            <p className="text-sm text-blue-700">
+                                <span className="font-medium">City:</span> {cityField || "Not set"}
+                            </p>
+                            <p className="text-sm text-blue-700">
+                                <span className="font-medium">State:</span> {stateField || "Not set"}
+                            </p>
+                            <p className="text-xs text-blue-600">
+                                <span className="font-medium">Coordinates:</span> {coordinates.lat.toFixed(6)}, {coordinates.lng.toFixed(6)}
+                                {!hasValidCoordinates && <span className="text-red-600 ml-1">(Required)</span>}
                             </p>
                         </div>
-                    )}
+                    </div>
                 </div>
 
                 <DialogFooter className="w-full flex flex-row justify-between gap-3">
@@ -665,7 +792,7 @@ export const LocationSearchDialog: React.FC<LocationSearchDialogProps> = ({
                     <Button
                         type="button"
                         onClick={handleConfirm}
-                        disabled={!selectedLocation.fullAddress}
+                        disabled={!hasValidCoordinates}
                         className="text-lg py-6 px-8 bg-blue-600 text-white font-semibold hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Confirm

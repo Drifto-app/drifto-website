@@ -61,13 +61,12 @@ export function CoverImageUploader({
             const body = response.data.data;
 
             if (body.url) {
-                // 3) Notify parent
                 onImageValueChange?.(body.url);
                 // Clean up the local preview URL
                 URL.revokeObjectURL(previewUrl);
             }
-        } catch (error) {
-            console.error("Upload failed:", error);
+        } catch (error: any) {
+            showTopToast("error", error.response?.data?.description || "Upload failed. Please try again.");
             // Reset local preview on error
             setLocalPreview(undefined);
             URL.revokeObjectURL(previewUrl);

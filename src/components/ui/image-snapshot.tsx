@@ -56,9 +56,8 @@ export const ImageSnapshots = ({
             const next = [...images, url];
             setImages(next);
             onImageAdd?.(next);
-        } catch (err) {
-            console.error(err);
-            showTopToast("error", "Upload failed. Please try again.");
+        } catch (error: any) {
+            showTopToast("error", error.response?.data?.description || "Upload failed. Please try again.");
         } finally {
             setIsUploading(false);
             setSubmitDisabled(false);

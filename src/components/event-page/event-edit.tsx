@@ -16,6 +16,7 @@ import {NewTicketCard} from "@/components/event-page/new-ticket-card";
 import {authApi} from "@/lib/axios";
 import {LoaderSmall} from "@/components/ui/loader";
 import {showTopToast} from "@/components/toast/toast-util";
+import {EventThemeSelector} from "@/components/event-page/event-theme";
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -41,9 +42,8 @@ export const EventEdit = ({
 
     const [loading, setLoading] = useState<boolean>(false);
     const [submitDisabled, setSubmitDisabled] = useState<boolean>(false);
-    const [startDateError, setStartDateError] = useState<boolean>(false);
-    const [stopDateError, setStopDateError] = useState<boolean>(false);
-
+    const [startDateError, setStartDateError] = useState<string | null>(null);
+    const [stopDateError, setStopDateError] = useState<string | null>(null);
     const [titleImage, setTitleImage] = useState<string | undefined>(
         event.titleImage
     );
@@ -55,13 +55,15 @@ export const EventEdit = ({
     const [coordinates, setCoordinates] = useState<{[key: string]: number}>(event.location);
     const [locationSecure, setLocationSecure] = useState<boolean>(event.locationSecure);
     const [isPublic, setIsPublic] = useState<boolean>(event.public);
-    const [startTime, setStartTime] = React.useState<Date>(new Date(event.startTime));
-    const [stopTime, setStopTime] = React.useState<Date>(new Date(event.stopTime));
+    const [startTime, setStartTime] = useState<Date | undefined>(new Date(event.startTime));
+    const [stopTime, setStopTime] = useState<Date | undefined>(new Date(event.stopTime));
     const [isAgeRestricted, setIsAgeRestricted] = useState<boolean>(event.ageRestricted);
-    const [minimumAge, setMinimumAge] = useState<string>(String(event.minimumAge ?? "0"));
+    const [minimumAge, setMinimumAge] = useState<string>(String(event.minimumAge ?? ""));
     const [eventTags, setEventTags] = useState<string[]>(event.eventTags)
     const [screenshots, setScreenshots] = useState<string[]>(event.screenshots)
     const [tickets, setTickets] = useState<any[]>(event.tickets);
+    const [eventTheme, setEventTheme] = useState<[string, string]>(event.eventTheme === null ? ["#fff", "#fff"] : event.eventTheme);
+
 
     const handleTitleImageChange = useCallback((newUrl: string) => {
         setTitleImage(newUrl);
@@ -82,23 +84,55 @@ export const EventEdit = ({
     }
 
     const handleStartDateChange = (value: Date) => {
-        if(value > stopTime || value < new Date(Date.now())) {
-            setStartDateError(true)
+        const valueDate = new Date(value);
+        const stopTimeValue: Date | null = stopTime ? new Date(stopTime) : null;
+
+        // Always update the state first
+        setStartTime(value);
+
+        // Then validate and set errors
+        setStartDateError(null);
+
+        if (valueDate < new Date()) {
+            setStartDateError("Start date or time cannot be before the current date or time");
             return;
         }
 
-        setStartDateError(false)
-        setStartTime(value);
+        if (stopTimeValue && valueDate >= stopTimeValue) {
+            setStartDateError("Start date or time must be before the stop date or time");
+            return;
+        }
+
+        // Clear stop date error if it's now valid
+        if (stopTimeValue && stopDateError && valueDate < stopTimeValue) {
+            setStopDateError(null);
+        }
     }
 
     const handleStopDateChange = (value: Date) => {
-        if(value < startTime || value < new Date(Date.now())) {
-            setStopDateError(true)
+        const valueDate = new Date(value);
+        const startTimeValue: Date | null = startTime ? new Date(startTime) : null;
+
+        // Always update the state first
+        setStopTime(value);
+
+        // Then validate and set errors
+        setStopDateError(null);
+
+        if (valueDate < new Date()) {
+            setStopDateError("Stop date or time cannot be before the current date or time");
             return;
         }
 
-        setStopDateError(false)
-        setStopTime(value);
+        if (startTimeValue && valueDate <= startTimeValue) {
+            setStopDateError("Stop date or time must be after the start date or time");
+            return;
+        }
+
+        // Clear start date error if it's now valid
+        if (startTimeValue && startDateError && valueDate > startTimeValue) {
+            setStartDateError(null);
+        }
     }
 
     const handleMinimumAgeChange = (raw: string) => {
@@ -139,13 +173,14 @@ export const EventEdit = ({
             isAgeRestricted,
             minimumAge:  minimumAge === "" || minimumAge === "0" ? null : parseInt(minimumAge, 10),
             tags: eventTags,
+            eventTheme: eventTheme,
         }
 
         try {
             const response = await authApi.patch(`/event/${event.id}`, params);
             showTopToast("success", "Updated successfully");
             setEvent(response.data.data);
-            setMainActiveScreen("")
+            setMainActiveScreen("details")
         } catch (error: any) {
             showTopToast("error", error.message);
         }finally {
@@ -182,8 +217,8 @@ export const EventEdit = ({
                 return (
                     <>
                         <CoverImageUploader
-                            value={titleImage}
-                            onChange={handleTitleImageChange}
+                            imageValue={titleImage}
+                            onImageValueChange={handleTitleImageChange}
                             mediaFileType={"EVENT_HEADER"}
                             setSubmitDisabled={setSubmitDisabled}
                         />
@@ -196,7 +231,7 @@ export const EventEdit = ({
                                     placeholder="Title"
                                     value={title}
                                     onChange={(e) => setTitle(e.target.value)}
-                                    className="py-6 bg-neutral-200"
+                                    className="py-6 bg-white"
                                 />
                             </div>
                             <div className="grid gap-2 ">
@@ -206,8 +241,8 @@ export const EventEdit = ({
                                     placeholder="Description"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    rows={5}
-                                    className="py-2 px-3 bg-neutral-200 rounded-md focus:border-blue-600 focus:border-1 focus:outline-hidden"
+                                    rows={8}
+                                    className="py-2 px-3 bg-white rounded-md border-1 border-neutral-200 focus:border-blue-600 focus:border-1 focus:outline-hidden"
                                 />
                             </div>
                             <div className="grid gap-2">
@@ -220,7 +255,7 @@ export const EventEdit = ({
                             </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="secure-location" className="text-neutral-500">Secure Location</Label>
-                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-white gap-2">
                                     <div className="flex flex-col gap-1">
                                         <h3 className="font-bold">Hide Exact Location</h3>
                                         <p className="text-sm text-neutral-500">Enable to hide the exact location fromm attendees until necessary</p>
@@ -230,7 +265,7 @@ export const EventEdit = ({
                             </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="event-visible" className="text-neutral-500">Event Visibility</Label>
-                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-neutral-200 gap-2">
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-white gap-2">
                                     <div className="flex flex-col gap-1">
                                         <h3 className="font-bold">Public Event</h3>
                                         <p className="text-sm text-neutral-500">Enable to make the event visible to all users.</p>
@@ -238,16 +273,16 @@ export const EventEdit = ({
                                     <Switch id="event-visible" size="medium" checked={isPublic} onCheckedChange={() => {setIsPublic(!isPublic)}} />
                                 </div>
                             </div>
-                           <div className="w-full flex flex-col gap-1">
-                               <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date" />
-                               {
-                                   startDateError && <p className="text-xs text-red-600">Start time cannot be past the stop time</p>
-                               }
-                           </div>
-                            <div className="w-full">
-                                <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date" />
+                            <div className="w-full flex flex-col gap-1">
+                                <DateTimePicker date={startTime} setDate={handleStartDateChange} label="start date & time" />
                                 {
-                                    stopDateError && <p className="text-xs text-red-600">Stop time cannot be before the stop time</p>
+                                    startDateError && <p className="text-xs text-red-600">{startDateError}</p>
+                                }
+                            </div>
+                            <div className="w-full">
+                                <DateTimePicker date={stopTime} setDate={handleStopDateChange} label="stop date & time" />
+                                {
+                                    stopDateError && <p className="text-xs text-red-600">{stopDateError}</p>
                                 }
                             </div>
                             <div className="grid gap-2 w-full">
@@ -261,7 +296,7 @@ export const EventEdit = ({
                                     placeholder="Minimum Age"
                                     value={minimumAge}
                                     onChange={(e) => handleMinimumAgeChange(e.target.value)}
-                                    className="py-2 bg-neutral-200"
+                                    className="py-2 bg-white"
                                 />
                             </div>
                             <div className="grid gap-2">
@@ -274,6 +309,13 @@ export const EventEdit = ({
                                     onTagRemove={(tag: string) => setEventTags((value) => value.filter((i) => i !== tag)) }
                                 />
                             </div>
+                            <div className="grid gap-2">
+                                <div className="flex flex-col">
+                                    <div className="font-bold">Event Theme</div>
+                                    <p className="text-neutral-400 text-xs font-semibold">Select a theme that sets the vibe for your event</p>
+                                </div>
+                                <EventThemeSelector currentEventTheme={eventTheme} setEventTheme={setEventTheme} />
+                            </div>
                             <div className="grid gap-2 w-full">
                                 <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
                                 <ImageSnapshots setSubmitDisabled={setSubmitDisabled} initialImages={screenshots} maxImages={50} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
@@ -282,7 +324,7 @@ export const EventEdit = ({
                                 <Button
                                     type="submit"
                                     className="w-[90%] text-md py-6 font-bold"
-                                    disabled={loading || startDateError || stopDateError || submitDisabled}
+                                    disabled={loading || !!startDateError || !!stopDateError || submitDisabled}
                                     onClick={handleUpdateSubmit}>
                                     {loading ? <LoaderSmall /> : "Confirm Changes"}
                                 </Button>

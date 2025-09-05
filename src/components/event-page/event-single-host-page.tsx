@@ -2,18 +2,16 @@
 
 import * as React from "react";
 import {cn} from "@/lib/utils";
-import {useSpotGradient} from "@/lib/util";
 import {SingleEventHeader} from "@/components/event-page/header";
 import {SingleEventDetails} from "@/components/event-page/details";
 import {SingleEventFooter} from "@/components/event-page/footer";
-import { useNavigationHistory } from "@/hooks/use-navigation-history";
 import {EventEarnings} from "@/components/event-page/event-earnings";
 import {EventEdit} from "@/components/event-page/event-edit";
 import {FindAttendees} from "@/components/event-page/find-attendees";
 import {HostInvites} from "@/components/event-page/host-invites";
 import {CoHostManage} from "@/components/event-page/co-host-manage";
 import {useRouter, useSearchParams} from "next/navigation";
-import {useEffect} from "react";
+import {useEffect, useMemo, useState} from "react";
 
 interface SingleEventHostPageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -27,86 +25,66 @@ export default function SingleEventHostPage(
 ) {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [isInitialized, setIsInitialized] = React.useState(false);
 
     const urlScreen = searchParams.get("screen");
+    const [activeScreen, setActiveScreen] = useState<string>(urlScreen ?? "details");
+    const [screenTitle, setScreenTitle] = useState<string>("Manage Event");
 
-    // Define screen titles
-    const screenTitles: Record<string, string> = {
-        'tickets': 'Ticket Sales',
-        'event-earnings': 'Event Earnings',
-        'edit': 'Edit Event',
-        'co-host-manage': 'Manage Co-Host',
-        'host-invites': 'Co-Host Invites',
-        'details': 'Manage Event'
-    };
-
-    const {
-        navigateTo,
-        goBack,
-        getCurrentScreen,
-        canGoBack,
-        resetToScreen,
-    } = useNavigationHistory('details');
-
-    const currentScreen = getCurrentScreen();
-    const activeScreen = currentScreen.screen;
-
-    // Initialize navigation history based on URL on first load
     useEffect(() => {
-        if (!isInitialized) {
-            const initialScreen = urlScreen || 'details';
-            const screenTitle = screenTitles[initialScreen] || 'Manage Event';
-            resetToScreen(initialScreen, screenTitle);
-            setIsInitialized(true);
-        }
-    }, [urlScreen, isInitialized, resetToScreen, screenTitles]);
-
-    // Sync URL with navigation history when activeScreen changes programmatically
-    useEffect(() => {
-        if (isInitialized && activeScreen && urlScreen !== activeScreen) {
-            const params = new URLSearchParams(searchParams.toString());
-            if (activeScreen === 'details') {
-                params.delete("screen");
-            } else {
-                params.set("screen", activeScreen);
+        const changeTitle = () => {
+            switch (activeScreen) {
+                case "event-earnings":
+                    setScreenTitle("Event Earnings");
+                    break;
+                case "tickets":
+                    setScreenTitle("Ticket Sales");
+                    break;
+                case "edit":
+                    setScreenTitle("Edit Event");
+                    break;
+                case "co-host-manage":
+                    setScreenTitle("Manage Co-Host");
+                    break;
+                case "host-invites":
+                    setScreenTitle("Co-Host Invites");
+                    break;
             }
-            router.replace(`?${params.toString()}`, { scroll: false });
         }
-    }, [activeScreen, urlScreen, searchParams, router, isInitialized]);
+        changeTitle()
+    }, [activeScreen]);
 
-    const gradient = useSpotGradient(event.eventTheme);
-    const style = event.eventTheme
-        ? {
-            backgroundImage: gradient
-        }
-        : undefined;
+    // const gradient = useSpotGradient(event.eventTheme);
+    const containerStyle = useMemo(() => {
+        const t = event?.eventTheme as [string, string] | undefined;
+        if (!t) return undefined;
+        const [c1, c2] = t;
+        return { background: `linear-gradient(to bottom, ${c1}, ${c2})` } as const;
+    }, [event]);
 
-    const setActiveScreen = (screen: string, title?: string) => {
-        const screenTitle = title || screenTitles[screen] || 'Manage Event';
-        navigateTo(screen, screenTitle);
-    };
 
     const handleBackClick = () => {
-        if (canGoBack()) {
-            goBack();
+
+        if(activeScreen !== "details") {
+            setActiveScreen("details");
         } else {
-            // If no history, go to the original prev route or browser back
-            if (typeof window !== 'undefined') {
-                window.history.back();
-                // router.push("/")
-            }
+            router.push(prev ? prev : "/");
         }
     };
 
     const handleScreen = (value: string, title?: string) => {
-        setActiveScreen(value, title);
+        const params = new URLSearchParams(searchParams.toString());
+        params.set("screen", value);
+        router.replace(`?${params.toString()}`);
+
+        if(title) {
+            setScreenTitle(title);
+        }else {
+            setScreenTitle("");
+        }
+
+        setActiveScreen(value);
     };
 
-    // Don't render until initialized to avoid flash
-    if (!isInitialized) {
-        return null;
-    }
 
     // Render different screens based on activeScreen
     const renderScreen = () => {
@@ -162,7 +140,7 @@ export default function SingleEventHostPage(
                 className,
                 event.eventTheme !== null ? "" : "bg-neutral-100",
             )}
-            style={activeScreen === "details" || activeScreen === "edit" ? style : undefined}
+            style={activeScreen === "details" || activeScreen === "edit" ? containerStyle : undefined}
             {...props}
         >
             <SingleEventHeader
@@ -170,7 +148,7 @@ export default function SingleEventHostPage(
                 isCoHostComponent={activeScreen !== 'details'}
                 prev={prev}
                 event={event}
-                title={currentScreen.title || 'Manage Event'}
+                title={screenTitle || 'Manage Event'}
                 onBackClick={handleBackClick}
             />
             {renderScreen()}

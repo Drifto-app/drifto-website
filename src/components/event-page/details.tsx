@@ -133,7 +133,7 @@ export const SingleEventDetails = ({
     } else if (event.eventDisplayStatus === "SOLD_OUT") {
         eventDisplayDetails = {
             icon: <TbTicketOff size={22} className="text-red-600"/>,
-            value: "sold o  ut",
+            value: "sold out",
             description: `Tickets are sold out`
         }
     }

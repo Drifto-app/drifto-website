@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react";
+import {useMemo, useState} from "react";
 import {SingleEventHeader} from "@/components/event-page/header";
 import {SingleEventDetails} from "@/components/event-page/details";
 import {SingleEventFooter} from "@/components/event-page/footer";
@@ -29,12 +29,12 @@ export default function EventSinglePage(
 
     const [activeScreen, setActiveScreen] = useState<string>(screen ?? "details");
 
-    const gradient = useSpotGradient(event.eventTheme)
-    const style = event.eventTheme
-        ? {
-            backgroundImage: gradient
-        }
-        : undefined;
+    const containerStyle = useMemo(() => {
+        const t = event?.eventTheme as [string, string] | undefined;
+        if (!t) return undefined;
+        const [c1, c2] = t;
+        return { background: `linear-gradient(to bottom, ${c1}, ${c2})` } as const;
+    }, [event]);
 
     const handleScreen = (value: string) => {
         const params = new URLSearchParams(searchParams.toString());
@@ -51,16 +51,16 @@ export default function EventSinglePage(
                     <SingleEventMap
                         event={event}
                         googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!}
-                        style={style}
+                        style={containerStyle}
                     />
                 )
             case "reviews":
                 return (
-                    <SingleEventReviews event={event} style={style} currentPathUrl={pathname + "?" + searchParams}/>
+                    <SingleEventReviews event={event} style={containerStyle} currentPathUrl={pathname + "?" + searchParams}/>
                 )
             case "related":
                 return (
-                    <SingleEventRelated event={event} style={style} currentPathUrl={pathname + "?" + searchParams}/>
+                    <SingleEventRelated event={event} style={containerStyle} currentPathUrl={pathname + "?" + searchParams}/>
                 )
             default:
                 return(
@@ -79,7 +79,7 @@ export default function EventSinglePage(
                 className,
                 event.eventTheme !== null ? "" : "bg-neutral-100",
             )}
-            style={style}
+            style={containerStyle}
             {...props}
         >
             <SingleEventHeader isCoHost={false} prev={prev} event={event} activeScreen={activeScreen} setActiveScreen={handleScreen} />

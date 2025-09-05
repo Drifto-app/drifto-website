@@ -31,8 +31,7 @@ export const HostInvites = ({
             const response = await authApi.get(`/invite/event/${event.id}`)
             setInvites(response.data.data)
         } catch(error: any) {
-            setError(error.response?.data?.message || "Failed to fetch invites")
-            console.error("Error fetching invites:", error)
+            setError(error.response?.data?.description || "Failed to fetch invites")
         } finally {
             setLoading(false)
         }

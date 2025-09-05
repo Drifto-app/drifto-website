@@ -209,7 +209,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 ))}
             </div>
 
-            <Button size="lg" className="fixed bottom-20 rounded-full z-1000 bg-blue-800" onClick={() => router.push("/m/create/event")}>
+            <Button size="lg" className="fixed bottom-20 rounded-full z-1000 bg-blue-800" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}>
                 Create Event
             </Button>
 

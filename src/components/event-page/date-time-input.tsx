@@ -75,9 +75,9 @@ export const DateTimePicker = ({
                     <Input
                         id="date"
                         value={dateValue}
-                        placeholder="June 01, 2025"
+                        placeholder="Month Day, Year"
                         required={required}
-                        className="bg-background pr-10 border-none shadow-none w-full"
+                        className="bg-background pr-10 shadow-none w-full"
                         onChange={(e) => handleDateChange(e.target.value)}
                         onKeyDown={(e) => {
                             if (e.key === "ArrowDown") {

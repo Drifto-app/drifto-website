@@ -5,7 +5,6 @@ import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
 import {useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {useSpotGradient} from "@/lib/util";
 import {
     Dialog,
     DialogClose,
@@ -35,13 +34,6 @@ export const SingleEventFooter = ({
     const router = useRouter();
 
     const [price, setPrice] = useState<string>("5000");
-
-    const gradient = useSpotGradient(event.eventTheme)
-    const style = event.eventTheme
-        ? {
-            backgroundImage: gradient
-        }
-        : undefined;
 
     const handleEventDelete = async () => {
         setLoading!(true);

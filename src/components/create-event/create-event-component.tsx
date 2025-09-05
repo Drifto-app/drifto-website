@@ -1,11 +1,11 @@
 "use client"
 
 import {useSearchParams} from "next/navigation";
-import {ScreenProvider} from "@/components/screen/screen-provider";
-import {LocationChangeContent} from "@/components/location-change/location-change-content";
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
+import {ScreenProvider} from "@/components/screen/screen-provider";
+import {CreateEventContent} from "@/components/create-event/create-event-content";
 
-export default function LocationPageContent () {
+export default function CreateEventComponent () {
     const searchParams = useSearchParams();
     const prev = searchParams.get("prev")
 
@@ -13,9 +13,9 @@ export default function LocationPageContent () {
         <ProtectedRoute>
             <ScreenProvider>
                 <div className="w-full">
-                    <LocationChangeContent prev={prev}/>
+                    <CreateEventContent prev={prev} />
                 </div>
             </ScreenProvider>
         </ProtectedRoute>
     )
-};
+}

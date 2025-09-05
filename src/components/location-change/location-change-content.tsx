@@ -75,7 +75,7 @@ export const LocationChangeContent = ({
             setLoading(false);
             router.push(prev ?? "/");
         } catch (error: any) {
-            showTopToast("error", error.message);
+            showTopToast("error", error.response?.data?.description);
         } finally {
             setLoading(false);
         }

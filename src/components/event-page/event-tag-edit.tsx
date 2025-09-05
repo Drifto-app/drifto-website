@@ -31,7 +31,7 @@ export const EventTagDialog= ({
         <>
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
-                  <div className=" w-full py-3 px-4 bg-neutral-200 rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors">
+                  <div className=" w-full py-3 px-4 bg-white rounded-md text-wrap flex flex-row justify-between items-center cursor-pointer hover:bg-neutral-300 transition-colors border-1 border-b-neutral-200">
                             <span className="text-sm w-[85%]">
                             {
                                 currentEventTags.length > 1 ? currentEventTags.join(", ") : currentEventTags[0]

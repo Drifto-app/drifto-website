@@ -79,7 +79,7 @@ export const useEventTagsStore = create<EventTagsState>()(
 
 
                 } catch (error) {
-                    console.error('Failed to fetch event tags:', error);
+                    console.error('Failed to fetch events tags:', error);
 
                     const errorMessage = 'Unknown error occurred';
 

@@ -5,7 +5,16 @@ import { Tabs } from "./tabs";
 import { authApi } from "@/lib/axios";
 import { log } from "console";
 import { useRouter } from "next/navigation";
-import { Briefcase, MapPin, PinIcon, Upload, Wifi } from "lucide-react";
+import {
+  Antenna,
+  Briefcase,
+  Loader,
+  MapPin,
+  PinIcon,
+  Radio,
+  Upload,
+  Wifi,
+} from "lucide-react";
 import { FaSuitcase } from "react-icons/fa";
 import { GiSuitcase } from "react-icons/gi";
 import { PiSuitcaseLight } from "react-icons/pi";
@@ -19,7 +28,7 @@ interface BookingItem {
   stopTime: string;
   numberOfTickets: number;
   address: string;
-  status?: string;
+  eventDisplayStatus?: string;
 }
 
 interface EventItem {
@@ -109,7 +118,9 @@ function BookingCard({ booking }: BookingCardProps) {
 
           <div className="space-y-1 text-sm text-gray-600 flex flex-col gap-1">
             <p className="font-normal text-base">{dateRange}</p>
-            <p className="">{booking.status || "ACTIVE"}</p>
+            <p className=" flex gap-2 items-center">
+              <Radio /> {booking.eventDisplayStatus || "ACTIVE"}
+            </p>
             <p className=" flex gap-2 items-center">
               <Briefcase size={25} />
               <span>{booking.numberOfTickets} Tickets</span>
@@ -229,8 +240,8 @@ function useEvents() {
   return { events, isLoading, error, refetch: loadEvents };
 }
 
-function EventsContent() {
-  const { events, isLoading, error, refetch } = useEvents();
+function EventsContent({ events }: { events: EventItem[] }) {
+  // const { events, isLoading, error, refetch } = useEvents();
   return (
     <div className="text-center py-12 flex flex-col gap-4">
       {events?.map((event, index) => {
@@ -264,7 +275,7 @@ function EventsCard({ event }: EventsCardProp) {
         width={800}
         height={500}
         src={event.titleImage}
-        onClick={() => router.push(`/m/eventDetails/${event.id}`)}
+        onClick={() => router.push(`/m/event/${event.id}`)}
         className="w-full max-h-96 object-cover rounded-2xl"
         alt=""
       />
@@ -354,6 +365,12 @@ function useBookings() {
 export default function PlanningDisplay() {
   const [activeTab, setActiveTab] = useState<TabType>("bookings");
   const { bookings, isLoading, error } = useBookings();
+  const {
+    events,
+    isLoading: isEventsLoading,
+    error: isEventsError,
+    refetch,
+  } = useEvents();
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -366,7 +383,7 @@ export default function PlanningDisplay() {
           />
         );
       case "events":
-        return <EventsContent />;
+        return <EventsContent events={events} />;
       default:
         return null;
     }

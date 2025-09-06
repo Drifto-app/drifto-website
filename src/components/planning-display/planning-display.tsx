@@ -3,21 +3,18 @@ import Image from "next/image";
 import PageHeader from "../page-header/page-header";
 import { Tabs } from "./tabs";
 import { authApi } from "@/lib/axios";
-import { log } from "console";
 import { useRouter } from "next/navigation";
 import {
-  Antenna,
   Briefcase,
-  Loader,
   MapPin,
-  PinIcon,
   Radio,
   Upload,
-  Wifi,
 } from "lucide-react";
-import { FaSuitcase } from "react-icons/fa";
-import { GiSuitcase } from "react-icons/gi";
-import { PiSuitcaseLight } from "react-icons/pi";
+import {Loader} from "@/components/ui/loader";
+import {useShare} from "@/hooks/share-option";
+import {ShareDialog} from "@/components/share-button/share-option";
+import {AvatarImage, Avatar, AvatarFallback} from "@/components/ui/avatar";
+import {Button} from "@/components/ui/button";
 
 // Types
 interface BookingItem {
@@ -33,6 +30,7 @@ interface BookingItem {
 
 interface EventItem {
   id: string;
+  description: string;
   titleImage: string;
   title: string;
   coHosts: any[];
@@ -95,7 +93,9 @@ function BookingCard({ booking }: BookingCardProps) {
   const dateRange = formatDateRange(booking.startTime, booking.stopTime);
   const router = useRouter();
   return (
-    <div>
+    <div className="w-full flex flex-col" onClick={() => {
+      router.push(`/m/bookings/${booking.eventId}`);
+    }}>
       <article className=" shadow-xl flex flex-col rounded-lg overflow-hidden">
         <div className="relative">
           <Image
@@ -105,9 +105,6 @@ function BookingCard({ booking }: BookingCardProps) {
             height={200}
             className="w-full h-48 object-cover"
             priority={false}
-            onClick={() => {
-              router.push(`/m/bookings/${booking.eventId}`);
-            }}
           />
         </div>
 
@@ -154,13 +151,11 @@ interface BookingsListProps {
 }
 
 function BookingsList({ bookings, isLoading, error }: BookingsListProps) {
-  console.log(bookings);
 
   if (isLoading) {
     return (
       <div className="flex justify-center items-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
-        <span className="ml-2">Loading bookings...</span>
+        <Loader />
       </div>
     );
   }
@@ -188,7 +183,7 @@ function BookingsList({ bookings, isLoading, error }: BookingsListProps) {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+    <div className="w-full flex flex-col gap-4 pb-15">
       {bookings.map((booking) => (
         <BookingCard key={booking.eventId} booking={booking} />
       ))}
@@ -240,10 +235,33 @@ function useEvents() {
   return { events, isLoading, error, refetch: loadEvents };
 }
 
-function EventsContent({ events }: { events: EventItem[] }) {
-  // const { events, isLoading, error, refetch } = useEvents();
+function EventsContent({ events, isLoading }: { events: EventItem[], isLoading: boolean }) {
+  const router = useRouter();
+
+  if (isLoading) {
+    return (
+        <div className="flex justify-center items-center py-12">
+          <Loader />
+        </div>
+    );
+  }
+
+  if(events.length <= 0) {
+    return (
+        <div className=" w-full flex flex-col items-center justify-center gap-3 h-[80dvh]">
+          <span className="text-neutral-500 text-sm">You have not created or collaborated in any experience.</span>
+          <Button
+            className="font-bold bg-blue-800 hover:bg-blue-800 px-6 py-6 text-md"
+            onClick={() => {router.push(`/m/event-create?prev=${encodeURIComponent("/?screen=plans")}`)}}
+          >
+            Create Event
+          </Button>
+        </div>
+    )
+  }
+
   return (
-    <div className="text-center py-12 flex flex-col gap-4">
+    <div className="text-center pt-4 pb-12 flex flex-col gap-6">
       {events?.map((event, index) => {
         return (
           <div key={index}>
@@ -259,6 +277,18 @@ interface EventsCardProp {
   event: EventItem;
 }
 function EventsCard({ event }: EventsCardProp) {
+
+  const eventUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/event/${event.id}`;
+  const {
+    isShareDialogOpen,
+    closeShareDialog,
+    handleQuickShare,
+  } = useShare({
+    title: event.title,
+    url: eventUrl,
+    description: event.description
+  });
+
   function formatDateToMonthDay(isoString: string) {
     const date = new Date(isoString);
     return date.toLocaleDateString("en-US", {
@@ -268,54 +298,55 @@ function EventsCard({ event }: EventsCardProp) {
   }
 
   const router = useRouter();
-  console.log("id", event.id);
   return (
-    <div>
-      <Image
-        width={800}
-        height={500}
-        src={event.titleImage}
-        onClick={() => router.push(`/m/event/${event.id}`)}
-        className="w-full max-h-96 object-cover rounded-2xl"
-        alt=""
-      />
-      <h3 className=" mt-4 text-left text-xl font-semibold first-letter:capitalize">
-        {event.title}
-      </h3>
-      <div className="flex mt-14 justify-between items-center">
-        {event.coHosts && event.coHosts.length > 0 && (
-          <span className=" flex gap-8 items-center">
-            <div className=" relative">
-              <Image
-                sizes="25"
-                width={50}
-                height={50}
-                className=" rounded-full object-cover w-10 h-10 z-10 relative border-2 border-white"
-                src={event.coHosts[0]?.profileImageUrl}
-                alt=""
-              />
-
-              <Image
-                width={50}
-                height={50}
-                className=" rounded-full object-cover w-8 h-8 absolute left-6 top-1"
-                src={event.coHosts[1]?.profileImageUrl}
-                alt=""
-              />
+      <>
+        <div className="flex flex-col gap-5">
+          <Image
+              width={800}
+              height={500}
+              src={event.titleImage}
+              onClick={() => router.push(`/m/event/${event.id}?prev=${encodeURIComponent("/?screen=plans")}`)}
+              className="w-full max-h-96 object-cover rounded-2xl"
+              alt=""
+          />
+          <h3 className=" text-left text-xl font-semibold first-letter:capitalize">
+            {event.title}
+          </h3>
+          <div className="flex justify-between items-center">
+            {event.coHosts && event.coHosts.length > 0 && (
+                <span className="flex gap-3 items-center">
+                  <div className="relative *:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2">
+                      {event.coHosts.slice(0, 4).map((cohost, index) => (
+                          <Avatar key={index}>
+                            <AvatarImage src={cohost.profileImageUrl} alt={cohost.username} />
+                            <AvatarFallback>
+                              <Image src={"/default.jpeg"} alt={cohost.username} fill />
+                            </AvatarFallback>
+                          </Avatar>
+                      ))}
+                    </div>
+                  <p>{event.coHosts.length} hosts</p>
+                </span>
+            )}
+            <div className="flex gap-3 items-center ml-auto">
+              <span className=" text-white bg-black py-2 px-3 font-normal rounded-full flex ">
+                {formatDateToMonthDay(event.startTime.toLocaleString())}
+              </span>
+              <span className=" text-white bg-black py-2 px-2 font-normal rounded-full flex" onClick={handleQuickShare}>
+                <Upload />
+              </span>
             </div>
-            {event.coHosts.length} hosts
-          </span>
-        )}
-        <div className="flex gap-3 items-center ml-auto">
-          <span className=" text-white bg-black py-2 px-3 font-normal rounded-full flex ">
-            {formatDateToMonthDay(event.startTime.toLocaleString())}
-          </span>
-          <span className=" text-white bg-black py-2 px-2 font-normal rounded-full flex ">
-            <Upload />
-          </span>
+          </div>
         </div>
-      </div>
-    </div>
+
+        <ShareDialog
+            isOpen={isShareDialogOpen}
+            onClose={closeShareDialog}
+            eventTitle={event.title}
+            eventUrl={eventUrl}
+            eventDescription={event.description}
+        />
+      </>
   );
 }
 
@@ -383,7 +414,7 @@ export default function PlanningDisplay() {
           />
         );
       case "events":
-        return <EventsContent events={events} />;
+        return <EventsContent events={events} isLoading={isLoading}/>;
       default:
         return null;
     }
@@ -391,7 +422,7 @@ export default function PlanningDisplay() {
 
   return (
     //view hieght subtracted from navbar height
-    <div className="h-[calc(100vh-60px)] overflow-y-scroll bg-gray-50">
+    <div className="w-full overflow-y-scroll bg-gray-50">
       <div className="p-2">
         <PageHeader headerTitle="Plans" />
         <Tabs active={activeTab} onClick={setActiveTab} />

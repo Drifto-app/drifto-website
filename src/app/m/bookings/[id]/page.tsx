@@ -1,22 +1,28 @@
 "use client";
+
 import { authApi } from "@/lib/axios";
 import {
-  ArrowBigLeft,
   ArrowLeft,
-  Box,
   Download,
-  Folder,
-  FolderArchive,
   Inbox,
 } from "lucide-react";
 import Image from "next/image";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import QRCode from "react-qr-code";
-export default function page() {
+import {cn} from "@/lib/utils";
+import {FaArrowLeft} from "react-icons/fa";
+import {ScreenProvider} from "@/components/screen/screen-provider";
+import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
+
+export default function Page() {
   const [tickets, setTickets] = useState<any[]>();
   const [eventDetails, setEventDetails] = useState<any>();
+
   const { id } = useParams();
+  const router = useRouter();
+
+
   const fetchTickets = async () => {
     const response = await authApi.get("/userTicket/plan/ticket/" + id, {
       params: { pageNumber: 1, pageSize: 10 },
@@ -57,6 +63,7 @@ export default function page() {
                   index={index}
                   noOfTickets={tickets.length}
                   ticketReference={ticket.ticketReference}
+                  eventId={id!.toString()}
                 />
               </div>
             );
@@ -66,29 +73,34 @@ export default function page() {
   );
 }
 interface headerProp {
-  title: String;
+  title: string;
 }
 function DetailsHeader({ title }: headerProp) {
   const router = useRouter();
-  const concatTitle = (title: String) => {
-    if (title.length < 28) {
-      return title;
-    }
-    const shortened = title.slice(0, 27) + "...";
-    return shortened;
-  };
+
+  // const concatTitle = (title: string) => {
+  //   if (title.length < 28) {
+  //     return title;
+  //   }
+  //   const shortened = title.slice(0, 27) + "...";
+  //   return shortened;
+  // };
+
   return (
-    <>
-      <div className=" p-4 flex items-center gap-6">
-        <div onClick={() => router.back()}>
-          <ArrowLeft size={40} />
+      <div className={cn(
+          "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center"
+      )}>
+        <div className="flex flex-row items-center px-8">
+          <FaArrowLeft
+              size={20}
+              onClick={() => router.push("/?screen=plans")}
+              className="cursor-pointer hover:text-neutral-700 transition-colors"
+          />
+          <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+            {title}
+          </p>
         </div>
-        <h3 className=" mx-auto text-base font-medium w-fit overflow-ellipsis break-normal whitespace-nowrap justify-self-center">
-          {concatTitle(title)}
-        </h3>
       </div>
-      <hr />
-    </>
   );
 }
 function formatTimestamp(ts: string) {
@@ -110,15 +122,16 @@ function formatTimestamp(ts: string) {
     .replace(", ", " ");
 }
 interface ticketCardProp {
-  title: String;
-  titleImg: String;
-  name: String;
-  ticketName: String;
-  date: String | Date;
-  ticketReference: String;
-  used: Boolean;
+  title: string;
+  titleImg: string;
+  name: string;
+  ticketName: string;
+  date: string | Date;
+  ticketReference: string;
+  used: boolean;
   index: number;
   noOfTickets: number;
+  eventId: string;
 }
 
 function TicketCard({
@@ -131,67 +144,74 @@ function TicketCard({
   used,
   index,
   noOfTickets,
+  eventId
 }: ticketCardProp) {
+  const router = useRouter();
+
   return (
-    <div>
-      <div className=" flex justify-end gap-3 mb-2">
-        <div className=" text-blue-600 px-3 py-2 flex items-center justify-center rounded-full border border-black">
-          <span>{used ? "Used" : "Not Used"}</span>
+    <ProtectedRoute>
+      <ScreenProvider>
+        <div>
+          <div className=" flex justify-end gap-3 mb-2">
+            <div className=" text-blue-600 px-3 py-2 flex items-center justify-center rounded-full border border-black">
+              <span>{used ? "Used" : "Not Used"}</span>
+            </div>
+            <button className=" p-2 border border-black rounded-full" onClick={() => {router.push(`/m/event/${eventId}?prev=${encodeURIComponent(`/m/bookings/${eventId}`)}`)}}>
+              <Inbox />
+            </button>
+            <button className=" p-2 border border-black rounded-full">
+              <Download />
+            </button>
+          </div>
+          <div className=" shadow-2xl rounded-b-2xl">
+            <Image
+                className=" rounded-t-2xl w-full h-48 object-cover"
+                alt={title.toString()}
+                width={800}
+                height={200}
+                priority={false}
+                src={titleImg?.toString()}
+            />
+            <div className=" p-4 ">
+              <h4 className="text-2xl font-semibold first-letter:capitalize">
+                {title}
+              </h4>
+              <div className=" grid mt-4 grid-cols-2 gap-4">
+                <div>
+                  <h5>Name</h5>
+                  <p className="break-all font-semibold text-lg">{name}</p>
+                </div>
+                <div>
+                  <h5>Event Date</h5>
+                  <p className="break-all font-semibold text-lg">
+                    {formatTimestamp(date?.toString())}
+                  </p>
+                </div>
+                <div>
+                  <h5>TIcket Name</h5>
+                  <p className="break-all font-semibold text-lg">{ticketName}</p>
+                </div>
+                <div>
+                  <h5>Reference</h5>
+                  <p className="break-all font-semibold text-lg">
+                    {ticketReference}
+                  </p>
+                </div>
+              </div>
+              <div className="flex gap-2 items-center">
+                <div className="border-t border-black w-full"></div>{" "}
+                <div className="w-fit break-normal whitespace-nowrap">
+                  {index} of {noOfTickets}
+                </div>
+                <div className="border-t border-black w-full"></div>
+              </div>
+              <div className=" flex justify-center py-8">
+                <QRCode size={128} value={ticketReference.toString()} />
+              </div>
+            </div>
+          </div>
         </div>
-        <button className=" p-2 border border-black rounded-full">
-          <Inbox />
-        </button>
-        <button className=" p-2 border border-black rounded-full">
-          <Download />
-        </button>
-      </div>
-      <div className=" shadow-2xl rounded-b-2xl">
-        <Image
-          className=" rounded-t-2xl w-full h-48 object-cover"
-          alt={title.toString()}
-          width={800}
-          height={200}
-          priority={false}
-          src={titleImg?.toString()}
-        />
-        <div className=" p-4 ">
-          <h4 className="text-2xl font-semibold first-letter:capitalize">
-            {title}
-          </h4>
-          <div className=" grid mt-4 grid-cols-2 gap-4">
-            <div>
-              <h5>Name</h5>
-              <p className="break-all font-semibold text-lg">{name}</p>
-            </div>
-            <div>
-              <h5>Event Date</h5>
-              <p className="break-all font-semibold text-lg">
-                {formatTimestamp(date?.toString())}
-              </p>
-            </div>
-            <div>
-              <h5>TIcket Name</h5>
-              <p className="break-all font-semibold text-lg">{ticketName}</p>
-            </div>
-            <div>
-              <h5>Reference</h5>
-              <p className="break-all font-semibold text-lg">
-                {ticketReference}
-              </p>
-            </div>
-          </div>
-          <div className="flex gap-2 items-center">
-            <div className="border-t border-black w-full"></div>{" "}
-            <div className="w-fit break-normal whitespace-nowrap">
-              {index} of {noOfTickets}
-            </div>
-            <div className="border-t border-black w-full"></div>
-          </div>
-          <div className=" flex justify-center py-8">
-            <QRCode size={128} value={ticketReference.toString()} />
-          </div>
-        </div>
-      </div>
-    </div>
+      </ScreenProvider>
+    </ProtectedRoute>
   );
 }

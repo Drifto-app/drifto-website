@@ -84,7 +84,7 @@ export default function HomeContent() {
   return (
     <ProtectedRoute>
       <ScreenProvider>
-        <div className="w-full">
+        <div className="min-h-[100dvh] w-full">
           {render()}
           <BottomNavbar
             activeScreen={activeScreen}

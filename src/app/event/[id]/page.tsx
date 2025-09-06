@@ -23,7 +23,6 @@ interface PageProps {
 async function getPublicEvent(eventId: string): Promise<Event | null> {
     try {
         const response = await api.get(`/event/public/${eventId}`)
-        console.log(response.data.data)
         return response.data.data
     } catch (error) {
         console.error('Failed to fetch public event:', error)
@@ -68,9 +67,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const optimizedImage = optimizeCloudinaryUrl(event.titleFileUrl)
     const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/m/events/${event.id}`
 
+    console.log(event)
+
     return {
         title: `${event.title.toUpperCase()} | Drifto`,
         description: event.description || `Join us for ${event.title} on ${new Date(event.startTime).toLocaleDateString()}`,
+        authors: [{name: "Drifto", url: process.env.NEXT_PUBLIC_BASE_URL}],
+
         openGraph: {
             title: event.title.toUpperCase(),
             description: event.description || `Join us for ${event.title}`,
@@ -80,7 +83,15 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
             locale: 'en_US',
             siteName: 'Drifto',
         },
-        twitter: { card: 'summary_large_image', title: event.title.toUpperCase(), description: event.description || `Join us for ${event.title}`, images: [optimizedImage] },
+
+        twitter: {
+            card: 'summary_large_image',
+            title: event.title.toUpperCase(),
+            description: event.description || `Join us for ${event.title}`,
+            images: [optimizedImage],
+            site: "@drifto",
+        }
+        ,
         alternates: { canonical: eventUrl },
         other: { 'event:start_time': new Date(event.startTime).toLocaleDateString() },
     }
@@ -217,8 +228,10 @@ function isBotRequest(userAgent: string): boolean {
         'openvas',                  // OpenVAS
         'burpsuite',                // Burp Suite
     ]
+
+    const lowerUserAgent = userAgent.toLowerCase()
     return botPatterns.some(pattern =>
-        userAgent.toLowerCase().includes(pattern)
+        lowerUserAgent.includes(pattern.toLowerCase())
     )
 }
 

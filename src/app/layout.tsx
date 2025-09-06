@@ -28,8 +28,10 @@ export default function RootLayout({
               <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
               <title>Drifto</title>
               <meta name="description"
-                    content="The ultimate mobile platform for discovering, booking, and managing experiences. Coming soon to iOS and Android."/>
+                    content="The ultimate mobile platform for discovering, booking, and managing experiences."/>
               <meta name="author" content="Drifto"/>
+              <meta property="og:type" content="website" />
+              <meta property="og:image" content="/logo-extend.png" />
           </head>
           <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <ClientProviders>

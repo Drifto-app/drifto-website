@@ -15,8 +15,8 @@ interface Event {
 }
 
 interface PageProps {
-    params: { id: string }
-    searchParams: { [key: string]: string | string[] | undefined }
+    params: Promise<{ id: string }>
+    searchParams: Promise<Record<string, string | string[] | undefined>>
 }
 
 // Server-side fetch without auth (for bots and crawlers)
@@ -62,57 +62,27 @@ function createQueryString(searchParams: { [key: string]: string | string[] | un
 
 // Generate dynamic metadata for SEO and social sharing
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-    const resolvedParams = await params
-
-    const event = await getPublicEvent(resolvedParams.id)
-
-    if (!event) {
-        return {
-            title: 'Event Not Found',
-            description: 'The requested event could not be found.'
-        }
-    }
-
+    const { id } = await params
+    const event = await getPublicEvent(id)
+    if (!event) return { title: 'Event Not Found', description: 'The requested event could not be found.' }
     const optimizedImage = optimizeCloudinaryUrl(event.titleFileUrl)
     const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/m/events/${event.id}`
 
     return {
         title: `${event.title.toUpperCase()} | Drifto`,
         description: event.description || `Join us for ${event.title} on ${new Date(event.startTime).toLocaleDateString()}`,
-
         openGraph: {
             title: event.title.toUpperCase(),
             description: event.description || `Join us for ${event.title}`,
             type: 'website',
             url: eventUrl,
-            images: [
-                {
-                    url: optimizedImage,
-                    width: 1200,
-                    height: 630,
-                    alt: event.title,
-                },
-            ],
+            images: [{ url: optimizedImage, width: 1200, height: 630, alt: event.title }],
             locale: 'en_US',
             siteName: 'Drifto',
         },
-
-        twitter: {
-            card: 'summary_large_image',
-            title: event.title.toUpperCase(),
-            description: event.description || `Join us for ${event.title}`,
-            images: [optimizedImage],
-        },
-
-        // Additional SEO metadata
-        alternates: {
-            canonical: eventUrl,
-        },
-
-        // Schema.org structured data
-        other: {
-            'event:start_time': new Date(event.startTime).toLocaleDateString(),
-        }
+        twitter: { card: 'summary_large_image', title: event.title.toUpperCase(), description: event.description || `Join us for ${event.title}`, images: [optimizedImage] },
+        alternates: { canonical: eventUrl },
+        other: { 'event:start_time': new Date(event.startTime).toLocaleDateString() },
     }
 }
 
@@ -259,18 +229,11 @@ export default async function EventPage({ params, searchParams }: PageProps) {
     const resolvedParams = await params
     const resolvedSearchParams = await searchParams
 
-    // Check if this is a bot/crawler request
     const isBot = isBotRequest(userAgent)
 
     if (isBot) {
-        // Serve static content for bots
         const event = await getPublicEvent(resolvedParams.id)
-
-        if (!event) {
-            notFound()
-        }
-
-        // Return minimal HTML for bots with structured data
+        if (!event) notFound()
         return (
             <div className="min-h-[100dvh] bg-gray-50 py-8">
                 <script
@@ -287,15 +250,16 @@ export default async function EventPage({ params, searchParams }: PageProps) {
                         })
                     }}
                 />
-
                 <div className="max-w-4xl mx-auto px-4">
                     <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-                        <Image
-                            src={event.titleFileUrl}
-                            alt={event.title}
-                            fill
-                            className="w-full h-64 object-cover rounded-md"
-                        />
+                        <div className="relative h-64">
+                            <Image
+                                src={event.titleFileUrl}
+                                alt={event.title}
+                                fill
+                                className="object-cover rounded-md"
+                            />
+                        </div>
                         <div className="p-6">
                             <h1 className="text-3xl font-bold mb-4 capitalize">{event.title}</h1>
                             <div className="flex flex-wrap gap-4 text-gray-600 mb-4">
@@ -309,9 +273,6 @@ export default async function EventPage({ params, searchParams }: PageProps) {
         )
     }
 
-    // For regular users, redirect to your existing client-side page
     const queryString = createQueryString(resolvedSearchParams)
-    const redirectUrl = `/m/events/${resolvedParams.id}${queryString ? `?${queryString}` : ''}`
-
-    redirect(redirectUrl)
+    redirect(`/m/events/${resolvedParams.id}${queryString ? `?${queryString}` : ''}`)
 }

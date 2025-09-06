@@ -38,7 +38,7 @@ export const RecentSearchCard = ({
         if(type === "user") {
             router.push(`/m/user/${item.id}?prev=${prev}`);
         } else {
-            router.push(`/m/event/${item.id}?prev=${prev}`);
+            router.push(`/m/events/${item.id}?prev=${prev}`);
         }
     }
 
@@ -142,7 +142,7 @@ export const SuggestionEventCard = ({
             )}
             {...props}
 
-            onClick={() => router.push(`/m/event/${event.id}?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}
+            onClick={() => router.push(`/m/events/${event.id}?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}
         >
             <div className="relative w-50 flex rounded-md items-center justify-center">
                 <AspectRatio ratio={4/3}>

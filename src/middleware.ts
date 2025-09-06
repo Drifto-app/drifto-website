@@ -3,7 +3,7 @@ import {NextRequest, NextResponse} from "next/server";
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
-    if ((pathname === "/event" || pathname.startsWith("/event/")) && !pathname.startsWith("/m/event")) {
+    if ((pathname === "/events" || pathname.startsWith("/events/")) && !pathname.startsWith("/m/events")) {
         return NextResponse.redirect(new URL(`/m${pathname}`, request.url));
     }
 

@@ -49,7 +49,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, className, ...pr
     const [loading, setLoading] = useState<boolean>(false);
 
     const handleRemoveClick = async (e: React.MouseEvent, username: string) => {
-        // Prevent event bubbling to parent div
+        // Prevent events bubbling to parent div
         e.preventDefault();
         e.stopPropagation();
 

@@ -203,7 +203,7 @@ export const SingleEventDetails = ({
                             <div className="w-full flex flex-row gap-1 justify-between px-6 sm:px-20">
                                 <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => router.push(
                                     `/m/comment/${event.id}` +
-                                    `?prev=${encodeURIComponent(`/m/event/${event.id}`)}` +
+                                    `?prev=${encodeURIComponent(`/m/events/${event.id}`)}` +
                                     `&type=EVENT`
                                 )}>
                                     <p className="font-semibold text-neutral-800 text-2xl">
@@ -215,7 +215,7 @@ export const SingleEventDetails = ({
                                 </div>
                                 <div className="w-full flex flex-col gap-1 items-center cursor-pointer" onClick={() => router.push(
                                     `/m/reaction/${event.id}` +
-                                    `?prev=${encodeURIComponent(`/m/event/${event.id}`)}` +
+                                    `?prev=${encodeURIComponent(`/m/events/${event.id}`)}` +
                                     `&type=EVENT`
                                 )}>
                                     <p className="font-semibold text-neutral-800 text-2xl">

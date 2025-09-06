@@ -199,7 +199,7 @@ export const SingleEventMap = ({
         };
     }, [isMobile]);
 
-    // Extract location data from event
+    // Extract location data from events
     const latitude = event?.data?.location?.latitude || event?.location?.latitude || 6.5244;
     const longitude = event?.data?.location?.longitude || event?.location?.longitude || 3.3792;
     const eventTitle = event?.data?.title || event?.title || '';

@@ -36,11 +36,14 @@ export const SingleEventHeader = ({
             // Use custom back navigation if provided
             onBackClick();
         } else if (isCoHostComponent) {
-            // Fallback for legacy usage
-            setActiveScreen?.(prev || 'details');
+            if(activeScreen !== "details") {
+                setActiveScreen?.(prev || 'details');
+                return
+            }
+            router.push(prev !== null ? prev : "/");
         } else {
             // Default router navigation
-            router.push(prev != null ? prev : "/");
+            router.push(prev !== null ? prev : "/");
         }
     }
 

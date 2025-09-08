@@ -28,7 +28,7 @@ export default function CommentManagePage(
     const router = useRouter();
 
     // State for infinite scroll
-    const [mainComment, setMainComment] = useState<{[key: string]: any}>({});
+    const [mainComment, setMainEntity] = useState<{[key: string]: any}>({});
     const [comments, setComments] = useState<any[]>([]);
     const [numOfComments, setNumOfComments] = useState<number>(0);
     const [title, setTitle] = useState<string>("");
@@ -100,7 +100,7 @@ export default function CommentManagePage(
             if(resetData) {
                 if (type === "COMMENT_REPLY") {
                     const response = await authApi.get(`/comment/${entityId}`);
-                    setMainComment(response.data.data);
+                    setMainEntity(response.data.data);
                 }
             }
 

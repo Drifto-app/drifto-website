@@ -32,7 +32,7 @@ export const OrderContent = ({
     const searchParams = useSearchParams();
     const pathname = usePathname();
 
-    const [isOrderSucessful, setIsOrderSucessful] = useState<boolean>(false);
+    const [isOrderSuccessful, setIsOrderSuccessful] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const [total, setTotal] = useState<number>(0);
     const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -94,7 +94,7 @@ export const OrderContent = ({
             if(!response.data.data.completed) {
                 router.push(`/m/payment/${response.data.data.orderId}?prev=${encodeURIComponent(pathname + "?" + searchParams)}`);
             } else {
-                setIsOrderSucessful(true);
+                setIsOrderSuccessful(true);
             }
         } catch (error: any) {
             showTopToast("error", error.response?.data?.description);
@@ -103,7 +103,7 @@ export const OrderContent = ({
         }
     }
 
-    if(isOrderSucessful) {
+    if(isOrderSuccessful) {
         return (
             <OrderSuccessDetails />
         )

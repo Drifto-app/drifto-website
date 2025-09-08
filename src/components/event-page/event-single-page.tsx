@@ -6,7 +6,6 @@ import {SingleEventDetails} from "@/components/event-page/details";
 import {SingleEventFooter} from "@/components/event-page/footer";
 import * as React from "react";
 import {cn} from "@/lib/utils";
-import {useSpotGradient} from "@/lib/util";
 import {SingleEventMap} from "@/components/event-page/event-map";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {SingleEventReviews} from "@/components/event-page/event-review";

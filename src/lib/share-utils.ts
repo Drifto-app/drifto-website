@@ -1,4 +1,3 @@
-// lib/shareUtils.ts
 export interface ShareData {
     title: string;
     url: string;

@@ -11,7 +11,7 @@ import { AiOutlineSend } from "react-icons/ai";
 import { authApi } from "@/lib/axios";
 import { toast } from "react-toastify";
 import { useState } from "react";
-import {useRouter} from "next/navigation";
+import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {cn} from "@/lib/utils";
 import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
 import {showTopToast} from "@/components/toast/toast-util";
@@ -24,6 +24,9 @@ interface CommentCardProps extends React.ComponentProps<"div"> {
 
 export function CommentCard({ comment, currentPathUrl, disabled, className, ...props}: CommentCardProps) {
     const router = useRouter();
+
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const [isLiked, setIsLiked] = useState<boolean>(comment.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
@@ -62,7 +65,7 @@ export function CommentCard({ comment, currentPathUrl, disabled, className, ...p
         )} {...props}>
             {/* author + date */}
             <div className="flex items-center justify-between">
-               <UserSinglePlaceholder user={comment.userPlaceHolder} />
+               <UserSinglePlaceholder user={comment.userPlaceHolder} prev={`${pathname}?${searchParams}`} />
                 <p className="text-md text-neutral-500">
                     {new Date(comment.createdAt).toLocaleDateString()}
                 </p>

@@ -182,7 +182,7 @@ export const EventEdit = ({
             setEvent(response.data.data);
             setMainActiveScreen("details")
         } catch (error: any) {
-            showTopToast("error", error.message);
+            showTopToast("error", error.response?.data?.description);
         }finally {
             setLoading(false);
         }

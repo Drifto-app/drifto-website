@@ -65,7 +65,7 @@ export const SearchComponent = ({
                 });
                 setSuggestionData(response.data.data);
             } catch {
-                // optional: handle error UI
+                showTopToast("error", "Something went wrong");
             } finally {
                 setSuggestionLoading(false);
             }

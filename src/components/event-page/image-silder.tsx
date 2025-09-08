@@ -1,15 +1,7 @@
 import * as React from "react";
-import { cn } from "@/lib/utils";
 import Image from "next/image";
-
-// ShadCN Carousel & AspectRatio components
-import { Card, CardContent } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-
-// Headless UI Dialog for modal pop-up
 import { Dialog } from '@headlessui/react';
-import { MdCancel } from "react-icons/md";
 import {X} from "lucide-react";
 
 interface SnapshotCarouselProps {

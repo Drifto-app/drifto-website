@@ -113,7 +113,7 @@ export const RecentSearchCard = ({
                 </div>
                 <div className="w-full  max-w-[70%] flex flex-col" onClick={onClick}>
                     <div className="flex gap-2 items-center">
-                        <p className="capitalize text-black text-sm font-bold truncate">{item.username}</p>
+                        <p className="text-black text-sm font-bold truncate">{item.username}</p>
                         <UserVerificationBadge user={item} />
                     </div>
                     <p className="text-sm capitalize text-neutral-400">{type}</p>

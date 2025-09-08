@@ -266,7 +266,12 @@ export const SingleEventDetails = ({
                         </EventSingleContentText>
                         <EventSingleContentText isLine={false} headText="Hosted By" className="flex-col items-start shadow-xl">
                             {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
-                                <UserEventSinglePlaceholder user={coHost} key={coHost.id} isHost={(i + 1) === event.coHosts.length} />
+                                <UserEventSinglePlaceholder
+                                    user={coHost}
+                                    key={coHost.id}
+                                    isHost={(i + 1) === event.coHosts.length}
+                                    prev={`/m/events/${event.id}`}
+                                />
                             ))}
                             {event.hostCollaborationStatus == "HOST" && (
                                 <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
@@ -421,7 +426,7 @@ export const SingleEventDetails = ({
                                 user={coHost}
                                 key={coHost.id}
                                 isHost={(i + 1) === event.coHosts.length}
-                                onClick={() => {router.push(`/user/m/${coHost.id}?prev=${pathname}?${searchParams}`)}} />
+                                prev={`/m/events/${event.id}`} />
                         ))}
                     </EventSingleContentText>
                     <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">

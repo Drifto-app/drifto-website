@@ -1,4 +1,3 @@
-// components/ui/ShareDialog.tsx
 "use client";
 
 import * as React from "react";
@@ -8,7 +7,6 @@ import { IoShareSocialOutline } from "react-icons/io5";
 import { FaCopy, FaWhatsapp, FaLinkedin, FaTelegram } from "react-icons/fa";
 import { canUseNativeShare, shareViaWeb, copyToClipboard, openSocialShare } from "@/lib/share-utils";
 import {FaXTwitter} from "react-icons/fa6";
-import { toast } from "sonner";
 import {showTopToast} from "@/components/toast/toast-util";
 
 interface ShareDialogProps {

@@ -218,7 +218,8 @@ export const CoHostManage = ({
                                         key={coHost.id}
                                         isHost={(i + 1) === event.coHosts.length || event.coHosts.length > 1}
                                         removeClick={handleCohostRemove}
-                                        onClick={() => {router.push(`/user/m/${coHost.id}?prev=${pathname}?${searchParams}`)}} />
+                                        prev={`${pathname}?${searchParams}`}
+                                    />
                                 </li>
                             )
                         })}

@@ -320,7 +320,7 @@ export const CreateEventContent = ({
             showTopToast("success", "Create experience successfully");
             setActiveScreen("success")
         } catch (error: any) {
-            showTopToast("error", error.message);
+            showTopToast("error", error.response?.data?.description);
         }finally {
             setLoading(false);
         }

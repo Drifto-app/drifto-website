@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button";
 
 interface UserPlaceholderProps extends React.ComponentProps<"div"> {
     user: {[key: string]: any};
+    prev?: string;
 }
 
 interface UserEventSinglePlaceholderProps extends UserPlaceholderProps {
@@ -43,7 +44,7 @@ function UserVerificationBadge({user}: {user: {[key: string]: any}}) {
     return null;
 }
 
-function UserEventSinglePlaceholder({user, isHost, removeClick, className, ...props }: UserEventSinglePlaceholderProps) {
+function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className, ...props }: UserEventSinglePlaceholderProps) {
     const router = useRouter();
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -65,7 +66,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, className, ...pr
     }
 
     const handleUserClick = () => {
-        router.push("/m/user/" + user.id);
+        router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`);
     }
 
     if(removeClick) {
@@ -152,14 +153,14 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, className, ...pr
     )
 }
 
-function UserSinglePlaceholder({user, className, ...props }: UserPlaceholderProps) {
+function UserSinglePlaceholder({user, prev, className, ...props }: UserPlaceholderProps) {
     const router = useRouter();
 
     return (
         <div key={user.id} className={cn(
             "flex flex-row gap-4 cursor-pointer",
             className
-        )} {...props} onClick={() => router.push("/m/user/" + user.id)}>
+        )} {...props} onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}` + user.id)}>
             <div className="w-8 h-8 flex flex-row items-center">
                 {
                     user.profileImageUrl !== null

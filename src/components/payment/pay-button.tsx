@@ -32,7 +32,6 @@ export const PayButton = ({
             email,
             channels: [paymentType ?? "card"],
             reference,
-            // split_code: process.env.NEXT_PUBLIC_PAYSTACK_SPLITCODE!,
             onSuccess: () => {
                 if (onSuccess) onSuccess();
             },

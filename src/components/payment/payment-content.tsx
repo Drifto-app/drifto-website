@@ -69,7 +69,7 @@ export const PaymentContent = ({
         )
     }
 
-    const renderPayButton = (buttonValue: string, paymentType: "card" | "bank" | "ussd" | "qr" | "bank_transfer") => {
+    const renderPayButton = (buttonValue: string, paymentType: "card" | "ussd" | "qr" | "bank_transfer" | "apple_pay" | "mobile_money" | "eft" | "bank") => {
         return (
             <PayButton
                 email={user?.email}

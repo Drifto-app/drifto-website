@@ -15,6 +15,7 @@ import {useShare} from "@/hooks/share-option";
 import {ShareDialog} from "@/components/share-button/share-option";
 import {AvatarImage, Avatar, AvatarFallback} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
+import {showTopToast} from "@/components/toast/toast-util";
 
 // Types
 interface BookingItem {
@@ -222,7 +223,7 @@ function useEvents() {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to load events";
       setError(errorMessage);
-      console.error("Error loading events:", err);
+      showTopToast("error", `Error loading events: ${errorMessage}`)
     } finally {
       setIsLoading(false);
     }
@@ -305,7 +306,7 @@ function EventsCard({ event }: EventsCardProp) {
               width={800}
               height={500}
               src={event.titleImage}
-              onClick={() => router.push(`/m/event/${event.id}?prev=${encodeURIComponent("/?screen=plans")}`)}
+              onClick={() => router.push(`/m/events/${event.id}?prev=${encodeURIComponent("/?screen=plans")}`)}
               className="w-full max-h-96 object-cover rounded-2xl"
               alt=""
           />

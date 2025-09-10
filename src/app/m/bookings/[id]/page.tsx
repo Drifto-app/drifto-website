@@ -11,13 +11,15 @@ import { FaArrowLeft } from "react-icons/fa";
 import { toPng } from "html-to-image";
 import { ScreenProvider } from "@/components/screen/screen-provider";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoutes";
+import {useAuthStore} from "@/store/auth-store";
+import {showTopToast} from "@/components/toast/toast-util";
 
 export default function Page() {
   const [tickets, setTickets] = useState<any[]>();
   const [eventDetails, setEventDetails] = useState<any>();
 
   const { id } = useParams();
-  const router = useRouter();
+  const {user} = useAuthStore()
 
   const fetchTickets = async () => {
     const response = await authApi.get("/userTicket/plan/ticket/" + id, {
@@ -42,30 +44,34 @@ export default function Page() {
     fetchEventDetails();
   }, []);
   return (
-    <div>
-      <DetailsHeader title={eventDetails?.title ?? ""} />
-      <div className=" flex flex-col gap-8 p-6">
-        {eventDetails &&
-          tickets?.map((ticket: any, index) => {
-            return (
-              <div key={ticket.id}>
-                <TicketCard
-                  title={eventDetails?.title}
-                  titleImg={eventDetails?.titleImage}
-                  name={""}
-                  ticketName={ticket.ticketName}
-                  date={eventDetails?.startTime}
-                  used={ticket.markedUsed}
-                  index={index}
-                  noOfTickets={tickets.length}
-                  ticketReference={ticket.ticketReference}
-                  eventId={id!.toString()}
-                />
-              </div>
-            );
-          })}
-      </div>
-    </div>
+    <ProtectedRoute>
+      <ScreenProvider>
+        <div>
+          <DetailsHeader title={eventDetails?.title ?? ""} />
+          <div className=" flex flex-col gap-8 p-6">
+            {eventDetails &&
+                tickets?.map((ticket: any, index) => {
+                  return (
+                      <div key={ticket.id}>
+                        <TicketCard
+                            title={eventDetails?.title}
+                            titleImg={eventDetails?.titleImage}
+                            name={`${user?.firstName} ${user?.lastName}`}
+                            ticketName={ticket.ticketName}
+                            date={eventDetails?.startTime}
+                            used={ticket.markedUsed}
+                            index={index}
+                            noOfTickets={tickets.length}
+                            ticketReference={ticket.ticketReference}
+                            eventId={id!.toString()}
+                        />
+                      </div>
+                  );
+                })}
+          </div>
+        </div>
+      </ScreenProvider>
+    </ProtectedRoute>
   );
 }
 interface headerProp {
@@ -125,6 +131,7 @@ interface ticketCardProp {
 }
 
 function TicketCard({
+  eventId,
   title,
   titleImg,
   name,
@@ -135,6 +142,7 @@ function TicketCard({
   index,
   noOfTickets,
 }: ticketCardProp) {
+  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [downloading, setDownloading] = useState(false);
 
@@ -152,7 +160,7 @@ function TicketCard({
       link.href = dataUrl;
       link.click();
     } catch (err) {
-      console.error("Failed to download ticket:", err);
+      showTopToast("error", "Failed to download ticket")
     } finally {
       setDownloading(false);
     }
@@ -164,7 +172,7 @@ function TicketCard({
         <div className=" text-blue-600 px-3 py-2 flex items-center justify-center rounded-full border border-black">
           <span>{used ? "Used" : "Not Used"}</span>
         </div>
-        <button className=" p-2 border border-black rounded-full">
+        <button className=" p-2 border border-black rounded-full" onClick={() => router.push(`/m/events/${eventId}?prev=${encodeURIComponent(`/m/bookings/${eventId}`)}`)}>
           <Inbox />
         </button>
         <button

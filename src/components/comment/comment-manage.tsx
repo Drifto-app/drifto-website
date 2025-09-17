@@ -13,6 +13,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {IoSend} from "react-icons/io5";
 import {showTopToast} from "@/components/toast/toast-util";
+import {PostCard} from "@/components/post/post-card";
 
 interface CommentManageProps extends React.ComponentProps<"div">{
     entityId: string;
@@ -28,7 +29,7 @@ export default function CommentManagePage(
     const router = useRouter();
 
     // State for infinite scroll
-    const [mainComment, setMainEntity] = useState<{[key: string]: any}>({});
+    const [mainEntity, setMainEntity] = useState<{[key: string]: any}>({});
     const [comments, setComments] = useState<any[]>([]);
     const [numOfComments, setNumOfComments] = useState<number>(0);
     const [title, setTitle] = useState<string>("");
@@ -98,10 +99,13 @@ export default function CommentManagePage(
 
         try {
             if(resetData) {
+                let response
                 if (type === "COMMENT_REPLY") {
-                    const response = await authApi.get(`/comment/${entityId}`);
-                    setMainEntity(response.data.data);
+                    response = await authApi.get(`/comment/${entityId}`);
+                } else if(type === "POST") {
+                    response = await authApi.get(`/post/${entityId}`);
                 }
+                setMainEntity(response?.data.data);
             }
 
             const currentPage = resetData ? 1 : pageRef.current;
@@ -278,7 +282,13 @@ export default function CommentManagePage(
             case "COMMENT_REPLY":
                 return(
                     <div className="w-full pt-2">
-                        <CommentCard comment={mainComment} currentPathUrl={currentPathUrl} disabled={true} className="rounded-none" />
+                        <CommentCard comment={mainEntity} currentPathUrl={currentPathUrl} disabled={true} className="rounded-none" />
+                    </div>
+                )
+            case "POST":
+                return (
+                    <div className="w-full pt-2 px-4">
+                        <PostCard postContent={mainEntity} disabled={true} />
                     </div>
                 )
         }
@@ -355,11 +365,6 @@ export default function CommentManagePage(
                     <Loader className="h-8 w-8"/>
                 </div>
             )}
-
-            {/* End of content indicator */}
-            {/*{!hasMore && comments.length > 0 && (*/}
-            {/*    <p className="py-4 text-gray-500">You have reached the end!</p>*/}
-            {/*)}*/}
 
             {/* No comments message */}
             {!loading && !initialLoading && comments.length === 0 && (

@@ -156,7 +156,7 @@ export const UserEvents = ({
                 ))}
             </div>
 
-            <div ref={sentinelRef} aria-hidden />
+            <div ref={sentinelRef} aria-hidden className="h-1" />
 
             {loading && (
                 <div className="flex justify-center py-4">

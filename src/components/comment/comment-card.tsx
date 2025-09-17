@@ -75,7 +75,7 @@ export function CommentCard({ comment, currentPathUrl, disabled, className, ...p
             <p className="text-neutral-800 text-lg mt-3 mb-5">{comment.comment}</p>
 
             {/* actions */}
-            <div className="flex items-center justify-between gap-6 text-neutral-500 font-bold">
+            <div className="flex items-center justify-between gap-6 text-neutral-400 font-bold">
                 <div className="flex items-center gap-2">
                     <span className="text-md">{totalReactions}</span>
                     <button

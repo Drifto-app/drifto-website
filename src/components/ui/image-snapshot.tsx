@@ -1,15 +1,16 @@
+"use client"
+
 import * as React from "react";
 import { Plus, X } from "lucide-react";
 import { authApi } from "@/lib/axios";
-import { toast } from "react-toastify";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
+import {cn, MAX_IMAGE_SIZE} from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import {LoaderSmall} from "@/components/ui/loader";
-import {showTopToast} from "@/components/toast/toast-util";
+import { LoaderSmall } from "@/components/ui/loader";
+import { showTopToast } from "@/components/toast/toast-util";
+import {ChangeEvent, useState} from "react";
 
 interface ImageSnapshotsProps {
     initialImages?: string[];
@@ -20,14 +21,48 @@ interface ImageSnapshotsProps {
 }
 
 export const ImageSnapshots = ({
-    initialImages = [], onImageAdd, setSubmitDisabled, onImageRemove, maxImages = 10,
-}: ImageSnapshotsProps ) => {
-    const [images, setImages] = React.useState<string[]>(initialImages);
-    const [isUploading, setIsUploading] = React.useState(false);
-    const [modalOpen, setModalOpen] = React.useState(false);
-    const [activeImage, setActiveImage] = React.useState<string | null>(null);
+                                   initialImages = [],
+                                   onImageAdd,
+                                   setSubmitDisabled,
+                                   onImageRemove,
+                                   maxImages = 10,
+                               }: ImageSnapshotsProps) => {
+    const [images, setImages] = useState<string[]>(initialImages);
+    const [isUploading, setIsUploading] = useState(false);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [activeImage, setActiveImage] = useState<string | null>(null);
 
-    // Upload handler
+    const uploadSingle = async (file: File): Promise<string | null> => {
+        try {
+            const formData = new FormData();
+            formData.append("mediaFile", file);
+            formData.append(
+                "fileData",
+                new Blob([JSON.stringify({ mediaFileType: "EVENT_SCREENSHOT" })], {
+                    type: "application/json",
+                })
+            );
+
+            const res = await authApi.post("/file/upload", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+
+            if (!res.data?.success) {
+                showTopToast("error", res.data?.description || "Upload failed.");
+                return null;
+            }
+
+            return res.data.data?.url ?? null;
+        } catch (error: any) {
+            showTopToast(
+                "error",
+                error?.response?.data?.description || "Upload failed. Please try again."
+            );
+            return null;
+        }
+    };
+
+    // (kept) single add API, now uses helper
     const handleImageAdd = async (file: File) => {
         if (images.length >= maxImages) {
             showTopToast("error", `Maximum ${maxImages} images allowed`);
@@ -35,33 +70,62 @@ export const ImageSnapshots = ({
         }
         setIsUploading(true);
         setSubmitDisabled(true);
-        try {
-            const formData = new FormData();
-            formData.append("mediaFile", file);
-            formData.append(
-                "fileData",
-                new Blob(
-                    [JSON.stringify({ mediaFileType: "EVENT_SCREENSHOT" })],
-                    { type: "application/json" }
-                )
-            );
-            const res = await authApi.post("/file/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            if (!res.data.success) {
-                showTopToast("error", res.data.description);
-                return;
-            }
-            const url = res.data.data.url;
+        const url = await uploadSingle(file);
+        if (url) {
             const next = [...images, url];
             setImages(next);
             onImageAdd?.(next);
-        } catch (error: any) {
-            showTopToast("error", error.response?.data?.description || "Upload failed. Please try again.");
-        } finally {
-            setIsUploading(false);
-            setSubmitDisabled(false);
         }
+        setIsUploading(false);
+        setSubmitDisabled(false);
+    };
+
+    // NEW: batch add multiple files at once
+    const handleImagesAddMany = async (files: FileList | null) => {
+        if (!files || files.length === 0) return;
+
+        const all = Array.from(files);
+        const imageFiles = all.filter((file) => file.type.startsWith("image/") && file.size <= MAX_IMAGE_SIZE);
+
+        if (imageFiles.length === 0) {
+            showTopToast("error", "Please select valid image files");
+            return;
+        }
+
+        const slots = Math.max(0, maxImages - images.length);
+        if (slots === 0) {
+            showTopToast("error", `Maximum ${maxImages} images allowed`);
+            return;
+        }
+
+        const toUpload = imageFiles.slice(0, slots);
+        if (toUpload.length < imageFiles.length) {
+            showTopToast(
+                "error",
+                `Only ${slots} more image${slots === 1 ? "" : "s"} allowed (extra file${
+                    imageFiles.length - slots === 1 ? "" : "s"
+                } ignored).`
+            );
+        }
+
+        setIsUploading(true);
+        setSubmitDisabled(true);
+
+        const uploaded: string[] = [];
+
+        for (const f of toUpload) {
+            const url = await uploadSingle(f);
+            if (url) uploaded.push(url);
+        }
+
+        if (uploaded.length > 0) {
+            const next = [...images, ...uploaded];
+            setImages(next);
+            onImageAdd?.(next);
+        }
+
+        setIsUploading(false);
+        setSubmitDisabled(false);
     };
 
     // Remove handler
@@ -71,14 +135,9 @@ export const ImageSnapshots = ({
         onImageRemove?.(next);
     };
 
-    // File picker
-    const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const f = e.target.files?.[0];
-        if (f && f.type.startsWith("image/")) {
-            handleImageAdd(f);
-        } else {
-            showTopToast("error", "Please select a valid image file");
-        }
+    const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
+        const files = e.target.files;
+        handleImagesAddMany(files);
         e.target.value = "";
     };
 
@@ -87,6 +146,7 @@ export const ImageSnapshots = ({
         setActiveImage(src);
         setModalOpen(true);
     };
+
     const closeModal = () => {
         setModalOpen(false);
         setActiveImage(null);
@@ -101,6 +161,7 @@ export const ImageSnapshots = ({
                     <input
                         type="file"
                         accept="image/*"
+                        multiple
                         className="hidden"
                         onChange={handleFileSelect}
                     />
@@ -157,7 +218,8 @@ export const ImageSnapshots = ({
                                 <Card className="overflow-hidden p-0">
                                     <CardContent className="p-0">
                                         <AspectRatio ratio={4 / 3}>
-                                            <label className="flex flex-col items-center justify-center w-full h-full border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition">
+                                            <label
+                                                className="flex flex-col items-center justify-center w-full h-full border-2 border-dashed rounded-lg cursor-pointer hover:bg-gray-50 transition">
                                                 {isUploading ? (
                                                     <LoaderSmall />
                                                 ) : (
@@ -169,6 +231,7 @@ export const ImageSnapshots = ({
                                                 <input
                                                     type="file"
                                                     accept="image/*"
+                                                    multiple
                                                     className="hidden"
                                                     disabled={isUploading}
                                                     onChange={handleFileSelect}
@@ -207,7 +270,6 @@ export const ImageSnapshots = ({
                             width={800}
                             height={600}
                             className="object-contain w-full h-auto"
-                            // style={{ maxHeight: "95vh" }}
                         />
                     )}
                 </Dialog.Panel>

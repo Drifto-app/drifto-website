@@ -147,7 +147,7 @@ export const SearchComponent = ({
                 }
             },
             {
-                root: rootEl, // null => window; element => your scroll container
+                root: rootEl,
                 rootMargin: "200px",
                 threshold: 0,
             }

@@ -424,23 +424,13 @@ export const CreatePostContent = ({
                     <div className="w-full flex flex-col items-center px-4 pt-6 gap-6">
                         <div className="w-full flex gap-4 relative">
                         <span className="w-18 h-18">
-                            {
-                                user?.profileImage !== null
-                                    ? <AspectRatio ratio={1/1}>
+                            <AspectRatio ratio={1/1}>
                                         <Image
-                                            src={user?.profileImage}
+                                            src={user?.profileImage || "/default.jpeg"}
                                             alt={user?.username}
                                             fill
                                             className="object-cover rounded-full" />
-                                    </AspectRatio>
-                                    : <AspectRatio ratio={1/1}>
-                                        <Image
-                                            src={"/default.jpeg "}
-                                            alt={user.username}
-                                            fill
-                                            className="object-cover rounded-full" />
-                                    </AspectRatio>
-                            }
+                            </AspectRatio>
                         </span>
                             <div className="flex-1 relative">
                                <textarea

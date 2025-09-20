@@ -11,13 +11,12 @@ import Image from "next/image";
 import {Button} from "@/components/ui/button";
 import {HiOutlineRectangleStack} from "react-icons/hi2";
 import {Card, CardContent} from "@/components/ui/card";
-import {X, User, Hash} from "lucide-react";
+import {X, Hash} from "lucide-react";
 import {LoaderSmall} from "@/components/ui/loader";
 import {showTopToast} from "@/components/toast/toast-util";
 import {authApi} from "@/lib/axios";
 import {Dialog} from "@headlessui/react";
 import {UserVerificationBadge} from "@/components/ui/user-placeholder";
-import {IoClose} from "react-icons/io5";
 
 interface CreatePostContentProps extends ComponentProps<"div">{
     prev: string | null,

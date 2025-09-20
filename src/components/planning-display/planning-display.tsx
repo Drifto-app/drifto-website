@@ -67,7 +67,7 @@ const FILTER_OPTIONS = [
 ] as const;
 
 // Custom hook for infinite scroll
-function useInfiniteScroll(
+export function useInfiniteScroll(
   callback: () => void,
   hasMore: boolean,
   isLoading: boolean

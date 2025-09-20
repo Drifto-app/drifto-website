@@ -1,24 +1,23 @@
+"use client"
+
+import { cn } from "@/lib/utils";
 import {ComponentProps, useCallback, useEffect, useRef, useState} from "react";
-import {cn} from "@/lib/utils";
-import {useRouter} from "next/navigation";
-import {IoSearchSharp} from "react-icons/io5";
-import {Input} from "@/components/ui/input";
-import * as React from "react";
 import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
+import {PostCard} from "@/components/post/post-card";
+import * as React from "react";
 import {Loader} from "@/components/ui/loader";
-import {UserEvent} from "@/components/user/user-event";
 
-interface UserEventsProps extends ComponentProps<"div"> {
+interface UserPostsProps extends ComponentProps<"div">{
     user: {[key:string]: any};
     isForUser?: boolean;
 }
 
-export const UserEvents = ({
+export const UserPosts = ({
     user, isForUser = false, className, ...props
-}: UserEventsProps) => {
-    const [searchText, setSearchText] = useState<string>("");
-    const [events, setEvents] = useState<Array<{[key: string]: any}>>([]);
+}: UserPostsProps) => {
+
+    const [posts, setPosts] = useState<Array<{[key: string]: any}>>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -29,8 +28,8 @@ export const UserEvents = ({
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const scrollRootRef = useRef<HTMLDivElement | null>(null);
 
-    const loadEvents = useCallback(
-        async (query: string, reset: boolean = false) => {
+    const loadPosts = useCallback(
+        async (reset: boolean = false) => {
             if (loadingRef.current || (!reset && !hasMoreRef.current)) return;
 
             loadingRef.current = true;
@@ -41,27 +40,26 @@ export const UserEvents = ({
                 const currentPage = reset ? 1 : pageRef.current;
 
                 const params: { [key: string]: string | number } = {
-                    search: query.trim().toLowerCase(),
                     pageSize: 10,
                     pageNumber: currentPage,
                 };
 
                 let response
                 if(isForUser) {
-                    response = await authApi.get(`/event/user`, { params });
+                    response = await authApi.get(`/post/user`, { params });
                 } else {
-                    response = await authApi.get(`/event/user/${user.id}`, { params });
+                    response = await authApi.get(`/post/user/${user.id}`, { params });
                 }
 
-                const newEvents = response.data.data.data as Array<Record<string, any>>;
+                const newPosts = response.data.data.data as Array<Record<string, any>>;
 
                 if (reset) {
-                    setEvents(newEvents);
+                    setPosts(newPosts);
                     pageRef.current = 2;
                     setHasMore(true);
                     hasMoreRef.current = true;
                 } else {
-                    setEvents((prev) => [...prev, ...newEvents]);
+                    setPosts((prev) => [...prev, ...newPosts]);
                     pageRef.current = currentPage + 1;
                 }
 
@@ -81,13 +79,13 @@ export const UserEvents = ({
 
     // Initial load
     useEffect(() => {
-        setEvents([]);
+        setPosts([]);
         setHasMore(true);
         pageRef.current = 1;
         hasMoreRef.current = true;
         setError(null);
-        loadEvents("", true);
-    }, [loadEvents]);
+        loadPosts(true);
+    }, [loadPosts]);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;
@@ -102,7 +100,7 @@ export const UserEvents = ({
                     hasMoreRef.current &&
                     !error
                 ) {
-                    loadEvents(searchText);
+                    loadPosts();
                 }
             },
             {
@@ -114,51 +112,21 @@ export const UserEvents = ({
 
         observer.observe(sentinel);
         return () => observer.disconnect();
-    }, [loadEvents, error, searchText]);
-
-    useEffect(() => {
-        const debounceTimer = setTimeout(() => {
-            setEvents([]);
-            setError(null);
-            pageRef.current = 1;
-            hasMoreRef.current = true;
-            setHasMore(true);
-
-            loadEvents(searchText, true);
-        }, 300);
-
-        return () => clearTimeout(debounceTimer);
-    }, [searchText, loadEvents]);
+    }, [loadPosts, error]);
 
     return (
         <div
             className={cn(
                 "w-full flex flex-col gap-4 flex-1 pt-4 overflow-y-auto no-scrollbar pb-10",
-                className,
+                className
             )}
             {...props}
             ref={scrollRootRef}
             style={{ maxHeight: "calc(100dvh - 80px)" }}
         >
-            <div className="w-full px-4">
-                <div className="flex items-center w-full rounded-full bg-neutral-200 px-2">
-                    <IoSearchSharp size={30} className="text-neutral-400" />
-                    <Input
-                        name="search"
-                        type="search"
-                        inputMode="search"
-                        enterKeyHint="search"
-                        className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-medium text-lg py-4"
-                        placeholder={`Search ${user.username}'s experiences`}
-                        aria-label="Search"
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value) }
-                    />
-                </div>
-            </div>
-            <div className="w-full flex flex-col gap-10 px-4">
-                {events.map((event) => (
-                    <UserEvent event={event} key={event.id} />
+            <div className="flex flex-col gap-6">
+                {posts.map((post) => (
+                    <PostCard key={post.id} postContent={post} />
                 ))}
             </div>
 

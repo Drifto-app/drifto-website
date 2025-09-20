@@ -7,7 +7,7 @@ import Image from "next/image";
 import {FaRegEdit} from "react-icons/fa";
 import {showTopToast} from "@/components/toast/toast-util";
 import {LoaderSmall} from "@/components/ui/loader";
-import {cn} from "@/lib/utils";
+import {cn, MAX_IMAGE_SIZE} from "@/lib/utils";
 
 interface CoverImageUploaderProps extends ComponentProps<"div">{
     imageValue?: string;
@@ -34,7 +34,7 @@ export function CoverImageUploader({
     const handleFileChange = useCallback(async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
 
-        if (!file) return;
+        if (!file || !file.type.startsWith("image/") || file.size > MAX_IMAGE_SIZE) return;
 
         // 1) Show instant preview
         const previewUrl = URL.createObjectURL(file);
@@ -43,7 +43,6 @@ export function CoverImageUploader({
         setSubmitDisabled(true)
 
         try {
-            // 2) Send to your API
             const formData = new FormData();
             formData.append("mediaFile", file);
             formData.append("fileData",  new Blob([JSON.stringify({
@@ -119,6 +118,7 @@ export function CoverImageUploader({
                 </Button>
                 <input
                     ref={inputRef}
+                    multiple={false}
                     type="file"
                     accept="image/*"
                     className="hidden"

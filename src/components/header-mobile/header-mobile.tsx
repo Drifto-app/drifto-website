@@ -99,14 +99,13 @@ export const HeaderMobile = ({
             )}
             {...props}
         >
-            {location !== null && (
-                <div
-                    className="h-full w-90 rounded-full shadow-none border-none text-neutral-700 text-center font-black mb-3 capitalize te"
-                    onClick={handleLocationClick}
-                >
-                    {location || "No location"}
-                </div>
-            )}
+            <div
+                className="h-full w-90 rounded-full shadow-none border-none text-neutral-700 text-center font-black mb-3 capitalize te"
+                onClick={handleLocationClick}
+            >
+                {location || "No location"}
+            </div>
+
             <div
                 className="w-9/10 max-w-xl flex flex-row items-center border rounded-full px-4 py-3 shadow-md"
                 onClick={handleSearchClick}

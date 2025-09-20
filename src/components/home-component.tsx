@@ -9,6 +9,7 @@ import { useAuthStore } from "@/store/auth-store";
 import { ScreenProvider } from "@/components/screen/screen-provider";
 import { useSearchParams, useRouter } from "next/navigation";
 import PlanningDisplay from "./planning-display/planning-display";
+import {PostDisplay} from "@/components/post/post-display";
 
 interface EventDisplayRef {
   refresh: () => void;
@@ -51,9 +52,7 @@ export default function HomeContent() {
         );
       case "posts":
         return (
-          <div className="w-full">
-            <div>posts</div>
-          </div>
+            <PostDisplay />
         );
       case "updates":
         return (

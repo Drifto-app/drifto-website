@@ -27,6 +27,7 @@ import {
 import {MdContentCopy} from "react-icons/md";
 import {useAuthStore} from "@/store/auth-store";
 import {UserEvents} from "@/components/user/user-events";
+import {UserPosts} from "@/components/user/user-posts";
 
 interface UserProps extends ComponentProps<"div"> {
     user: {[key: string]: any}
@@ -114,9 +115,7 @@ export const UserContent = ({
                 )
             case "posts":
                 return (
-                    <div className="w-full flex-1 flex flex-col">
-                        Posts
-                    </div>
+                    <UserPosts user={user} />
                 )
             default:
                 return (

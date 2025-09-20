@@ -67,7 +67,6 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const optimizedImage = optimizeCloudinaryUrl(event.titleFileUrl)
     const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/m/events/${event.id}`
 
-    console.log(event)
 
     return {
         title: `${event.title.toUpperCase()} | Drifto`,

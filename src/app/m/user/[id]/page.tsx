@@ -25,7 +25,7 @@ export default function UserPage () {
             return
         }
 
-        const fetchEvent = async () => {
+        const fetchUser = async () => {
             try {
                 const response = await authApi.get(`/user/lookup/${id}`)
                 setUser(response.data.data);
@@ -36,7 +36,7 @@ export default function UserPage () {
             }
         };
 
-        fetchEvent();
+        fetchUser();
     }, [id]);
 
     if(error) {

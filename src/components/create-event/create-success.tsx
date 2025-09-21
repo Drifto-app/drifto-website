@@ -98,9 +98,9 @@ export const CreateEventSuccess = ({ event, onContinue }: CreateSuccessProps) =>
             <ShareDialog
                 isOpen={isShareDialogOpen}
                 onClose={closeShareDialog}
-                eventTitle={event.title}
-                eventUrl={eventUrl}
-                eventDescription={event.description}
+                title={event.title}
+                url={eventUrl}
+                description={event.description}
             />
         </>
     );

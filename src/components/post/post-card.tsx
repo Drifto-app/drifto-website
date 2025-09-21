@@ -4,24 +4,31 @@ import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 import {UserSinglePlaceholder} from "@/components/ui/user-placeholder";
 import * as React from "react";
-import {FaHeart, FaRegComment, FaRegHeart} from "react-icons/fa";
+import {FaFlag, FaHeart, FaRegComment, FaRegHeart} from "react-icons/fa";
 import {AiOutlineSend} from "react-icons/ai";
 import {MediaCarousel, MediaDialog} from "@/components/post/post-media";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import {SlOptionsVertical} from "react-icons/sl";
+import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer";
+import {MdDeleteOutline} from "react-icons/md";
 
 interface PostCardProps extends ComponentProps<"div">{
     postContent: {[key: string]: any};
     disabled?: boolean;
+    isForUser?: boolean;
+    onDelete?: (postId: string) => void;
 }
 
 export const PostCard = ({
-    postContent, disabled = false, className, ...props
+    postContent, disabled = false, isForUser = false, onDelete, className, ...props
 }: PostCardProps) => {
     const router = useRouter();
 
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
+    const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
+    const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
     const [isLiked, setIsLiked] = useState<boolean>(postContent.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
     const [totalReactions, setTotalReactions] = useState<number>(
@@ -62,6 +69,21 @@ export const PostCard = ({
         setShowMediaDialog(false);
     };
 
+    const handleDelete = async () => {
+        setIsDeleteLoading(true)
+
+        try {
+            await authApi.delete(`/post/${postContent.id}`)
+            setDrawerOpen(false);
+            onDelete?.(postContent.id);
+            showTopToast("success", "Post deleted successfully.");
+        } catch (error: any) {
+            showTopToast("error", "Error deleting post");
+        } finally {
+            setIsDeleteLoading(false);
+        }
+    }
+
     return (
         <>
             <div
@@ -74,9 +96,47 @@ export const PostCard = ({
                 <div className="w-full flex flex-col gap-6 px-4">
                     <div className="flex items-center justify-between">
                         <UserSinglePlaceholder user={postContent.userPlaceHolder} prev={prevUrl} />
-                        <p className="text-sm text-neutral-500">
+                        <span className="inline-flex items-center justify-center">
+                          <p className="text-sm text-neutral-500">
                             {new Date(postContent.createdAt).toLocaleDateString()}
-                        </p>
+                          </p>
+                          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                            <DrawerTrigger asChild>
+                              <button
+                                  className="bg-none pl-5"
+                                  onClick={() => setDrawerOpen(true)}
+                              >
+                                <SlOptionsVertical className="text-neutral-500" />
+                              </button>
+                            </DrawerTrigger>
+
+                            <DrawerContent className="z-99999">
+                              <div className="w-full px-4 pb-4">
+                                <DrawerHeader>
+                                  <DrawerTitle>Action</DrawerTitle>
+                                </DrawerHeader>
+
+                                  {isForUser ? (
+                                      <button
+                                          className="flex gap-2 items-center py-4 text-red-600"
+                                          onClick={handleDelete}
+                                          disabled={isDeleteLoading}
+                                      >
+                                          <MdDeleteOutline size={20} />
+                                          <span className="font-semibold">
+                                      {isDeleteLoading ? "Deleting..." : "Delete"}
+                                    </span>
+                                      </button>
+                                  ) : (
+                                      <button className="flex gap-2 items-center py-4">
+                                          <FaFlag />
+                                          <span className="font-semibold">Report</span>
+                                      </button>
+                                  )}
+                              </div>
+                            </DrawerContent>
+                          </Drawer>
+                        </span>
                     </div>
                     <div className="w-full flex flex-col gap-2">
                     <span className="flex flex-col gap-2">

@@ -196,10 +196,7 @@ export default function ReactionManagePage(
             "w-full flex flex-col items-center justify-center pb-20",
             className
         )} {...props}>
-            <div className={cn(
-                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
-                className
-            )} {...props}>
+            <div className="w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center">
                 <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
                         size={20}

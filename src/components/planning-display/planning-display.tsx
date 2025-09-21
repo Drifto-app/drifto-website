@@ -541,7 +541,7 @@ function EventsContent({
 
   if (events.length <= 0) {
     return (
-      <div className=" w-full flex flex-col items-center justify-center gap-3 h-[80dvh]">
+      <div className=" w-full flex flex-col items-center justify-center gap-3 min-h-[80dvh]">
         <span className="text-neutral-500 text-sm">
           You have not created or collaborated in any experience.
         </span>
@@ -656,9 +656,9 @@ function EventsCard({ event }: EventsCardProp) {
       <ShareDialog
         isOpen={isShareDialogOpen}
         onClose={closeShareDialog}
-        eventTitle={event.title}
-        eventUrl={eventUrl}
-        eventDescription={event.description}
+        title={event.title}
+        url={eventUrl}
+        description={event.description}
       />
     </>
   );
@@ -719,9 +719,9 @@ export default function PlanningDisplay() {
 
   return (
     //view hieght subtracted from navbar height
-    <div className="w-full overflow-y-scroll bg-gray-50">
+    <div className="w-full overflow-y-scroll bg-gray-50 flex flex-col min-h-[100dvh]">
       <div className="p-2">
-        <PageHeader headerTitle="Plans" />
+        <PageHeader headerTitle="Plans"  prev={"/?screen=plans"} />
         <Tabs active={activeTab} onClick={setActiveTab} />
       </div>
 

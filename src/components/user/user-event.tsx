@@ -40,7 +40,7 @@ export const UserEvent = ({
                     Drifto Original
                 </span>}
             </div>
-            <div className="w-full flex flex-col ">
+            <div className="w-full flex flex-col">
                 <span className="font-black text-lg capitalize leading-tight truncate">{event.title}</span>
                 <span className="capitalize text-neutral-500 font-semibold">{`${event.city}, ${event.state}`}</span>
                 <span className="text-neutral-500 font-semibold">

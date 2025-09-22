@@ -1,12 +1,11 @@
 "use client"
 
-import {useAuthStore} from "@/store/auth-store";
 import React, {useState} from "react";
 import PageHeader from "@/components/page-header/page-header";
 import {ProfileTabs} from "@/components/profile-display/tabs";
 import {UserProfile} from "@/components/profile-display/user-profile";
 import {FaArrowLeft} from "react-icons/fa";
-import {useRouter} from "next/navigation";
+import {cn} from "@/lib/utils";
 
 export type TabType = "profile" | "favourites";
 
@@ -47,7 +46,10 @@ export const ProfileDisplay = ({handleScreenChange}: ProfileDisplayProps) => {
     }
 
     return (
-        <div className="w-full min-h-[100dvh] bg-gray-50 flex flex-col">
+        <div className={cn(
+            "w-full min-h-[100dvh] bg-gray-50 flex flex-col relative",
+            activeScreen !== "profile" && "z-99999"
+        )}>
             {activeScreen !== "profile"
                 ? <div className={"w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center"}>
                     <div className="flex flex-row items-center px-8">

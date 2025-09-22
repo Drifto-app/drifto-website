@@ -15,6 +15,7 @@ import {BiCalendarAlt} from "react-icons/bi";
 import {ActiveScreenType} from "@/components/profile-display/profile-display";
 import {UserEvents} from "@/components/user/user-events";
 import {UserPosts} from "@/components/user/user-posts";
+import {UserOrders} from "@/components/order/user-orders";
 
 interface UserProfileProps extends ComponentProps<"div"> {
     handleScreenChange: (value: string) => void;
@@ -55,9 +56,7 @@ export const UserProfile = ({
                 )
             case "orders":
                 return (
-                    <div>
-                        Order
-                    </div>
+                    <UserOrders user={user!} />
                 )
             case "subscribers":
                 return (

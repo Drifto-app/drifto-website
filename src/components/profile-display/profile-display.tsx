@@ -6,6 +6,7 @@ import {ProfileTabs} from "@/components/profile-display/tabs";
 import {UserProfile} from "@/components/profile-display/user-profile";
 import {FaArrowLeft} from "react-icons/fa";
 import {cn} from "@/lib/utils";
+import {UserEventFavourites} from "@/components/profile-display/user-event-favourites";
 
 export type TabType = "profile" | "favourites";
 
@@ -34,9 +35,7 @@ export const ProfileDisplay = ({handleScreenChange}: ProfileDisplayProps) => {
         switch (currentTab) {
             case "favourites":
                 return (
-                    <div className="w-full">
-                        Favourites
-                    </div>
+                    <UserEventFavourites />
                 )
             default:
                 return (

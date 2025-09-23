@@ -23,6 +23,7 @@ export const UserEvents = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const queuedRef = useRef(false);
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
@@ -96,14 +97,14 @@ export const UserEvents = ({
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (
-                    entry.isIntersecting &&
-                    !loadingRef.current &&
-                    hasMoreRef.current &&
-                    !error
-                ) {
-                    loadEvents(searchText);
+                if (!entry.isIntersecting) return;
+
+                if (loadingRef.current) {
+                    queuedRef.current = true;
+                    return;
                 }
+
+                if (hasMoreRef.current && !error) loadEvents(searchText);
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -129,6 +130,13 @@ export const UserEvents = ({
 
         return () => clearTimeout(debounceTimer);
     }, [searchText, loadEvents]);
+
+    useEffect(() => {
+        if (!loading && queuedRef.current && hasMoreRef.current && !error) {
+            queuedRef.current = false;
+            loadEvents(searchText);
+        }
+    }, [loading, error, loadEvents, searchText]);
 
     return (
         <div

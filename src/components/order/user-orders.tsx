@@ -19,6 +19,7 @@ export const UserOrders = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const queuedRef = useRef(false);
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
@@ -85,14 +86,14 @@ export const UserOrders = ({
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (
-                    entry.isIntersecting &&
-                    !loadingRef.current &&
-                    hasMoreRef.current &&
-                    !error
-                ) {
-                    loadOrders();
+                if (!entry.isIntersecting) return;
+
+                if (loadingRef.current) {
+                    queuedRef.current = true;
+                    return;
                 }
+
+                if (hasMoreRef.current && !error) loadOrders();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -104,6 +105,13 @@ export const UserOrders = ({
         observer.observe(sentinel);
         return () => observer.disconnect();
     }, [loadOrders, error]);
+
+    useEffect(() => {
+        if (!loading && queuedRef.current && hasMoreRef.current && !error) {
+            queuedRef.current = false;
+            loadOrders();
+        }
+    }, [loading, error, loadOrders]);
 
     return (
         <div

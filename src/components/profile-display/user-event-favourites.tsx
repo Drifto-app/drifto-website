@@ -1,23 +1,20 @@
 "use client"
 
-import { cn } from "@/lib/utils";
 import {ComponentProps, useCallback, useEffect, useRef, useState} from "react";
+import {cn} from "@/lib/utils";
 import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
-import {PostCard} from "@/components/post/post-card";
-import * as React from "react";
 import {Loader} from "@/components/ui/loader";
+import * as React from "react";
+import {EventFavouriteCard} from "@/components/profile-display/event-favourite-card";
 
-interface UserPostsProps extends ComponentProps<"div">{
-    user: {[key:string]: any};
-    isForUser?: boolean;
-}
+interface UserEventFavouritesProps extends ComponentProps<"div"> {}
 
-export const UserPosts = ({
-    user, isForUser = false, className, ...props
-}: UserPostsProps) => {
+export const UserEventFavourites = ({
+    className, ...props
+}: UserEventFavouritesProps) => {
 
-    const [posts, setPosts] = useState<Array<{[key: string]: any}>>([]);
+    const [events, setEvents] = useState<Array<{[key: string]: any}>>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -29,7 +26,7 @@ export const UserPosts = ({
     const sentinelRef = useRef<HTMLDivElement | null>(null);
     const scrollRootRef = useRef<HTMLDivElement | null>(null);
 
-    const loadPosts = useCallback(
+    const loadEvents = useCallback(
         async (reset: boolean = false) => {
             if (loadingRef.current || (!reset && !hasMoreRef.current)) return;
 
@@ -43,24 +40,20 @@ export const UserPosts = ({
                 const params: { [key: string]: string | number } = {
                     pageSize: 10,
                     pageNumber: currentPage,
+                    reactionType: "EVENT"
                 };
 
-                let response
-                if(isForUser) {
-                    response = await authApi.get(`/post/user`, { params });
-                } else {
-                    response = await authApi.get(`/post/user/${user.id}`, { params });
-                }
+                const response = await authApi.get(`/reaction/user`, { params });
 
                 const newPosts = response.data.data.data as Array<Record<string, any>>;
 
                 if (reset) {
-                    setPosts(newPosts);
+                    setEvents(newPosts);
                     pageRef.current = 2;
                     setHasMore(true);
                     hasMoreRef.current = true;
                 } else {
-                    setPosts((prev) => [...prev, ...newPosts]);
+                    setEvents((prev) => [...prev, ...newPosts]);
                     pageRef.current = currentPage + 1;
                 }
 
@@ -75,18 +68,17 @@ export const UserPosts = ({
                 loadingRef.current = false;
             }
         },
-        [user]
+        []
     );
 
-    // Initial load
     useEffect(() => {
-        setPosts([]);
+        setEvents([]);
         setHasMore(true);
         pageRef.current = 1;
         hasMoreRef.current = true;
         setError(null);
-        loadPosts(true);
-    }, [loadPosts]);
+        loadEvents(true);
+    }, [loadEvents]);
 
     useEffect(() => {
         const sentinel = sentinelRef.current;
@@ -102,7 +94,7 @@ export const UserPosts = ({
                     return;
                 }
 
-                if (hasMoreRef.current && !error) loadPosts();
+                if (hasMoreRef.current && !error) loadEvents();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -113,33 +105,29 @@ export const UserPosts = ({
 
         observer.observe(sentinel);
         return () => observer.disconnect();
-    }, [loadPosts, error]);
+    }, [loadEvents, error]);
 
     useEffect(() => {
         if (!loading && queuedRef.current && hasMoreRef.current && !error) {
             queuedRef.current = false;
-            loadPosts();
+            loadEvents();
         }
-    }, [loading, error, loadPosts]);
+    }, [loading, error, loadEvents]);
 
     return (
         <div
             className={cn(
                 "w-full flex flex-col gap-4 flex-1 pt-4 overflow-y-auto no-scrollbar pb-10",
-                className
+                className,
             )}
             {...props}
             ref={scrollRootRef}
             style={{ maxHeight: "calc(100dvh - 80px)" }}
         >
-            <div className="flex flex-col gap-6">
-                {posts.map((post) => (
-                    <PostCard
-                        key={post.id}
-                        postContent={post}
-                        isForUser={isForUser}
-                        onDelete={(postId) => {setPosts((post) => post.filter(p => p.id !== postId))}}
-                    />
+
+            <div className="grid grid-cols-2 gap-20">
+                {events.map((event) => (
+                    <EventFavouriteCard eventContent={event.eventPlaceHolder} key={event.eventPlaceHolder.eventId} />
                 ))}
             </div>
 

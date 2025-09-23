@@ -25,6 +25,8 @@ const titleText: {value: string, screen: ActiveScreenType}[] = [
 ]
 
 export const ProfileDisplay = ({handleScreenChange}: ProfileDisplayProps) => {
+    
+
     const [currentTab, setCurrentTab] = useState<TabType>("profile")
 
     const [activeScreen, setActiveScreen] = useState<ActiveScreenType>("profile");

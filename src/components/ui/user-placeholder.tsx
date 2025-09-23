@@ -137,10 +137,14 @@ function UserSinglePlaceholder({user, prev, className, ...props }: UserPlacehold
     const router = useRouter();
 
     return (
-        <div key={user.id} className={cn(
-            "flex flex-row gap-4 cursor-pointer",
-            className
-        )} {...props} onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`)}>
+        <div
+            className={cn(
+                "flex flex-row gap-4 cursor-pointer",
+                className
+             )}
+            {...props}
+            onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`)}
+        >
             <div className="w-8 h-8 flex flex-row items-center">
                 <AspectRatio ratio={1}>
                     <Image

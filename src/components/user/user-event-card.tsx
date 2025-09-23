@@ -10,7 +10,7 @@ interface UserEventProps extends ComponentProps<"div"> {
     event: {[key: string]: any};
 }
 
-export const UserEvent = ({
+export const UserEventCard = ({
     event, className, ...props
 }: UserEventProps) => {
     const router = useRouter();

@@ -19,7 +19,6 @@ export const UserEventFavourites = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const queuedRef = useRef(false);
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
@@ -45,15 +44,16 @@ export const UserEventFavourites = ({
 
                 const response = await authApi.get(`/reaction/user`, { params });
 
-                const newPosts = response.data.data.data as Array<Record<string, any>>;
+                const data = response.data.data.data;
+                const newEvents = data.map((event: {[key: string]: any}) => event.eventPlaceHolder)
 
                 if (reset) {
-                    setEvents(newPosts);
+                    setEvents(newEvents);
                     pageRef.current = 2;
                     setHasMore(true);
                     hasMoreRef.current = true;
                 } else {
-                    setEvents((prev) => [...prev, ...newPosts]);
+                    setEvents((prev) => [...prev, ...newEvents]);
                     pageRef.current = currentPage + 1;
                 }
 
@@ -87,14 +87,12 @@ export const UserEventFavourites = ({
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (!entry.isIntersecting) return;
-
-                if (loadingRef.current) {
-                    queuedRef.current = true;
-                    return;
-                }
-
-                if (hasMoreRef.current && !error) loadEvents();
+                if (
+                    entry.isIntersecting &&
+                    !loadingRef.current &&
+                    hasMoreRef.current &&
+                    !error
+                )  loadEvents();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -107,12 +105,6 @@ export const UserEventFavourites = ({
         return () => observer.disconnect();
     }, [loadEvents, error]);
 
-    useEffect(() => {
-        if (!loading && queuedRef.current && hasMoreRef.current && !error) {
-            queuedRef.current = false;
-            loadEvents();
-        }
-    }, [loading, error, loadEvents]);
 
     return (
         <div
@@ -122,12 +114,18 @@ export const UserEventFavourites = ({
             )}
             {...props}
             ref={scrollRootRef}
-            style={{ maxHeight: "calc(100dvh - 80px)" }}
+            style={{ maxHeight: "calc(100dvh - 120px)" }}
         >
 
-            <div className="grid grid-cols-2 gap-20">
+            <div className="flex flex-col gap-8 px-4">
                 {events.map((event) => (
-                    <EventFavouriteCard eventContent={event.eventPlaceHolder} key={event.eventPlaceHolder.eventId} />
+                    <EventFavouriteCard
+                        eventContent={event}
+                        key={event.eventId}
+                        onUnReact={(eventId: string) => {
+                            setEvents((items) => items.filter(i => i.eventId !== eventId));
+                        }}
+                    />
                 ))}
             </div>
 

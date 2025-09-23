@@ -22,7 +22,6 @@ export const UserPosts = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const queuedRef = useRef(false);
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
@@ -78,7 +77,6 @@ export const UserPosts = ({
         [user]
     );
 
-    // Initial load
     useEffect(() => {
         setPosts([]);
         setHasMore(true);
@@ -95,14 +93,12 @@ export const UserPosts = ({
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (!entry.isIntersecting) return;
-
-                if (loadingRef.current) {
-                    queuedRef.current = true;
-                    return;
-                }
-
-                if (hasMoreRef.current && !error) loadPosts();
+                if (
+                    entry.isIntersecting &&
+                    !loadingRef.current &&
+                    hasMoreRef.current &&
+                    !error
+                )  loadPosts();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -114,13 +110,6 @@ export const UserPosts = ({
         observer.observe(sentinel);
         return () => observer.disconnect();
     }, [loadPosts, error]);
-
-    useEffect(() => {
-        if (!loading && queuedRef.current && hasMoreRef.current && !error) {
-            queuedRef.current = false;
-            loadPosts();
-        }
-    }, [loading, error, loadPosts]);
 
     return (
         <div

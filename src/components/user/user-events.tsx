@@ -7,7 +7,7 @@ import * as React from "react";
 import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 import {Loader} from "@/components/ui/loader";
-import {UserEvent} from "@/components/user/user-event";
+import {UserEventCard} from "@/components/user/user-event-card";
 
 interface UserEventsProps extends ComponentProps<"div"> {
     user: {[key:string]: any};
@@ -23,7 +23,6 @@ export const UserEvents = ({
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const queuedRef = useRef(false);
     const loadingRef = useRef(false);
     const hasMoreRef = useRef(true);
     const pageRef = useRef(1);
@@ -97,14 +96,12 @@ export const UserEvents = ({
         const observer = new IntersectionObserver(
             (entries) => {
                 const entry = entries[0];
-                if (!entry.isIntersecting) return;
-
-                if (loadingRef.current) {
-                    queuedRef.current = true;
-                    return;
-                }
-
-                if (hasMoreRef.current && !error) loadEvents(searchText);
+                if (
+                    entry.isIntersecting &&
+                    !loadingRef.current &&
+                    hasMoreRef.current &&
+                    !error
+                ) loadEvents(searchText);
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -130,13 +127,6 @@ export const UserEvents = ({
 
         return () => clearTimeout(debounceTimer);
     }, [searchText, loadEvents]);
-
-    useEffect(() => {
-        if (!loading && queuedRef.current && hasMoreRef.current && !error) {
-            queuedRef.current = false;
-            loadEvents(searchText);
-        }
-    }, [loading, error, loadEvents, searchText]);
 
     return (
         <div
@@ -166,7 +156,7 @@ export const UserEvents = ({
             </div>
             <div className="w-full flex flex-col gap-10 px-4">
                 {events.map((event) => (
-                    <UserEvent event={event} key={event.id} />
+                    <UserEventCard event={event} key={event.id} />
                 ))}
             </div>
 

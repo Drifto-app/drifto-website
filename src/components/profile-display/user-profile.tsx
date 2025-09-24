@@ -90,7 +90,10 @@ export const UserProfile = ({
                                         onClick={() => {
                                             if(item.name === "Subscribers") {
                                                 setActiveScreen("subscribers");
-                                        }}}
+                                            }else if(item.name === "Experience") {
+                                                setActiveScreen("events")
+                                            }
+                                        }}
                                     >
                                         <p className="text-neutral-400 text-md">{item.name}</p>
                                         <p className="font-bold text-xl">{item.value}</p>

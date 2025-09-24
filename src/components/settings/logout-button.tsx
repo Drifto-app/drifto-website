@@ -43,7 +43,7 @@ export const LogoutButton = ({
             <DialogTrigger asChild>
                 <Button
                     className={cn(
-                        "w-full rounded-sm bg-blue-800 hover:bg-blue-800 focus:outline-none text-lg font-bold py-7 shadow-lg",
+                        "w-full rounded-sm bg-blue-800 hover:bg-blue-800 focus:outline-none text-lg font-bold py-7 shadow-xl",
                         className,
                     )}
                     {...props}

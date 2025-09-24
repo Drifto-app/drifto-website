@@ -10,6 +10,7 @@ import { ScreenProvider } from "@/components/screen/screen-provider";
 import { useSearchParams, useRouter } from "next/navigation";
 import PlanningDisplay from "./planning-display/planning-display";
 import {PostDisplay} from "@/components/post/post-display";
+import {ProfileDisplay} from "@/components/profile-display/profile-display";
 
 interface EventDisplayRef {
   refresh: () => void;
@@ -46,9 +47,7 @@ export default function HomeContent() {
     switch (activeScreen) {
       case "plans":
         return (
-          <div className="w-full">
             <PlanningDisplay />
-          </div>
         );
       case "posts":
         return (
@@ -62,9 +61,7 @@ export default function HomeContent() {
         );
       case "profile":
         return (
-          <div className="w-full">
-            <div>profile</div>
-          </div>
+          <ProfileDisplay handleScreenChange={handleScreen} />
         );
       default:
         return (

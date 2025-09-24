@@ -77,7 +77,6 @@ export const UserPosts = ({
         [user]
     );
 
-    // Initial load
     useEffect(() => {
         setPosts([]);
         setHasMore(true);
@@ -99,9 +98,7 @@ export const UserPosts = ({
                     !loadingRef.current &&
                     hasMoreRef.current &&
                     !error
-                ) {
-                    loadPosts();
-                }
+                )  loadPosts();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -126,7 +123,12 @@ export const UserPosts = ({
         >
             <div className="flex flex-col gap-6">
                 {posts.map((post) => (
-                    <PostCard key={post.id} postContent={post} />
+                    <PostCard
+                        key={post.id}
+                        postContent={post}
+                        isForUser={isForUser}
+                        onDelete={(postId) => {setPosts((post) => post.filter(p => p.id !== postId))}}
+                    />
                 ))}
             </div>
 

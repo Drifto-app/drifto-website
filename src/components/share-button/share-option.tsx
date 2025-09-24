@@ -12,9 +12,9 @@ import {showTopToast} from "@/components/toast/toast-util";
 interface ShareDialogProps {
     isOpen: boolean;
     onClose: () => void;
-    eventTitle: string;
-    eventUrl: string;
-    eventDescription?: string;
+    title: string;
+    url: string;
+    description?: string;
 }
 
 interface ShareOption {
@@ -27,9 +27,9 @@ interface ShareOption {
 export const ShareDialog: React.FC<ShareDialogProps> = ({
                                                             isOpen,
                                                             onClose,
-                                                            eventTitle,
-                                                            eventUrl,
-                                                            eventDescription = "",
+                                                            title,
+                                                            url,
+                                                            description = "",
                                                         }) => {
     const [isNativeShareSupported, setIsNativeShareSupported] = React.useState(false);
 
@@ -39,16 +39,16 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
 
     const handleNativeShare = async () => {
         const ok = await shareViaWeb({
-            title: eventTitle,
-            text: eventDescription,
-            url: eventUrl,
+            title: title,
+            text: description,
+            url: url,
         });
         if (ok) onClose();
         else showTopToast("error", "Failed to share");
     };
 
     const handleCopyLink = async () => {
-        const ok = await copyToClipboard(eventUrl);
+        const ok = await copyToClipboard(url);
         if (ok) {
             showTopToast("success", "Link copied to clipboard!");
             onClose();
@@ -63,7 +63,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
             icon: <FaWhatsapp size={24} />,
             color: "bg-green-500",
             onClick: () => {
-                openSocialShare("whatsapp", eventTitle, eventUrl, `Check out this event: ${eventTitle}`);
+                openSocialShare("whatsapp", title, url, `Check out this event: ${title}`);
                 onClose();
             },
         },
@@ -72,7 +72,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
             icon: <FaXTwitter size={24} />,
             color: "bg-black",
             onClick: () => {
-                openSocialShare("twitter", eventTitle, eventUrl, `Check out this event: ${eventTitle}`);
+                openSocialShare("twitter", title, url, `Check out this event: ${title}`);
                 onClose();
             },
         },
@@ -81,7 +81,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
             icon: <FaLinkedin size={24} />,
             color: "bg-blue-700",
             onClick: () => {
-                openSocialShare("linkedin", eventTitle, eventUrl);
+                openSocialShare("linkedin", title, url);
                 onClose();
             },
         },
@@ -90,7 +90,7 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
             icon: <FaTelegram size={24} />,
             color: "bg-cyan-500",
             onClick: () => {
-                openSocialShare("telegram", eventTitle, eventUrl, `Check out this event: ${eventTitle}`);
+                openSocialShare("telegram", title, url, `Check out this event: ${title}`);
                 onClose();
             },
         },
@@ -126,8 +126,8 @@ export const ShareDialog: React.FC<ShareDialogProps> = ({
                 <div className="flex-1 min-h-0 overflow-y-auto">
                     {/* Event Preview */}
                     <div className="p-4 border-b border-gray-100">
-                        <h3 className="font-semibold text-gray-900 text-sm mb-1 capitalize">{eventTitle}</h3>
-                        <p className="text-xs text-gray-500 break-all">{eventUrl}</p>
+                        <h3 className="font-semibold text-gray-900 text-sm mb-1 capitalize">{title}</h3>
+                        <p className="text-xs text-gray-500 break-all">{url}</p>
                     </div>
 
                     {/* Share Options */}

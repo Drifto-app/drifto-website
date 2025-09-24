@@ -77,23 +77,13 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
             )} {...props}>
                 <div className="flex flex-row gap-4 cursor-pointer" onClick={handleUserClick}>
                     <div className="w-12 h-12 flex flex-row items-center">
-                        {
-                            user.profileImageUrl !== null
-                                ? <AspectRatio ratio={1/1}>
-                                    <Image
-                                        src={user.profileImageUrl}
-                                        alt={user.username}
-                                        fill
-                                        className="object-cover rounded-full" />
-                                </AspectRatio>
-                                : <AspectRatio ratio={1/1}>
-                                    <Image
-                                        src={"/default.jpeg"}
-                                        alt={user.username}
-                                        fill
-                                        className="object-cover rounded-full" />
-                                </AspectRatio>
-                        }
+                        <AspectRatio ratio={1}>
+                            <Image
+                                src={user.profileImageUrl || "/default.jpeg"}
+                                alt={user.username}
+                                fill
+                                className="object-cover rounded-full" />
+                        </AspectRatio>
                     </div>
                     <div>
                         <div className="flex flex-row gap-1 items-center">
@@ -124,23 +114,13 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
             className
         )} {...props} onClick={handleUserClick}>
             <div className="w-12 h-12 flex flex-row items-center">
-                {
-                    user.profileImageUrl !== null
-                        ? <AspectRatio ratio={1/1}>
-                            <Image
-                                src={user.profileImageUrl}
-                                alt={user.username}
-                                fill
-                                className="object-cover rounded-full" />
-                        </AspectRatio>
-                        : <AspectRatio ratio={1/1}>
-                            <Image
-                                src={"/default.jpeg"}
-                                alt={user.username}
-                                fill
-                                className="object-cover rounded-full" />
-                        </AspectRatio>
-                }
+                <AspectRatio ratio={1}>
+                    <Image
+                        src={user.profileImageUrl || "/default.jpeg"}
+                        alt={user.username}
+                        fill
+                        className="object-cover rounded-full" />
+                </AspectRatio>
             </div>
             <div>
                 <div className="flex flex-row gap-1 items-center">
@@ -157,28 +137,22 @@ function UserSinglePlaceholder({user, prev, className, ...props }: UserPlacehold
     const router = useRouter();
 
     return (
-        <div key={user.id} className={cn(
-            "flex flex-row gap-4 cursor-pointer",
-            className
-        )} {...props} onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`)}>
+        <div
+            className={cn(
+                "flex flex-row gap-4 cursor-pointer",
+                className
+             )}
+            {...props}
+            onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`)}
+        >
             <div className="w-8 h-8 flex flex-row items-center">
-                {
-                    user.profileImageUrl !== null
-                        ? <AspectRatio ratio={1/1}>
-                            <Image
-                                src={user.profileImageUrl}
-                                alt={user.username}
-                                fill
-                                className="object-cover rounded-full" />
-                        </AspectRatio>
-                        : <AspectRatio ratio={1/1}>
-                            <Image
-                                src={"/default.jpeg "}
-                                alt={user.username}
-                                fill
-                                className="object-cover rounded-full" />
-                        </AspectRatio>
-                }
+                <AspectRatio ratio={1}>
+                    <Image
+                        src={user.profileImageUrl || "/default.jpeg"}
+                        alt={user.username}
+                        fill
+                        className="object-cover rounded-full" />
+                </AspectRatio>
             </div>
             <div className="flex flex-row gap-1 items-center">
                 <p className="font-semibold text-md">{user.username}</p>

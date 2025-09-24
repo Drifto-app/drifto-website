@@ -29,7 +29,7 @@ export interface AuthResponse {
 interface AuthStore extends AuthState {
     login: (credentials: LoginCredentials) => Promise<void>;
     googleLogin: (credentials: string) => Promise<void>;
-    logout: () => void;
+    logout: () => Promise<void>;
     refreshAccessToken: () => Promise<boolean>;
     getUser: () => Promise<void>;
     setUser: (user: {[key: string]: any}) => void;
@@ -103,12 +103,16 @@ export const useAuthStore = create<AuthStore>()(
                 }
             },
 
-            logout: () => {
-                const { refreshToken } = get();
-                api.post('/auth/logout', {
-                    refreshToken
-                })
-                get().clearAuth();
+            logout: async () => {
+                try {
+                    const { refreshToken } = get();
+                    await api.post('/auth/logout', {
+                        refreshToken
+                    })
+                    get().clearAuth();
+                } catch (error: any) {
+                    throw error;
+                }
             },
 
             refreshAccessToken: async (): Promise<boolean> => {

@@ -196,10 +196,7 @@ export default function ReactionManagePage(
             "w-full flex flex-col items-center justify-center pb-20",
             className
         )} {...props}>
-            <div className={cn(
-                "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
-                className
-            )} {...props}>
+            <div className="w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center">
                 <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
                         size={20}
@@ -224,19 +221,16 @@ export default function ReactionManagePage(
                 ))}
             </div>
 
-            {/* Loading indicator for pagination */}
             {loading && !initialLoading && (
                 <div className="flex justify-center py-4">
                     <Loader className="h-8 w-8"/>
                 </div>
             )}
 
-            {/* End of content indicator */}
             {!hasMore && users.length > 0 && (
                 <p className="py-4 text-gray-500">You have reached the end!</p>
             )}
 
-            {/* No comments message */}
             {!loading && !initialLoading && users.length === 0 && (
                 <div className="w-full flex flex-col items-center justify-center py-8">
                     <p className="text-gray-500">No user reaction found</p>

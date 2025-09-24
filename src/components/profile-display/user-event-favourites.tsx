@@ -1,23 +1,19 @@
+"use client"
+
 import {ComponentProps, useCallback, useEffect, useRef, useState} from "react";
 import {cn} from "@/lib/utils";
-import {useRouter} from "next/navigation";
-import {IoSearchSharp} from "react-icons/io5";
-import {Input} from "@/components/ui/input";
-import * as React from "react";
 import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 import {Loader} from "@/components/ui/loader";
-import {UserEventCard} from "@/components/user/user-event-card";
+import * as React from "react";
+import {EventFavouriteCard} from "@/components/profile-display/event-favourite-card";
 
-interface UserEventsProps extends ComponentProps<"div"> {
-    user: {[key:string]: any};
-    isForUser?: boolean;
-}
+interface UserEventFavouritesProps extends ComponentProps<"div"> {}
 
-export const UserEvents = ({
-    user, isForUser = false, className, ...props
-}: UserEventsProps) => {
-    const [searchText, setSearchText] = useState<string>("");
+export const UserEventFavourites = ({
+    className, ...props
+}: UserEventFavouritesProps) => {
+
     const [events, setEvents] = useState<Array<{[key: string]: any}>>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -30,7 +26,7 @@ export const UserEvents = ({
     const scrollRootRef = useRef<HTMLDivElement | null>(null);
 
     const loadEvents = useCallback(
-        async (query: string, reset: boolean = false) => {
+        async (reset: boolean = false) => {
             if (loadingRef.current || (!reset && !hasMoreRef.current)) return;
 
             loadingRef.current = true;
@@ -41,19 +37,15 @@ export const UserEvents = ({
                 const currentPage = reset ? 1 : pageRef.current;
 
                 const params: { [key: string]: string | number } = {
-                    search: query.trim().toLowerCase(),
                     pageSize: 10,
                     pageNumber: currentPage,
+                    reactionType: "EVENT"
                 };
 
-                let response
-                if(isForUser) {
-                    response = await authApi.get(`/event/user`, { params });
-                } else {
-                    response = await authApi.get(`/event/user/${user.id}`, { params });
-                }
+                const response = await authApi.get(`/reaction/user`, { params });
 
-                const newEvents = response.data.data.data as Array<Record<string, any>>;
+                const data = response.data.data.data;
+                const newEvents = data.map((event: {[key: string]: any}) => event.eventPlaceHolder)
 
                 if (reset) {
                     setEvents(newEvents);
@@ -76,17 +68,16 @@ export const UserEvents = ({
                 loadingRef.current = false;
             }
         },
-        [user]
+        []
     );
 
-    // Initial load
     useEffect(() => {
         setEvents([]);
         setHasMore(true);
         pageRef.current = 1;
         hasMoreRef.current = true;
         setError(null);
-        loadEvents("", true);
+        loadEvents(true);
     }, [loadEvents]);
 
     useEffect(() => {
@@ -101,7 +92,7 @@ export const UserEvents = ({
                     !loadingRef.current &&
                     hasMoreRef.current &&
                     !error
-                ) loadEvents(searchText);
+                )  loadEvents();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -112,21 +103,8 @@ export const UserEvents = ({
 
         observer.observe(sentinel);
         return () => observer.disconnect();
-    }, [loadEvents, error, searchText]);
+    }, [loadEvents, error]);
 
-    useEffect(() => {
-        const debounceTimer = setTimeout(() => {
-            setEvents([]);
-            setError(null);
-            pageRef.current = 1;
-            hasMoreRef.current = true;
-            setHasMore(true);
-
-            loadEvents(searchText, true);
-        }, 300);
-
-        return () => clearTimeout(debounceTimer);
-    }, [searchText, loadEvents]);
 
     return (
         <div
@@ -136,27 +114,18 @@ export const UserEvents = ({
             )}
             {...props}
             ref={scrollRootRef}
-            style={{ maxHeight: "calc(100dvh - 80px)" }}
+            style={{ maxHeight: "calc(100dvh - 120px)" }}
         >
-            <div className="w-full px-4">
-                <div className="flex items-center w-full rounded-full bg-neutral-200 px-2">
-                    <IoSearchSharp size={30} className="text-neutral-400" />
-                    <Input
-                        name="search"
-                        type="search"
-                        inputMode="search"
-                        enterKeyHint="search"
-                        className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-medium text-lg py-4"
-                        placeholder={`Search ${user.username}'s experiences`}
-                        aria-label="Search"
-                        value={searchText}
-                        onChange={(e) => setSearchText(e.target.value) }
-                    />
-                </div>
-            </div>
-            <div className="w-full flex flex-col gap-10 px-4">
+
+            <div className="flex flex-col gap-8 px-4">
                 {events.map((event) => (
-                    <UserEventCard event={event} key={event.id} />
+                    <EventFavouriteCard
+                        eventContent={event}
+                        key={event.eventId}
+                        onUnReact={(eventId: string) => {
+                            setEvents((items) => items.filter(i => i.eventId !== eventId));
+                        }}
+                    />
                 ))}
             </div>
 

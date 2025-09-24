@@ -4,13 +4,11 @@ import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 
 interface EventTagsState {
-    // State
     tags: any[];
     isLoading: boolean;
     error: string | null;
     lastFetched: number | null;
 
-    // Actions
     fetchTags: () => Promise<void>;
     setTags: (tags: any[]) => void;
     clearTags: () => void;
@@ -25,18 +23,15 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes in milliseconds
 export const useEventTagsStore = create<EventTagsState>()(
     persist(
         (set, get) => ({
-            // Initial state
             tags: [],
             isLoading: false,
             error: null,
             lastFetched: null,
 
-            // Fetch tags from API
             fetchTags: async () => {
                 const { lastFetched, isLoading } = get();
                 const now = Date.now();
 
-                // Prevent multiple simultaneous requests
                 if (isLoading) {
                     return;
                 }
@@ -95,23 +90,19 @@ export const useEventTagsStore = create<EventTagsState>()(
                 }
             },
 
-            // Set tags manually (useful for testing or manual updates)
             setTags: (tags) => {
                 set({ tags, lastFetched: Date.now() });
             },
 
-            // Clear all tags
             clearTags: () => {
                 set({ tags: [], lastFetched: null, error: null });
             },
 
-            // Get a specific tag by ID
             getTagById: (id) => {
                 const { tags } = get();
                 return tags.find(tag => tag.id === id);
             },
 
-            // Get multiple tags by their names
             getTagsByName: (names) => {
                 const { tags } = get();
                 return tags.filter(tag =>
@@ -121,12 +112,10 @@ export const useEventTagsStore = create<EventTagsState>()(
                 );
             },
 
-            // Set error state
             setError: (error) => {
                 set({ error });
             },
 
-            // Set loading state
             setLoading: (isLoading) => {
                 set({ isLoading });
             },

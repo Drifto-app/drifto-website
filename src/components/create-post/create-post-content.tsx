@@ -424,7 +424,7 @@ export const CreatePostContent = ({
                     <div className="w-full flex flex-col items-center px-4 pt-6 gap-6">
                         <div className="w-full flex gap-4 relative">
                         <span className="w-18 h-18">
-                            <AspectRatio ratio={1/1}>
+                            <AspectRatio ratio={1}>
                                         <Image
                                             src={user?.profileImage || "/default.jpeg"}
                                             alt={user?.username}

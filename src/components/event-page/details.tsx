@@ -296,9 +296,9 @@ export const SingleEventDetails = ({
                 <ShareDialog
                     isOpen={isShareDialogOpen}
                     onClose={closeShareDialog}
-                    eventTitle={event.title}
-                    eventUrl={eventUrl}
-                    eventDescription={event.description}
+                    title={event.title}
+                    url={eventUrl}
+                    description={event.description}
                 />
 
                 <Dialog
@@ -438,9 +438,9 @@ export const SingleEventDetails = ({
             <ShareDialog
                 isOpen={isShareDialogOpen}
                 onClose={closeShareDialog}
-                eventTitle={event.title}
-                eventUrl={eventUrl}
-                eventDescription={event.description}
+                title={event.title}
+                url={eventUrl}
+                description={event.description}
             />
         </>
     )

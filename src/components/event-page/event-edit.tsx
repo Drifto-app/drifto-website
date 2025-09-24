@@ -7,7 +7,6 @@ import {Input} from "@/components/ui/input";
 import {LocationSearchDialog} from "@/components/event-page/location-search-dialog";
 import {Switch} from "@/components/ui/switch";
 import {DateTimePicker} from "@/components/event-page/date-time-input";
-import {toast} from "react-toastify";
 import {ImageSnapshots} from "@/components/ui/image-snapshot";
 import {EventTagDialog} from "@/components/event-page/event-tag-edit";
 import {Button} from "@/components/ui/button";

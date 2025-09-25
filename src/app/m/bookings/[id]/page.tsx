@@ -11,15 +11,15 @@ import { FaArrowLeft } from "react-icons/fa";
 import { toPng } from "html-to-image";
 import { ScreenProvider } from "@/components/screen/screen-provider";
 import { ProtectedRoute } from "@/components/auth/ProtectedRoutes";
-import {useAuthStore} from "@/store/auth-store";
-import {showTopToast} from "@/components/toast/toast-util";
+import { useAuthStore } from "@/store/auth-store";
+import { showTopToast } from "@/components/toast/toast-util";
 
 export default function Page() {
   const [tickets, setTickets] = useState<any[]>();
   const [eventDetails, setEventDetails] = useState<any>();
-
+  const router = useRouter();
   const { id } = useParams();
-  const {user} = useAuthStore()
+  const { user } = useAuthStore();
 
   const fetchTickets = async () => {
     const response = await authApi.get("/userTicket/plan/ticket/" + id, {
@@ -46,28 +46,38 @@ export default function Page() {
   return (
     <ProtectedRoute>
       <ScreenProvider>
-        <div>
+        <div className="pb-20">
           <DetailsHeader title={eventDetails?.title ?? ""} />
           <div className=" flex flex-col gap-8 p-6">
             {eventDetails &&
-                tickets?.map((ticket: any, index) => {
-                  return (
-                      <div key={ticket.id}>
-                        <TicketCard
-                            title={eventDetails?.title}
-                            titleImg={eventDetails?.titleImage}
-                            name={`${user?.firstName} ${user?.lastName}`}
-                            ticketName={ticket.ticketName}
-                            date={eventDetails?.startTime}
-                            used={ticket.markedUsed}
-                            index={index}
-                            noOfTickets={tickets.length}
-                            ticketReference={ticket.ticketReference}
-                            eventId={id!.toString()}
-                        />
-                      </div>
-                  );
-                })}
+              tickets?.map((ticket: any, index) => {
+                return (
+                  <div key={ticket.id}>
+                    <TicketCard
+                      title={eventDetails?.title}
+                      titleImg={eventDetails?.titleImage}
+                      name={`${user?.firstName} ${user?.lastName}`}
+                      ticketName={ticket.ticketName}
+                      date={eventDetails?.startTime}
+                      used={ticket.markedUsed}
+                      index={index}
+                      noOfTickets={tickets.length}
+                      ticketReference={ticket.ticketReference}
+                      eventId={id!.toString()}
+                    />
+                  </div>
+                );
+              })}
+          </div>
+          <div className=" w-full fixed bottom-0 bg-white border-t border-t-neutral-400 py-4 flex justify-center">
+            <button
+              onClick={() => {
+                router.push(`/m/refund/${id}?prev=${encodeURIComponent(`/m/bookings/${id}`)}`);
+              }}
+              className="outline-none border-none bg-white text-blue-700 text-lg font-md"
+            >
+              Request a refund
+            </button>
           </div>
         </div>
       </ScreenProvider>
@@ -160,7 +170,7 @@ function TicketCard({
       link.href = dataUrl;
       link.click();
     } catch (err) {
-      showTopToast("error", "Failed to download ticket")
+      showTopToast("error", "Failed to download ticket");
     } finally {
       setDownloading(false);
     }
@@ -172,7 +182,16 @@ function TicketCard({
         <div className=" text-blue-600 px-3 py-2 flex items-center justify-center rounded-full border border-black">
           <span>{used ? "Used" : "Not Used"}</span>
         </div>
-        <button className=" p-2 border border-black rounded-full" onClick={() => router.push(`/m/events/${eventId}?prev=${encodeURIComponent(`/m/bookings/${eventId}`)}`)}>
+        <button
+          className=" p-2 border border-black rounded-full"
+          onClick={() =>
+            router.push(
+              `/m/events/${eventId}?prev=${encodeURIComponent(
+                `/m/bookings/${eventId}`
+              )}`
+            )
+          }
+        >
           <Inbox />
         </button>
         <button

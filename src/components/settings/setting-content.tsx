@@ -93,7 +93,7 @@ export const SettingContent = ({
                 )
             default:
                 return (
-                    <div className="flex-1 flex flex-col gap-8 px-4">
+                    <div className="flex-1 flex flex-col gap-8 px-4 pb-10">
                         <div className="w-full flex flex-row items-center pl-4 py-4 shadow-2xl rounded-lg" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(currentPathUrl)}`)}>
                             <span className="max-w-[60%] flex flex-col gap-1">
                                 <h4 className="font-bold text-lg">Become a Drifto Host</h4>

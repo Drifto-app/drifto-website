@@ -65,7 +65,7 @@ export default function HomeContent() {
         );
       default:
         return (
-          <div className="w-full">
+          <div className="w-full bg-gray-50">
             <HeaderMobile
               location={location}
               setLocation={setLocation}

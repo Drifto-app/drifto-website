@@ -46,7 +46,7 @@ export default function Page() {
   return (
     <ProtectedRoute>
       <ScreenProvider>
-        <div>
+        <div className="pb-20">
           <DetailsHeader title={eventDetails?.title ?? ""} />
           <div className=" flex flex-col gap-8 p-6">
             {eventDetails &&
@@ -72,7 +72,7 @@ export default function Page() {
           <div className=" w-full fixed bottom-0 bg-white border-t border-t-neutral-400 py-4 flex justify-center">
             <button
               onClick={() => {
-                router.push("/m/refund/" + id);
+                router.push(`/m/refund/${id}?prev=${encodeURIComponent(`/m/bookings/${id}`)}`);
               }}
               className="outline-none border-none bg-white text-blue-700 text-lg font-md"
             >

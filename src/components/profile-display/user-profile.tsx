@@ -66,7 +66,7 @@ export const UserProfile = ({
             default:
                 return (
                     <>
-                        <div className="w-full flex flex-col px-4 pt-6 gap-8">
+                        <div className="w-full flex flex-col px-4 pt-6 pb-15 gap-8">
                             <div className="flex items-center gap-4">
                                 <div className="w-20 h-20 flex flex-row items-center">
                                     <AspectRatio ratio={1}>

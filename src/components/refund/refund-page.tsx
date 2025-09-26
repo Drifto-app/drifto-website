@@ -174,7 +174,7 @@ export default function RefundPageComponent() {
     return (
         <ProtectedRoute>
             <ScreenProvider>
-                <div className="min-h-screen bg-gray-50">
+                <div className="w-full min-h-[100dvh] bg-gray-50">
                     <RefundHeader title="Request Refund" prev={prev} />
 
                     <main className="p-4 pb-24">

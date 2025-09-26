@@ -122,7 +122,7 @@ export const PostDisplay = ({className, ...props}: PostDisplayProps) => {
     return (
         <div
             className={cn(
-                "w-full flex flex-col min-h-[100dvh]",
+                "w-full flex flex-col min-h-[100dvh] bg-gray-50",
                 className,
             )}
             style={{ maxHeight: "calc(100dvh - 80px)" }}

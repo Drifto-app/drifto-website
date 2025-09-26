@@ -5,12 +5,8 @@ import {Suspense} from "react";
 export default function RefundTicketPage() {
 
   return (
-  <Suspense fallback={
-    <div className="w-full h-screen flex items-center justify-center">
-      <Loader />
-    </div>
-  }>
-    <RefundPageComponent />
-  </Suspense>
+      <div className="w-full">
+        <RefundPageComponent />
+      </div>
   )
 }

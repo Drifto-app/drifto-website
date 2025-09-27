@@ -5,7 +5,7 @@ import { Plus, X } from "lucide-react";
 import { authApi } from "@/lib/axios";
 import { Dialog } from "@headlessui/react";
 import Image from "next/image";
-import {cn, MAX_IMAGE_SIZE} from "@/lib/utils";
+import {cn, MAX_IMAGE_SIZE, uploadMedia} from "@/lib/utils";
 import { Card, CardContent } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { LoaderSmall } from "@/components/ui/loader";
@@ -34,25 +34,14 @@ export const ImageSnapshots = ({
 
     const uploadSingle = async (file: File): Promise<string | null> => {
         try {
-            const formData = new FormData();
-            formData.append("mediaFile", file);
-            formData.append(
-                "fileData",
-                new Blob([JSON.stringify({ mediaFileType: "EVENT_SCREENSHOT" })], {
-                    type: "application/json",
-                })
-            );
+            const response = await uploadMedia(file, "EVENT_SCREENSHOT")
 
-            const res = await authApi.post("/file/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-
-            if (!res.data?.success) {
-                showTopToast("error", res.data?.description || "Upload failed.");
+            if (!response) {
+                showTopToast("error", "Upload failed.");
                 return null;
             }
 
-            return res.data.data?.url ?? null;
+            return response ?? null;
         } catch (error: any) {
             showTopToast(
                 "error",

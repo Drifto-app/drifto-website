@@ -17,6 +17,7 @@ import {UserEvents} from "@/components/user/user-events";
 import {UserPosts} from "@/components/user/user-posts";
 import {UserOrders} from "@/components/order/user-orders";
 import {UserSubscribers} from "@/components/user/user-subscribers";
+import {router} from "next/client";
 
 interface UserProfileProps extends ComponentProps<"div"> {
     handleScreenChange: (value: string) => void;
@@ -28,6 +29,7 @@ export const UserProfile = ({
     activeScreen, setActiveScreen, handleScreenChange, className, ...props
 }: UserProfileProps) => {
     const {user} = useAuthStore();
+    const router = useRouter();
 
     const userUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/user/${user?.id}`;
     const {
@@ -68,7 +70,7 @@ export const UserProfile = ({
                     <>
                         <div className="w-full flex flex-col px-4 pt-6 pb-25 gap-8">
                             <div className="flex items-center gap-4">
-                                <div className="w-20 h-20 flex flex-row items-center">
+                                <div className="w-20 h-20 flex flex-row items-center"   onClick={() => router.push(`/m/settings/profile-picture?prev=${encodeURIComponent(`/?screen=profile`)}`)}>
                                     <AspectRatio ratio={1}>
                                         <Image
                                             src={user?.profileImage || "/default.jpeg"}
@@ -78,7 +80,7 @@ export const UserProfile = ({
                                     </AspectRatio>
                                 </div>
                                 <div className="flex flex-row gap-1 items-center">
-                                    <p className="font-semibold text-lg ">{user?.username}</p>
+                                    <p className="font-semibold text-lg"   onClick={() => router.push(`/m/settings/username?prev=${encodeURIComponent(`/?screen=profile`)}`)} >{user?.username}</p>
                                     <UserVerificationBadge user={user!} />
                                 </div>
                             </div>
@@ -104,6 +106,7 @@ export const UserProfile = ({
                                 <Button
                                     variant="outline"
                                     className="flex-1 min-w-0 shadow-none font-semibold border-black py-6"
+                                    onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(`/?screen=profile`)}`)}
                                 >
                                     Edit Profile
                                 </Button>

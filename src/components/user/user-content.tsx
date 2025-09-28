@@ -152,6 +152,7 @@ export const UserContent = ({
                                     <Button
                                         variant="outline"
                                         className="flex-1 min-w-0 shadow-none font-semibold border-black py-6"
+                                        onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(`${pathname}?${searchParams}`)}`)}
                                     >
                                         Edit Profile
                                     </Button>
@@ -164,12 +165,12 @@ export const UserContent = ({
                                     </Button>
                                 </div>
                                 : <div className="w-full flex gap-3">
-                                    <Button
-                                        variant="outline"
-                                        className="flex-1 min-w-0 shadow-none font-semibold border-black py-6"
-                                    >
-                                        Message
-                                    </Button>
+                                    {/*<Button*/}
+                                    {/*    variant="outline"*/}
+                                    {/*    className="flex-1 min-w-0 shadow-none font-semibold border-black py-6"*/}
+                                    {/*>*/}
+                                    {/*    Message*/}
+                                    {/*</Button>*/}
                                     {user.followed
                                         ? <Button
                                             variant="outline"

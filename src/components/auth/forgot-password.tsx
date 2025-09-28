@@ -209,22 +209,22 @@ export const ForgotPassword = ({
                         onChange={(value) => setOtpValue(value)}
                     >
                         <InputOTPGroup>
-                            <InputOTPSlot index={0} />
+                            <InputOTPSlot index={0} className="otp-slot" />
                         </InputOTPGroup>
                         <InputOTPGroup>
-                            <InputOTPSlot index={1} />
+                            <InputOTPSlot index={1} className="otp-slot" />
                         </InputOTPGroup>
                         <InputOTPGroup>
-                            <InputOTPSlot index={2} />
+                            <InputOTPSlot index={2} className="otp-slot" />
                         </InputOTPGroup>
                         <InputOTPGroup>
-                            <InputOTPSlot index={3} />
+                            <InputOTPSlot index={3} className="otp-slot" />
                         </InputOTPGroup>
                         <InputOTPGroup>
-                            <InputOTPSlot index={4} />
+                            <InputOTPSlot index={4} className="otp-slot" />
                         </InputOTPGroup>
                         <InputOTPGroup>
-                            <InputOTPSlot index={5} />
+                            <InputOTPSlot index={5} className="otp-slot" />
                         </InputOTPGroup>
                     </InputOTP>
                     <div className="text-center text-sm">

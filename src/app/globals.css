@@ -179,6 +179,10 @@ a {
   animation: slideUpFromBottom 0.7s ease-out;
 }
 
+.otp-slot {
+  @apply h-14 w-12 text-xl rounded-lg border;
+}
+
 @utility no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;

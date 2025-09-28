@@ -15,11 +15,10 @@ interface ProfileDisplayProps {
     handleScreenChange: (value: string) => void;
 }
 
-export type ActiveScreenType = "profile" | "subscribers" | "events" | "posts" | "orders"
+export type ActiveScreenType = "profile" | "subscribers" | "posts" | "orders"
 
 const titleText: {value: string, screen: ActiveScreenType}[] = [
     {screen: "subscribers" , value: "subscribers"},
-    {screen: "events" , value: "My Experiences"},
     {screen: "posts" , value: "Posts"},
     {screen: "orders" , value: "Orders"},
 ]

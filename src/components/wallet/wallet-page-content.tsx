@@ -49,7 +49,7 @@ const WalletContent = ({
     }[] = [
         {text: "Transactions", icon: <GoPulse size={25} />, onClick: () => {router.push(`/m/wallet/transactions?prev=${encodeURIComponent(currentPathUrl)}`)}},
         {text: "Account", icon: <MdCreditCard size={25} />, onClick: () => {}},
-        {text: "Withdraw", icon: <GoDownload size={25} />, onClick: () => {}},
+        {text: "Withdraw", icon: <GoDownload size={25} />, onClick: () => {router.push(`/m/wallet/withdraw?prev=${encodeURIComponent(currentPathUrl)}`)}},
         {text: "Support", icon: <IoIosHelpCircleOutline size={25} />, onClick: () => {}}
     ]
 

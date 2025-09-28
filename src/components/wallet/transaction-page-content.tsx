@@ -10,7 +10,6 @@ import * as React from "react";
 import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 import {Loader} from "@/components/ui/loader";
-import {PostCard} from "@/components/post/post-card";
 import { TransactionCard } from "./transaction-card";
 
 export const WalletTransactionsPageContent = () => {

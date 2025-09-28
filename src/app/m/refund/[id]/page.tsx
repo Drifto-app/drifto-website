@@ -1,3 +1,5 @@
+"use client"
+
 import RefundPageComponent from "@/components/refund/refund-page";
 import {Loader} from "@/components/ui/loader";
 import {Suspense} from "react";

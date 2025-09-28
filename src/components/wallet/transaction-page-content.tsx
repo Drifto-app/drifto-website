@@ -174,6 +174,8 @@ export const WalletTransactionsContent = ({
                     ))}
                 </div>
 
+                {transactions.length < 0 && !hasMore && <div className="w-full text-center text-neutral-500">No Transaction History Found</div>}
+
                 <div ref={sentinelRef} aria-hidden className="h-1" />
 
                 {loading && (

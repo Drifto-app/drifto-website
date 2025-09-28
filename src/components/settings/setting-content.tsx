@@ -13,6 +13,7 @@ import {MdNavigateNext, MdPayment} from "react-icons/md";
 import {TbTools} from "react-icons/tb";
 import {IoMdHappy} from "react-icons/io";
 import {PiAt} from "react-icons/pi";
+import {useAuthStore} from "@/store/auth-store";
 
 interface SettingContentProps extends ComponentProps<"div"> {
     prev: string | null;
@@ -30,6 +31,7 @@ export const SettingContent = ({
     prev, currentPathUrl, className, ...props
 }: SettingContentProps) => {
     const router = useRouter();
+    const {user} = useAuthStore();
 
     const [activeScreen, setActiveScreen] = useState<string>("settings");
 
@@ -62,6 +64,37 @@ export const SettingContent = ({
 
     const render = () => {
         switch (activeScreen) {
+            case "host-settings":
+                return (
+                    <div className="flex-1 w-full px-6">
+                        <div className="w-full flex flex-col pt-6">
+                            <span
+                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
+                            >
+                                <p>Edit Profile</p>
+                                <MdNavigateNext size={30} />
+                            </span>
+                            <span
+                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                onClick={() => router.push(`/m/wallet?prev=${encodeURIComponent(currentPathUrl)}`)}
+                            >
+                                <p>Wallet</p>
+                                <MdNavigateNext size={30} />
+                            </span>
+                            <span
+                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                onClick={() => router.push(
+                                    `/m/user-events?id=${user?.id}&prev=${encodeURIComponent(currentPathUrl)}`
+                                )}
+
+                            >
+                                <p>Experience</p>
+                                <MdNavigateNext size={30} />
+                            </span>
+                        </div>
+                    </div>
+                )
             case "profile":
                 return (
                     <div className="flex-1 w-full px-6">

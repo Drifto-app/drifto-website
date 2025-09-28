@@ -13,6 +13,7 @@ import {Input} from "@/components/ui/input";
 import {LoaderSmall} from "@/components/ui/loader";
 import {showTopToast} from "@/components/toast/toast-util";
 import {authApi} from "@/lib/axios";
+import {Label} from "@/components/ui/label";
 
 export const NamePageContent = () => {
     const searchParams = useSearchParams();
@@ -37,7 +38,7 @@ export const NameContent = ({
                                 prev, currentPathUrl, className, ...props
                             }: NameContentProps) => {
     const router = useRouter();
-    const {user, setUser} = useAuthStore()
+    const { user, setUser } = useAuthStore()
 
     const [firstName, setFirstName] = useState<string>(user?.firstName || "");
     const [lastName, setLastName] = useState<string>(user?.lastName || "");
@@ -124,25 +125,35 @@ export const NameContent = ({
             </div>
             <div className="w-full flex-1 flex flex-col py-8 px-8 justify-between">
                 <div className="flex flex-col gap-6">
-                    <div className="grid gap-4">
-                        <Input
-                            id="firstName"
-                            type="text"
-                            placeholder="First name"
-                            value={firstName}
-                            onChange={handleFirstNameChange}
-                            required
-                            className="w-full py-6 text-base capitalize"
-                        />
-                        <Input
-                            id="lastName"
-                            type="text"
-                            placeholder="Last name"
-                            value={lastName}
-                            onChange={handleLastNameChange}
-                            required
-                            className="w-full py-6 text-base capitalize"
-                        />
+                    <div className="grid gap-6">
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="firstName" className="text-sm font-medium text-neutral-700">
+                                First Name
+                            </Label>
+                            <Input
+                                id="firstName"
+                                type="text"
+                                placeholder="First name"
+                                value={firstName}
+                                onChange={handleFirstNameChange}
+                                required
+                                className="w-full py-6 text-base capitalize"
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label htmlFor="lastName" className="text-sm font-medium text-neutral-700">
+                                Last Name
+                            </Label>
+                            <Input
+                                id="lastName"
+                                type="text"
+                                placeholder="Last name"
+                                value={lastName}
+                                onChange={handleLastNameChange}
+                                required
+                                className="w-full py-6 text-base capitalize"
+                            />
+                        </div>
                     </div>
                 </div>
                 <Button

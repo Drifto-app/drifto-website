@@ -1,8 +1,8 @@
 import { Loader } from "@/components/ui/loader";
 import { Suspense } from "react";
-import {NamePageContent} from "@/components/settings/name-edit";
+import {UpdateEmailPageContent} from "@/components/settings/update-email";
 
-export default function UsernameChangePage() {
+export default function UpdateEmailPage() {
 
     return (
         <Suspense fallback={
@@ -10,7 +10,7 @@ export default function UsernameChangePage() {
                 <Loader />
             </div>
         }>
-            <NamePageContent />
+            <UpdateEmailPageContent />
         </Suspense>
     )
 }

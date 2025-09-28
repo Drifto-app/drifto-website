@@ -13,6 +13,7 @@ import {Input} from "@/components/ui/input";
 import {LoaderSmall} from "@/components/ui/loader";
 import {showTopToast} from "@/components/toast/toast-util";
 import {api, authApi} from "@/lib/axios";
+import {Label} from "@/components/ui/label";
 
 export const UsernamePageContent = () => {
     const searchParams = useSearchParams();
@@ -155,6 +156,9 @@ export const UsernameContent = ({
             <div className="w-full flex-1 flex flex-col py-8 px-4 justify-between">
                 <div className="flex flex-col gap-6">
                     <div className="grid gap-2">
+                        <Label htmlFor="username" className="text-sm font-medium text-neutral-700">
+                            Username
+                        </Label>
                         <div className="relative flex flex-row gap-2">
                             <Input
                                 id="username"

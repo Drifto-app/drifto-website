@@ -110,6 +110,12 @@ export const EditProfileContent= ({
                     <span className="text-blue-800 font-semibold">Update Photo</span>
                 </div>
                 <div className="w-full flex flex-col items-center gap-4 px-4">
+                    <span className="w-full flex justify-between px-4 border-1 border-neutral-800 rounded-md py-4">
+                            <p className="text-neutral-400 font-semibold text-lg">{user?.email}</p>
+                    </span>
+                    <span className="w-full flex justify-between px-4 border-1 border-neutral-800 rounded-md py-4">
+                            <p className="text-neutral-400 font-semibold text-lg">{user?.phoneNumber || "No Phone Number"}</p>
+                    </span>
                     {userInfo.map((item, index) => (
                         <span key={index} className="w-full flex justify-between px-4 border-1 border-neutral-800 rounded-md py-4" onClick={item.onClickAction}>
                             <p className="text-neutral-400 font-semibold text-lg">{item.value}</p>

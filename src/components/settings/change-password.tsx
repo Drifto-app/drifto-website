@@ -7,7 +7,6 @@ import {ChangeEvent, ComponentProps, useState} from "react";
 import {cn, passwordRegex} from "@/lib/utils";
 import {FaArrowLeft} from "react-icons/fa";
 import * as React from "react";
-import {useAuthStore} from "@/store/auth-store";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {LoaderSmall} from "@/components/ui/loader";

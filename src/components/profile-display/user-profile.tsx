@@ -49,10 +49,6 @@ export const UserProfile = ({
 
     const render = () => {
         switch (activeScreen) {
-            case "events":
-                return (
-                    <UserEvents user={user!} isForUser={true} />
-                )
             case "posts":
                 return (
                     <UserPosts user={user!} isForUser={true} />
@@ -93,7 +89,10 @@ export const UserProfile = ({
                                             if(item.name === "Subscribers") {
                                                 setActiveScreen("subscribers");
                                             }else if(item.name === "Experience") {
-                                                setActiveScreen("events")
+                                                router.push(
+                                                    `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
+                                                );
+
                                             }
                                         }}
                                     >
@@ -119,7 +118,9 @@ export const UserProfile = ({
                                 </Button>
                             </div>
                             <div className="w-full grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => setActiveScreen("events")}>
+                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() =>  router.push(
+                                    `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
+                                )}>
                                     <div className="h-10 flex items-center justify-center">
                                         <PiFireSimpleBold size={40} />
                                     </div>

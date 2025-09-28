@@ -35,7 +35,7 @@ interface UserProps extends ComponentProps<"div"> {
     prev: string | null;
 }
 
-type ActiveScreenType = "details" | "events" | "posts";
+type ActiveScreenType = "details" | "posts";
 
 export const UserContent = ({
     user, setUser, prev, className, ...props
@@ -109,10 +109,6 @@ export const UserContent = ({
 
     const render = () => {
         switch (activeScreen) {
-            case "events":
-                return (
-                    <UserEvents user={user} />
-                )
             case "posts":
                 return (
                     <UserPosts user={user} />
@@ -233,7 +229,11 @@ export const UserContent = ({
                                 </DialogContent>
                             </Dialog>
                             <div className="w-full grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => setActiveScreen("events")}>
+                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => router.push(
+                                    isUserProfile
+                                        ? `/m/user-events?prev=${encodeURIComponent(`${pathname}?${searchParams}`)}`
+                                        : `/m/user-events?id=${user?.id}&prev=${encodeURIComponent(`${pathname}?${searchParams}`)}`
+                                )}>
                                     <div className="h-10 flex items-center justify-center">
                                         <PiFireSimpleBold size={40} />
                                     </div>

@@ -230,12 +230,12 @@ export default function RefundPageComponent() {
                         )}
 
                         <section className="w-full flex justify-center py-6">
-                            <div
-                                onClick={() => router.push(`/m/settings/account/add?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}
-                                className="text-blue-800 hover:text-blue-800 font-medium transition-colors"
+                            <a
+                                href={`/m/settings/account/add?prev=${encodeURIComponent(pathname + "?" + searchParams)}`}
+                                className="text-blue-800  font-semibold transition-colors"
                             >
                                 Add Account
-                            </div>
+                            </a>
                         </section>
 
                     </main>

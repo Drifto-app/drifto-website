@@ -10,7 +10,6 @@ import * as React from "react";
 import {authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 import {Loader} from "@/components/ui/loader";
-import {PostCard} from "@/components/post/post-card";
 import { TransactionCard } from "./transaction-card";
 
 export const WalletTransactionsPageContent = () => {
@@ -173,6 +172,8 @@ export const WalletTransactionsContent = ({
                         />
                     ))}
                 </div>
+
+                {transactions.length < 0 && !hasMore && <div className="w-full text-center text-neutral-500">No Transaction History Found</div>}
 
                 <div ref={sentinelRef} aria-hidden className="h-1" />
 

@@ -3,7 +3,7 @@
 import {ComponentProps, ReactNode, useState} from "react";
 import {cn} from "@/lib/utils";
 import {useRouter} from "next/navigation";
-import {FaArrowLeft, FaRegIdBadge, FaRegUser} from "react-icons/fa";
+import {FaArrowLeft, FaChevronRight, FaRegIdBadge, FaRegUser} from "react-icons/fa";
 import * as React from "react";
 import {LogoutButton} from "@/components/settings/logout-button";
 import Image from "next/image";
@@ -38,7 +38,7 @@ export const SettingContent = ({
     const settingsOptions: SettingsOptionType[] = [
         {name: "Profile & Preferences", value: "profile", icon: <FaRegUser size={25} />, onClickFunction: () => setActiveScreen("profile")},
         {name: "Host Settings", value: "host-settings", icon: <FaRegIdBadge size={25} />, onClickFunction: () => setActiveScreen("host-settings")},
-        {name: "Payment Methods", value: "payment-method", icon: <MdPayment size={25} />, onClickFunction: () => setActiveScreen("payment-method")},
+        {name: "Payment Methods", value: "payment-method", icon: <MdPayment size={25} />, onClickFunction: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`)},
         {name: "My Refunds", value: "refunds", icon: <IoCashOutline size={25} />, onClickFunction: () => setActiveScreen("refunds")},
         {name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={25} />, onClickFunction: () => setActiveScreen("privacy-policy")},
         {name: "Help & Support", value: "support", icon: <TbTools size={25} />, onClickFunction: () => setActiveScreen("support")},
@@ -73,14 +73,14 @@ export const SettingContent = ({
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
-                                <MdNavigateNext size={30} />
+                                <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
                                 className="w-full flex justify-between py-4 text-xl font-semibold items-center"
                                 onClick={() => router.push(`/m/wallet?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Wallet</p>
-                                <MdNavigateNext size={30} />
+                                <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
                                 className="w-full flex justify-between py-4 text-xl font-semibold items-center"
@@ -90,7 +90,7 @@ export const SettingContent = ({
 
                             >
                                 <p>Experience</p>
-                                <MdNavigateNext size={30} />
+                                <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                         </div>
                     </div>
@@ -104,14 +104,14 @@ export const SettingContent = ({
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
-                                <MdNavigateNext size={30} />
+                                <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
                                 className="w-full flex justify-between py-4 text-xl font-semibold items-center"
                                 onClick={() => router.push(`/m/settings/preferences?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Preferences</p>
-                                <MdNavigateNext size={30} />
+                                <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
                                 className="w-full flex justify-between py-4 text-xl font-semibold items-center"
@@ -119,7 +119,7 @@ export const SettingContent = ({
 
                             >
                                 <p>Delete Account</p>
-                                <MdNavigateNext size={30} />
+                                <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                         </div>
                     </div>

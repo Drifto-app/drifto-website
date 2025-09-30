@@ -121,6 +121,13 @@ export const TransactionCard = ({
                             <p className="text-right">{transactionContent.id}</p>
                         </span>
                         <span className="w-full flex justify-between">
+                            <p className="w-[40%]">Fees: </p>
+                            <p className="text-right">{new Intl.NumberFormat("en-NG", {
+                                style: "currency",
+                                currency: "NGN",
+                            }).format(transactionContent.fees || 0.00)}</p>
+                        </span>
+                        <span className="w-full flex justify-between">
                             <p className="w-[40%]">Created To: </p>
                             <p className="text-right">
                                 {isCredit ? "Your wallet balance" : `${transactionContent.accountName}, ${transactionContent.accountName}, ${transactionContent.bankName}`}

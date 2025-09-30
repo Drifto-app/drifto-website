@@ -39,11 +39,11 @@ export const SettingContent = ({
         {name: "Profile & Preferences", value: "profile", icon: <FaRegUser size={25} />, onClickFunction: () => setActiveScreen("profile")},
         {name: "Host Settings", value: "host-settings", icon: <FaRegIdBadge size={25} />, onClickFunction: () => setActiveScreen("host-settings")},
         {name: "Payment Methods", value: "payment-method", icon: <MdPayment size={25} />, onClickFunction: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "My Refunds", value: "refunds", icon: <IoCashOutline size={25} />, onClickFunction: () => setActiveScreen("refunds")},
-        {name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={25} />, onClickFunction: () => setActiveScreen("privacy-policy")},
-        {name: "Help & Support", value: "support", icon: <TbTools size={25} />, onClickFunction: () => setActiveScreen("support")},
-        {name: "Invite Friends", value: "invite", icon: <IoMdHappy size={27} />, onClickFunction: () => setActiveScreen("invite")},
-        {name: "Connect With Us", value: "connect", icon: <PiAt size={25} />, onClickFunction: () => setActiveScreen("connect")},
+        {name: "My Refunds", value: "refunds", icon: <IoCashOutline size={25} />, onClickFunction: () => router.push(`/m/refund-history?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={25} />, onClickFunction: () => router.push(`/m/settings/privacy-policy?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Help & Support", value: "support", icon: <TbTools size={25} />, onClickFunction: () =>  router.push(`/m/settings/help-support?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Invite Friends", value: "invite", icon: <IoMdHappy size={27} />, onClickFunction: () => router.push(`/m/settings/invite-friends?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Connect With Us", value: "connect", icon: <PiAt size={25} />, onClickFunction: () => router.push(`/m/settings/connect-page?prev=${encodeURIComponent(currentPathUrl)}`)},
     ]
 
     const handleBackClick = () => {

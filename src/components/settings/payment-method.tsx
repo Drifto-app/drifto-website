@@ -87,7 +87,7 @@ export const PaymentSettingsContent = ({
 
                     <a
                         className="w-full text-blue-700 text-center font-semibold text-base hover:text-blue-800 transition-colors"
-                        href={`/m/settings/account/add?prev=${encodeURIComponent(currentPathUrl)}`}
+                        href={`/m/settings/payment-method/add?prev=${encodeURIComponent(currentPathUrl)}`}
                     >
                         Add Account Number
                     </a>

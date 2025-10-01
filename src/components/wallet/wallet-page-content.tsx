@@ -112,7 +112,7 @@ const WalletContent = ({
                 </div>
                 <div className="w-full grid grid-cols-2 gap-5">
                     {actionButtons.map((item, index) => (
-                        <span key={index} className="flex gap-2 items-center px-2 py-3 rounded-md border-1 border-neutral-400 text-blue-800" onClick={item.onClick}>
+                        <span key={index} className="flex gap-2 items-center px-2 py-3 rounded-md border-1 border-neutral-300 text-blue-800" onClick={item.onClick}>
                             {item.icon}
                             <p className="text-lg text-black">{item.text}</p>
                         </span>

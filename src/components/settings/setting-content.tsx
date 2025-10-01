@@ -39,11 +39,11 @@ export const SettingContent = ({
         {name: "Profile & Preferences", value: "profile", icon: <FaRegUser size={25} />, onClickFunction: () => setActiveScreen("profile")},
         {name: "Host Settings", value: "host-settings", icon: <FaRegIdBadge size={25} />, onClickFunction: () => setActiveScreen("host-settings")},
         {name: "Payment Methods", value: "payment-method", icon: <MdPayment size={25} />, onClickFunction: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "My Refunds", value: "refunds", icon: <IoCashOutline size={25} />, onClickFunction: () => setActiveScreen("refunds")},
-        {name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={25} />, onClickFunction: () => setActiveScreen("privacy-policy")},
-        {name: "Help & Support", value: "support", icon: <TbTools size={25} />, onClickFunction: () => setActiveScreen("support")},
-        {name: "Invite Friends", value: "invite", icon: <IoMdHappy size={27} />, onClickFunction: () => setActiveScreen("invite")},
-        {name: "Connect With Us", value: "connect", icon: <PiAt size={25} />, onClickFunction: () => setActiveScreen("connect")},
+        {name: "My Refunds", value: "refunds", icon: <IoCashOutline size={25} />, onClickFunction: () => router.push(`/m/refund-history?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={25} />, onClickFunction: () => router.push(`/m/settings/privacy-policy?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Help & Support", value: "support", icon: <TbTools size={25} />, onClickFunction: () =>  router.push(`/m/settings/help-support?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Invite Friends", value: "invite", icon: <IoMdHappy size={27} />, onClickFunction: () => router.push(`/m/settings/invite-friends?prev=${encodeURIComponent(currentPathUrl)}`)},
+        {name: "Connect With Us", value: "connect", icon: <PiAt size={25} />, onClickFunction: () => router.push(`/m/settings/connect-page?prev=${encodeURIComponent(currentPathUrl)}`)},
     ]
 
     const handleBackClick = () => {
@@ -69,21 +69,21 @@ export const SettingContent = ({
                     <div className="flex-1 w-full px-6">
                         <div className="w-full flex flex-col pt-6">
                             <span
-                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center"
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center"
                                 onClick={() => router.push(`/m/wallet?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Wallet</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center"
                                 onClick={() => router.push(
                                     `/m/user-events?id=${user?.id}&prev=${encodeURIComponent(currentPathUrl)}`
                                 )}
@@ -100,21 +100,21 @@ export const SettingContent = ({
                     <div className="flex-1 w-full px-6">
                         <div className="w-full flex flex-col pt-6">
                             <span
-                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center"
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center"
                                 onClick={() => router.push(`/m/settings/preferences?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Preferences</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-xl font-semibold items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center"
                                 onClick={() => router.push(`/m/settings/delete-account?prev=${encodeURIComponent(currentPathUrl)}`)}
 
                             >
@@ -126,8 +126,8 @@ export const SettingContent = ({
                 )
             default:
                 return (
-                    <div className="flex-1 flex flex-col gap-8 px-4 pb-10">
-                        <div className="w-full flex flex-row items-center pl-4 py-4 shadow-2xl rounded-lg" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(currentPathUrl)}`)}>
+                    <div className="flex-1 flex flex-col gap-4 px-4 pb-10">
+                        <div className="w-full flex flex-row items-center pl-4 py-3 shadow-2xl rounded-lg" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(currentPathUrl)}`)}>
                             <span className="max-w-[60%] flex flex-col gap-1">
                                 <h4 className="font-bold text-lg">Become a Drifto Host</h4>
                                 <p className="text-neutral-600 leading-tight">Share what you love. Create moments that matter and get paid.</p>
@@ -150,7 +150,7 @@ export const SettingContent = ({
                                     onClick={item.onClickFunction}
                                 >
                             {item.icon}
-                                    <p className="font-semibold text-xl">{item.name}</p>
+                                    <p className="text-lg">{item.name}</p>
                         </span>
                             ))}
                         </div>

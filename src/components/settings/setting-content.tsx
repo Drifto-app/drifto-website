@@ -69,21 +69,21 @@ export const SettingContent = ({
                     <div className="flex-1 w-full px-6">
                         <div className="w-full flex flex-col pt-6">
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
                                 onClick={() => router.push(`/m/wallet?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Wallet</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
                                 onClick={() => router.push(
                                     `/m/user-events?id=${user?.id}&prev=${encodeURIComponent(currentPathUrl)}`
                                 )}
@@ -100,21 +100,21 @@ export const SettingContent = ({
                     <div className="flex-1 w-full px-6">
                         <div className="w-full flex flex-col pt-6">
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
                                 onClick={() => router.push(`/m/settings/preferences?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Preferences</p>
                                 <FaChevronRight size={16} className="text-neutral-400" />
                             </span>
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center"
+                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
                                 onClick={() => router.push(`/m/settings/delete-account?prev=${encodeURIComponent(currentPathUrl)}`)}
 
                             >
@@ -127,7 +127,7 @@ export const SettingContent = ({
             default:
                 return (
                     <div className="flex-1 flex flex-col gap-4 px-4 pb-10">
-                        <div className="w-full flex flex-row items-center pl-4 py-3 shadow-2xl rounded-lg" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(currentPathUrl)}`)}>
+                        <div className="w-full flex flex-row items-center pl-4 py-3 shadow-2xl rounded-lg cursor-pointer" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(currentPathUrl)}`)}>
                             <span className="max-w-[60%] flex flex-col gap-1">
                                 <h4 className="font-bold text-lg">Become a Drifto Host</h4>
                                 <p className="text-neutral-600 leading-tight">Share what you love. Create moments that matter and get paid.</p>
@@ -146,7 +146,7 @@ export const SettingContent = ({
                             {settingsOptions.map((item, i) => (
                                 <span
                                     key={i}
-                                    className="w-full flex items-center gap-5 py-6 px-2 border-b-neutral-300 border-b-1"
+                                    className="w-full flex items-center gap-5 py-6 px-2 border-b-neutral-300 border-b-1 cursor-pointer"
                                     onClick={item.onClickFunction}
                                 >
                             {item.icon}

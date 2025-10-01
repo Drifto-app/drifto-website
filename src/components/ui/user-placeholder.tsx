@@ -2,7 +2,7 @@
 
 import {AspectRatio} from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {MdVerified} from "react-icons/md";
+import {MdDeleteOutline, MdVerified} from "react-icons/md";
 import {cn} from "@/lib/utils";
 import * as React from "react";
 import {useRouter} from "next/navigation";
@@ -10,6 +10,10 @@ import {GoDash} from "react-icons/go";
 import {useState} from "react";
 import {LoaderSmall} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
+import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer";
+import {SlOptionsVertical} from "react-icons/sl";
+import {FaFlag} from "react-icons/fa";
+import { IoIosInformationCircle } from "react-icons/io";
 
 interface UserPlaceholderProps extends React.ComponentProps<"div"> {
     user: {[key: string]: any};
@@ -21,19 +25,50 @@ interface UserEventSinglePlaceholderProps extends UserPlaceholderProps {
     removeClick?: (username: string) => void;
 }
 
-function UserVerificationBadge({user}: {user: {[key: string]: any}}) {
+function UserVerificationBadge({user, isClickable = false}: {user: {[key: string]: any}, isClickable?: boolean}) {
     let verificationStyle = "";
+    let description = ""
 
-    if(user.userVerificationType === "HOST_VERIFICATION") {
-        verificationStyle = "text-black"
+    if(user.userVerificationType === "ORGANIZATION_VERIFICATION") {
+        verificationStyle = "text-black";
+        description = "The account is verified as an affiliated account to Drifto";
     } else if(user.userVerificationType === "USER_VERIFICATION") {
         verificationStyle = "text-blue-600"
-    } else if(user.userVerificationType === "EVENT_VERIFICATION") {
+        description = "The account is a verified user on Drifto";
+    } else if(user.userVerificationType === "HOST_VERIFICATION") {
         verificationStyle = "text-yellow-500"
+        description = "The account is a verified host account on Drifto";
+
     }
 
 
     if(user.verified) {
+        if (isClickable) {
+            return (
+                <Drawer>
+                    <DrawerTrigger asChild>
+                        <MdVerified size={18} className={cn(
+                            verificationStyle
+                        )} />
+                    </DrawerTrigger>
+
+                    <DrawerContent className="z-99999">
+                        <div className="w-full px-4 pb-4">
+                            <DrawerHeader>
+                                <DrawerTitle>Verification Info</DrawerTitle>
+                            </DrawerHeader>
+                            <div className="flex items-center gap-2">
+                                <IoIosInformationCircle size={25}/>
+                                <span className="font-bold">
+                                    {description}
+                                </span>
+                            </div>
+                        </div>
+                    </DrawerContent>
+                </Drawer>
+            )
+        }
+
         return (
             <MdVerified size={18} className={cn(
                 verificationStyle

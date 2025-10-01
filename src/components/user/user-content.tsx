@@ -130,7 +130,7 @@ export const UserContent = ({
                             <div className="w-full flex flex-col">
                                 <div className="flex gap-2 items-center">
                                     <p className="text-black text-md font-bold truncate">{user.username}</p>
-                                    <UserVerificationBadge user={user} />
+                                    <UserVerificationBadge user={user} isClickable={true} />
                                 </div>
                             </div>
                         </div>

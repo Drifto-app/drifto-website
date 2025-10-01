@@ -46,9 +46,8 @@ export const PaymentSettingsContent = ({
             )}
             {...props}
         >
-            {/* Header */}
-            <div className="w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-16 flex-shrink-0">
-                <div className="flex flex-row items-center px-4">
+            <div className="w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-20 flex-shrink-0">
+                <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
                         size={20}
                         onClick={handleBackClick}
@@ -57,10 +56,10 @@ export const PaymentSettingsContent = ({
                         role="button"
                         tabIndex={0}
                     />
-                    <p className="font-semibold text-neutral-950 text-lg w-full text-center capitalize truncate ml-4">
+                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
                         Payment Settings
                     </p>
-                    <div className="w-5" /> {/* Spacer for centering */}
+                    <div className="w-5" />
                 </div>
             </div>
 
@@ -88,7 +87,7 @@ export const PaymentSettingsContent = ({
 
                     <a
                         className="w-full text-blue-700 text-center font-semibold text-base hover:text-blue-800 transition-colors"
-                        href={`/m/settings/account/add?prev=${encodeURIComponent(currentPathUrl)}`}
+                        href={`/m/settings/payment-method/add?prev=${encodeURIComponent(currentPathUrl)}`}
                     >
                         Add Account Number
                     </a>

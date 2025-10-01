@@ -78,7 +78,8 @@ export const DeleteAccountContent = ({
             clearAuth()
             router.push("/login");
         } catch (error: any) {
-            showTopToast("error", "Error deleting account");
+            console.log(error)
+            showTopToast("error", error.response?.data?.description);
         } finally {
             setIsLoading(false);
         }
@@ -120,15 +121,15 @@ export const DeleteAccountContent = ({
                     <ul className="flex flex-col gap-2">
                         {checkText.map((item, index) => (
                             <li key={index} className="w-full flex gap-2 items-center">
-                                <IoIosCheckboxOutline size={25} className="text-blue-800" />
+                                <IoIosCheckboxOutline size={25} className="text-blue-800 flex-shrink-0" />
                                 <p>{item}</p>
                             </li>
                         ))}
                     </ul>
                     <ul className="flex flex-col gap-2 pt-5">
-                        {checkText.map((item, index) => (
+                        {lockText.map((item, index) => (
                             <li key={index} className="w-full flex gap-2 items-center">
-                                <IoLockClosed size={25} className="text-blue-800" />
+                                <IoLockClosed size={25} className="text-blue-800 flex-shrink-0" />
                                 <p>{item}</p>
                             </li>
                         ))}

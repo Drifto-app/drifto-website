@@ -154,7 +154,7 @@ export const WalletTransactionsContent = ({
                         paymentInfo={paymentInfo}
                         setPaymentInfo={setPaymentInfo}
                     />
-                    <a className="w-full text-blue-800 text-center font-semibold" href={`/m/settings/account/add?prev=${encodeURIComponent(currentPathUrl)}`}>Add account number</a>
+                    <a className="w-full text-blue-800 text-center font-semibold" href={`/m/settings/payment-method/add?prev=${encodeURIComponent(currentPathUrl)}`}>Add account number</a>
                 </div>
                 <Button
                     className="w-full bg-blue-800 hover:bg-blue-800 py-8 font-semibold text-lg mt-8"

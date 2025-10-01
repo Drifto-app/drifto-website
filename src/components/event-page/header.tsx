@@ -69,7 +69,7 @@ export const SingleEventHeader = ({
 
     return (
         <div className={cn(
-            "w-full border-b-1 border-b-neutral-300 flex flex-col gap-5 h-[15vh] justify-between",
+            "w-full border-b-1 border-b-neutral-300 flex flex-col gap-5 h-28 justify-between",
             className
         )} {...props}>
             <div className="flex flex-row items-center pt-8 px-8">

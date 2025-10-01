@@ -8,6 +8,7 @@ import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
 import {ScreenProvider} from "@/components/screen/screen-provider";
 import {UserPaymentInfo} from "@/components/wallet/user-payment-infos";
 import {Loader} from "@/components/ui/loader";
+import {showTopToast} from "@/components/toast/toast-util";
 
 // Types
 interface Ticket {
@@ -19,9 +20,9 @@ interface Ticket {
 
 interface RefundRequest {
     userTicketReference: string;
-    accountNumber: string;
-    bankCode: string;
-    bankName: string;
+    accountNumber?: string;
+    bankCode?: string;
+    bankName?: string;
 }
 
 interface LoadingState {
@@ -91,10 +92,9 @@ export default function RefundPageComponent() {
                 await authApi.post("refund/userTicket", refundData);
                 router.push("/?screen=plans");
             } catch (error: any) {
-                const errorMessage =
-                    error.response?.data?.message || "Failed to process refund";
-                setErrors((prev) => ({ ...prev, refund: errorMessage }));
-                console.error("Error processing refund:", error);
+                const errorMessage = "Failed to process refund";
+                // setErrors((prev) => ({ ...prev, refund: errorMessage }));
+                showTopToast("error", errorMessage)
             } finally {
                 setLoading((prev) => ({ ...prev, refund: false }));
             }
@@ -115,14 +115,19 @@ export default function RefundPageComponent() {
     );
 
     const handleConfirmRefund = useCallback(() => {
-        if (!selectedTicket || !paymentInfo) return;
+        if (!selectedTicket) return;
+
+        if(selectedTicket.paid && !paymentInfo) return;
 
         const refundData: RefundRequest = {
             userTicketReference: selectedTicket.ticketReference,
-            accountNumber: paymentInfo.accountNumber || "",
-            bankCode: paymentInfo.bankCode || "",
-            bankName: paymentInfo.bankName || "",
         };
+
+        if(selectedTicket.paid) {
+            refundData.accountNumber = paymentInfo!.accountNumber || "";
+            refundData.bankCode = paymentInfo!.bankCode || "";
+            refundData.bankName = paymentInfo!.bankName || "";
+        }
 
         handleRefundTicket(refundData);
     }, [selectedTicket, paymentInfo, handleRefundTicket]);
@@ -155,12 +160,12 @@ export default function RefundPageComponent() {
                 </div>
 
                 {/* Error Display */}
-                {errors.refund && (
-                    <ErrorMessage
-                        message={errors.refund}
-                        onDismiss={() => setErrors((prev) => ({ ...prev, refund: null }))}
-                    />
-                )}
+                {/*{errors.refund && (*/}
+                {/*    <ErrorMessage*/}
+                {/*        message={errors.refund}*/}
+                {/*        onDismiss={() => setErrors((prev) => ({ ...prev, refund: null }))}*/}
+                {/*    />*/}
+                {/*)}*/}
 
                 {/* Tickets Section */}
                 <section className="mb-8">
@@ -274,9 +279,7 @@ interface LoadingSpinnerProps {
     message?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-                                                           message = "Loading...",
-                                                       }) => (
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = () => (
     <div className="flex flex-col items-center justify-center py-8 text-gray-500">
         <Loader />
     </div>
@@ -341,7 +344,7 @@ const RefundHeader: React.FC<RefundHeaderProps> = ({ title, prev }) => {
                 >
                     <FaArrowLeft size={16} className="text-gray-700" />
                 </button>
-                <h1 className="font-semibold text-gray-900 text-lg capitalize truncate flex-1 text-center mx-4">
+                <h1 className="font-semibold text-gray-900 text-base capitalize truncate flex-1 text-center mx-4">
                     {title}
                 </h1>
                 <div className="w-8 h-8" /> {/* Spacer for centering */}

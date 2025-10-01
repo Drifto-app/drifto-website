@@ -74,7 +74,7 @@ export default function Page() {
               onClick={() => {
                 router.push(`/m/refund/${id}?prev=${encodeURIComponent(`/m/bookings/${id}`)}`);
               }}
-              className="outline-none border-none bg-white text-blue-700 text-lg font-md"
+              className="outline-none border-none bg-white text-blue-700 text-base font-md"
             >
               Request a refund
             </button>
@@ -242,7 +242,7 @@ function TicketCard({
           <div className="flex gap-2 items-center">
             <div className="border-t border-black w-full"></div>
             <div className="w-fit break-normal whitespace-nowrap">
-              {index} of {noOfTickets}
+              {index + 1} of {noOfTickets}
             </div>
             <div className="border-t border-black w-full"></div>
           </div>

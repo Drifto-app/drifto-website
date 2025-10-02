@@ -1,11 +1,14 @@
 "use client";
 import { authApi } from "@/lib/axios";
-import { UserCircle, AlertCircle, Loader2 } from "lucide-react";
+import { AlertCircle, Loader2 } from "lucide-react";
 import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
 import React, { useEffect, useState, useCallback } from "react";
 import { FaArrowLeft } from "react-icons/fa";
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
 import {ScreenProvider} from "@/components/screen/screen-provider";
+import {UserPaymentInfo} from "@/components/wallet/user-payment-infos";
+import {Loader} from "@/components/ui/loader";
+import {showTopToast} from "@/components/toast/toast-util";
 
 // Types
 interface Ticket {
@@ -15,30 +18,20 @@ interface Ticket {
     paid: boolean;
 }
 
-interface Bank {
-    accountName: string;
-    accountNumber: string;
-    bankName: string;
-    id: string;
-    bankCode: string;
-}
-
 interface RefundRequest {
     userTicketReference: string;
-    accountNumber: string;
-    bankCode: string;
-    bankName: string;
+    accountNumber?: string;
+    bankCode?: string;
+    bankName?: string;
 }
 
 interface LoadingState {
     tickets: boolean;
-    banks: boolean;
     refund: boolean;
 }
 
 interface ErrorState {
     tickets: string | null;
-    banks: string | null;
     refund: string | null;
 }
 
@@ -51,20 +44,18 @@ export default function RefundPageComponent() {
     const prev = searchParams.get("prev")
 
     // State management
-    const [bankDetails, setBankDetails] = useState<Bank[]>([]);
     const [tickets, setTickets] = useState<Ticket[]>([]);
     const [selectedTicket, setSelectedTicket] = useState<Ticket | undefined>();
-    const [selectedBank, setSelectedBank] = useState<Bank | undefined>();
+    const [paymentInfo, setPaymentInfo] = useState<Record<string, any> | null>(null);
+    const [hasAccounts, setHasAccounts] = useState(false);
 
     const [loading, setLoading] = useState<LoadingState>({
         tickets: false,
-        banks: false,
         refund: false,
     });
 
     const [errors, setErrors] = useState<ErrorState>({
         tickets: null,
-        banks: null,
         refund: null,
     });
 
@@ -92,31 +83,6 @@ export default function RefundPageComponent() {
         }
     }, [id]);
 
-    const fetchPaymentInfo = useCallback(async () => {
-        setLoading((prev) => ({ ...prev, banks: true }));
-        setErrors((prev) => ({ ...prev, banks: null }));
-
-        try {
-            const response = await authApi.get("/paymentInfo/user", {
-                params: {
-                    pageNumber: 1,
-                    pageSize: 10,
-                    detailsType: "BANK_ACCOUNT_DETAILS",
-                },
-            });
-
-            const data = response.data?.data?.data || [];
-            setBankDetails(data);
-        } catch (error: any) {
-            const errorMessage =
-                error.response?.data?.message || "Failed to fetch bank details";
-            setErrors((prev) => ({ ...prev, banks: errorMessage }));
-            console.error("Error fetching bank details:", error);
-        } finally {
-            setLoading((prev) => ({ ...prev, banks: false }));
-        }
-    }, []);
-
     const handleRefundTicket = useCallback(
         async (refundData: RefundRequest) => {
             setLoading((prev) => ({ ...prev, refund: true }));
@@ -126,10 +92,9 @@ export default function RefundPageComponent() {
                 await authApi.post("refund/userTicket", refundData);
                 router.push("/?screen=plans");
             } catch (error: any) {
-                const errorMessage =
-                    error.response?.data?.message || "Failed to process refund";
-                setErrors((prev) => ({ ...prev, refund: errorMessage }));
-                console.error("Error processing refund:", error);
+                const errorMessage = "Failed to process refund";
+                // setErrors((prev) => ({ ...prev, refund: errorMessage }));
+                showTopToast("error", errorMessage)
             } finally {
                 setLoading((prev) => ({ ...prev, refund: false }));
             }
@@ -142,126 +107,123 @@ export default function RefundPageComponent() {
         setSelectedTicket((prev) => (prev?.id === ticket.id ? undefined : ticket));
     }, []);
 
-    const handleBankSelect = useCallback((bank: Bank) => {
-        setSelectedBank((prev) => (prev?.id === bank.id ? undefined : bank));
-    }, []);
+    const handleAccountsLoad = useCallback(
+        (accounts: Array<Record<string, any>>) => {
+            setHasAccounts(accounts.length > 0);
+        },
+        []
+    );
 
     const handleConfirmRefund = useCallback(() => {
         if (!selectedTicket) return;
 
+        if(selectedTicket.paid && !paymentInfo) return;
+
         const refundData: RefundRequest = {
             userTicketReference: selectedTicket.ticketReference,
-            accountNumber: selectedBank?.accountNumber || "",
-            bankCode: selectedBank?.bankCode || "",
-            bankName: selectedBank?.bankName || "",
         };
 
+        if(selectedTicket.paid) {
+            refundData.accountNumber = paymentInfo!.accountNumber || "";
+            refundData.bankCode = paymentInfo!.bankCode || "";
+            refundData.bankName = paymentInfo!.bankName || "";
+        }
+
         handleRefundTicket(refundData);
-    }, [selectedTicket, selectedBank, handleRefundTicket]);
+    }, [selectedTicket, paymentInfo, handleRefundTicket]);
 
     // Effects
     useEffect(() => {
         fetchTickets();
-        fetchPaymentInfo();
-    }, [fetchTickets, fetchPaymentInfo]);
+    }, [fetchTickets]);
 
     // Computed values
     const shouldShowBankSelection =
         selectedTicket?.paid === true || selectedTicket === undefined;
     const isConfirmDisabled =
-        !selectedTicket || loading.refund || (selectedTicket.paid && !selectedBank);
+        !selectedTicket || loading.refund || (selectedTicket.paid && !paymentInfo);
 
     return (
-        <ProtectedRoute>
-            <ScreenProvider>
-                <div className="min-h-screen bg-gray-50">
-                    <RefundHeader title="Request Refund" prev={prev} />
+        <div className="w-full min-h-[100dvh] bg-gray-50">
+            <RefundHeader title="Request Refund" prev={prev} />
 
-                    <main className="p-4 pb-24">
-                        {/* Instructions */}
-                        <div className="mb-8">
-                            <h1 className="text-lg font-semibold mb-2">
-                                Select the ticket you want a refund for
-                            </h1>
-                            <p className="text-base text-gray-600">
-                                Select the ticket you want a refund for. You can select only one
-                                ticket at a time.
-                            </p>
-                        </div>
-
-                        {/* Error Display */}
-                        {errors.refund && (
-                            <ErrorMessage
-                                message={errors.refund}
-                                onDismiss={() => setErrors((prev) => ({ ...prev, refund: null }))}
-                            />
-                        )}
-
-                        {/* Tickets Section */}
-                        <section className="mb-8">
-                            {loading.tickets ? (
-                                <LoadingSpinner message="Loading tickets..." />
-                            ) : errors.tickets ? (
-                                <ErrorMessage message={errors.tickets} onRetry={fetchTickets} />
-                            ) : (
-                                <TicketList
-                                    tickets={tickets}
-                                    selectedTicket={selectedTicket}
-                                    onTicketSelect={handleTicketSelect}
-                                />
-                            )}
-                        </section>
-
-                        {/* Bank Selection Section */}
-                        {shouldShowBankSelection && (
-                            <section>
-                                <h2 className="text-xl font-bold mb-4">Account</h2>
-
-                                {loading.banks ? (
-                                    <LoadingSpinner message="Loading bank details..." />
-                                ) : errors.banks ? (
-                                    <ErrorMessage message={errors.banks} onRetry={fetchPaymentInfo} />
-                                ) : (
-                                    <BankList
-                                        banks={bankDetails}
-                                        selectedBank={selectedBank}
-                                        onBankSelect={handleBankSelect}
-                                    />
-                                )}
-                            </section>
-                        )}
-
-                        <section className="w-full flex justify-center py-6">
-                            <div
-                                onClick={() => router.push(`/m/settings/account/add?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}
-                                className="text-blue-800 hover:text-blue-800 font-medium transition-colors"
-                            >
-                                Add Account
-                            </div>
-                        </section>
-
-                    </main>
-
-                    {/* Confirm Button */}
-                    <div className="fixed bottom-0 left-0 w-full border-t border-gray-300 bg-white p-4 flex justify-center">
-                        <button
-                            disabled={isConfirmDisabled}
-                            onClick={handleConfirmRefund}
-                            className="w-10/12 flex items-center justify-center gap-2 p-3 rounded-md disabled:bg-neutral-600 disabled:cursor-not-allowed text-white bg-blue-800 hover:bg-blue-800 font-bold text-lg transition-colors"
-                        >
-                            {loading.refund ? (
-                                <>
-                                    <Loader2 className="animate-spin" size={20} />
-                                    Processing...
-                                </>
-                            ) : (
-                                "Confirm"
-                            )}
-                        </button>
-                    </div>
+            <main className="p-4 pb-24">
+                {/* Instructions */}
+                <div className="mb-8">
+                    <h1 className="text-lg font-semibold mb-2">
+                        Select the ticket you want a refund for
+                    </h1>
+                    <p className="text-base text-gray-600">
+                        Select the ticket you want a refund for. You can select only one
+                        ticket at a time.
+                    </p>
                 </div>
-            </ScreenProvider>
-        </ProtectedRoute>
+
+                {/* Error Display */}
+                {/*{errors.refund && (*/}
+                {/*    <ErrorMessage*/}
+                {/*        message={errors.refund}*/}
+                {/*        onDismiss={() => setErrors((prev) => ({ ...prev, refund: null }))}*/}
+                {/*    />*/}
+                {/*)}*/}
+
+                {/* Tickets Section */}
+                <section className="mb-8">
+                    {loading.tickets ? (
+                        <LoadingSpinner message="Loading tickets..." />
+                    ) : errors.tickets ? (
+                        <ErrorMessage message={errors.tickets} onRetry={fetchTickets} />
+                    ) : (
+                        <TicketList
+                            tickets={tickets}
+                            selectedTicket={selectedTicket}
+                            onTicketSelect={handleTicketSelect}
+                        />
+                    )}
+                </section>
+
+                {/* Bank Selection Section */}
+                {shouldShowBankSelection && (
+                    <section>
+                        <h2 className="text-xl font-bold mb-4">Account</h2>
+                        <UserPaymentInfo
+                            detailsType="BANK_ACCOUNT_DETAILS"
+                            maxHeight="500px"
+                            onAccountsLoad={handleAccountsLoad}
+                            paymentInfo={paymentInfo}
+                            setPaymentInfo={setPaymentInfo}
+                        />
+                    </section>
+                )}
+
+                <section className="w-full flex justify-center py-6">
+                    <a
+                        href={`/m/settings/payment-method/add?prev=${encodeURIComponent(pathname + "?" + searchParams)}`}
+                        className="text-blue-800 font-semibold transition-colors"
+                    >
+                        Add Account
+                    </a>
+                </section>
+            </main>
+
+            {/* Confirm Button */}
+            <div className="fixed bottom-0 left-0 w-full border-t border-gray-300 bg-white p-4 flex justify-center">
+                <button
+                    disabled={isConfirmDisabled}
+                    onClick={handleConfirmRefund}
+                    className="w-10/12 flex items-center justify-center gap-2 p-3 rounded-md disabled:bg-neutral-600 disabled:cursor-not-allowed text-white bg-blue-800 hover:bg-blue-800 font-bold text-lg transition-colors"
+                >
+                    {loading.refund ? (
+                        <>
+                            <Loader2 className="animate-spin" size={20} />
+                            Processing...
+                        </>
+                    ) : (
+                        "Confirm"
+                    )}
+                </button>
+            </div>
+        </div>
     );
 }
 
@@ -302,59 +264,9 @@ const TicketList: React.FC<TicketListProps> = ({
                         <span className="font-medium">{ticket.ticketName}</span>
                         {!ticket.paid && (
                             <span className="ml-2 text-sm text-gray-500 font-normal">
-                (free)
-              </span>
+                                (free)
+                            </span>
                         )}
-                    </div>
-                );
-            })}
-        </div>
-    );
-};
-
-// Component: Bank List
-interface BankListProps {
-    banks: Bank[];
-    selectedBank: Bank | undefined;
-    onBankSelect: (bank: Bank) => void;
-}
-
-const BankList: React.FC<BankListProps> = ({
-                                               banks,
-                                               selectedBank,
-                                               onBankSelect,
-                                           }) => {
-    if (banks.length === 0) {
-        return (
-            <div className="text-center py-8 text-gray-500">
-                No bank accounts found. Please add a bank account in your profile.
-            </div>
-        );
-    }
-
-    return (
-        <div className="space-y-4">
-            {banks.map((bank) => {
-                const isSelected = selectedBank?.id === bank.id;
-                return (
-                    <div
-                        key={bank.id}
-                        onClick={() => onBankSelect(bank)}
-                        className={`p-3 rounded-md border-2 flex gap-4 cursor-pointer transition-all hover:shadow-md ${
-                            isSelected
-                                ? "text-blue-900 border-blue-900 bg-blue-50"
-                                : "border-gray-300 hover:border-gray-400"
-                        }`}
-                    >
-                        <UserCircle size={50} className="text-gray-600 flex-shrink-0" />
-                        <div className="flex-1 min-w-0">
-                            <p className="font-bold text-sm capitalize truncate">
-                                {bank.accountNumber} ({bank.bankName})
-                            </p>
-                            <p className="text-gray-600 font-light uppercase text-sm truncate">
-                                {bank.accountName}
-                            </p>
-                        </div>
                     </div>
                 );
             })}
@@ -367,12 +279,9 @@ interface LoadingSpinnerProps {
     message?: string;
 }
 
-const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-                                                           message = "Loading...",
-                                                       }) => (
+const LoadingSpinner: React.FC<LoadingSpinnerProps> = () => (
     <div className="flex flex-col items-center justify-center py-8 text-gray-500">
-        <Loader2 className="animate-spin mb-2" size={32} />
-        <p>{message}</p>
+        <Loader />
     </div>
 );
 
@@ -435,7 +344,7 @@ const RefundHeader: React.FC<RefundHeaderProps> = ({ title, prev }) => {
                 >
                     <FaArrowLeft size={16} className="text-gray-700" />
                 </button>
-                <h1 className="font-semibold text-gray-900 text-lg capitalize truncate flex-1 text-center mx-4">
+                <h1 className="font-semibold text-gray-900 text-base capitalize truncate flex-1 text-center mx-4">
                     {title}
                 </h1>
                 <div className="w-8 h-8" /> {/* Spacer for centering */}

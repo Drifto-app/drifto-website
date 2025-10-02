@@ -94,10 +94,11 @@ export function LoginForm({
                 Forgot your password?
               </span>
             </div>
-            <div className="flex flex-row justify-start items-center border rounded-md">
+            <div className="flex flex-row justify-start items-center border rounded-md focus-within:border-blue-600">
               <Input
                   id="password"
                   type={isPasswordShow ? 'text' : 'password'}
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required

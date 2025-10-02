@@ -1,6 +1,6 @@
 "use client"
 
-import {useSearchParams} from "next/navigation";
+import {usePathname, useSearchParams} from "next/navigation";
 import {ScreenProvider} from "@/components/screen/screen-provider";
 import {LocationChangeContent} from "@/components/location-change/location-change-content";
 import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
@@ -10,11 +10,13 @@ export default function SettingsPageContent () {
     const searchParams = useSearchParams();
     const prev = searchParams.get("prev")
 
+    const pathname = usePathname();
+
     return (
         <ProtectedRoute>
             <ScreenProvider>
                 <div className="w-full">
-                   <SettingContent prev={prev} />
+                   <SettingContent prev={prev} currentPathUrl={pathname + "?" + searchParams} />
                 </div>
             </ScreenProvider>
         </ProtectedRoute>

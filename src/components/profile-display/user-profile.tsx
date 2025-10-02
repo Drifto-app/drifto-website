@@ -17,6 +17,7 @@ import {UserEvents} from "@/components/user/user-events";
 import {UserPosts} from "@/components/user/user-posts";
 import {UserOrders} from "@/components/order/user-orders";
 import {UserSubscribers} from "@/components/user/user-subscribers";
+import {router} from "next/client";
 
 interface UserProfileProps extends ComponentProps<"div"> {
     handleScreenChange: (value: string) => void;
@@ -28,6 +29,7 @@ export const UserProfile = ({
     activeScreen, setActiveScreen, handleScreenChange, className, ...props
 }: UserProfileProps) => {
     const {user} = useAuthStore();
+    const router = useRouter();
 
     const userUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/user/${user?.id}`;
     const {
@@ -47,10 +49,6 @@ export const UserProfile = ({
 
     const render = () => {
         switch (activeScreen) {
-            case "events":
-                return (
-                    <UserEvents user={user!} isForUser={true} />
-                )
             case "posts":
                 return (
                     <UserPosts user={user!} isForUser={true} />
@@ -66,9 +64,9 @@ export const UserProfile = ({
             default:
                 return (
                     <>
-                        <div className="w-full flex flex-col px-4 pt-6 gap-8">
+                        <div className="w-full flex flex-col px-4 pt-6 pb-25 gap-8">
                             <div className="flex items-center gap-4">
-                                <div className="w-20 h-20 flex flex-row items-center">
+                                <div className="w-20 h-20 flex flex-row items-center cursor-pointer" onClick={() => router.push(`/m/settings/profile-picture?prev=${encodeURIComponent(`/?screen=profile`)}`)}>
                                     <AspectRatio ratio={1}>
                                         <Image
                                             src={user?.profileImage || "/default.jpeg"}
@@ -78,20 +76,23 @@ export const UserProfile = ({
                                     </AspectRatio>
                                 </div>
                                 <div className="flex flex-row gap-1 items-center">
-                                    <p className="font-semibold text-lg ">{user?.username}</p>
-                                    <UserVerificationBadge user={user!} />
+                                    <p className="font-semibold text-lg cursor-pointer" onClick={() => router.push(`/m/settings/username?prev=${encodeURIComponent(`/?screen=profile`)}`)} >{user?.username}</p>
+                                    <UserVerificationBadge user={user!} isClickable={true} />
                                 </div>
                             </div>
                             <div className="w-full flex justify-between items-center px-6">
                                 {userStats.map((item, index) => (
                                     <span
                                         key={index}
-                                        className="flex flex-col items-center justify-center gap-1"
+                                        className="flex flex-col items-center justify-center gap-1 cursor-pointer"
                                         onClick={() => {
                                             if(item.name === "Subscribers") {
                                                 setActiveScreen("subscribers");
                                             }else if(item.name === "Experience") {
-                                                setActiveScreen("events")
+                                                router.push(
+                                                    `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
+                                                );
+
                                             }
                                         }}
                                     >
@@ -104,6 +105,7 @@ export const UserProfile = ({
                                 <Button
                                     variant="outline"
                                     className="flex-1 min-w-0 shadow-none font-semibold border-black py-6"
+                                    onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(`/?screen=profile`)}`)}
                                 >
                                     Edit Profile
                                 </Button>
@@ -116,27 +118,29 @@ export const UserProfile = ({
                                 </Button>
                             </div>
                             <div className="w-full grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => setActiveScreen("events")}>
+                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() =>  router.push(
+                                    `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
+                                )}>
                                     <div className="h-10 flex items-center justify-center">
                                         <PiFireSimpleBold size={40} />
                                     </div>
                                     <span className="font-semibold">Experiences</span>
                                 </div>
 
-                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => setActiveScreen("posts")}>
+                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() => setActiveScreen("posts")}>
                                     <div className="h-10 flex items-center justify-center">
                                         <FaHashtag size={30} />
                                     </div>
                                     <span className="font-semibold">Posts</span>
                                 </div>
-                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => setActiveScreen("orders")}>
+                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() => setActiveScreen("orders")}>
                                     <div className="h-10 flex items-center justify-center">
                                         <FaRegClock size={30} />
                                     </div>
                                     <span className="font-semibold">Orders</span>
                                 </div>
                                 <div
-                                    className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start"
+                                    className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer"
                                     onClick={() => handleScreenChange("plans")}>
                                     <div className="h-10 flex items-center justify-center">
                                         <BiCalendarAlt size={30} />

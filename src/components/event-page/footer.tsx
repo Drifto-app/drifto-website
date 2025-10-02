@@ -144,7 +144,11 @@ export const SingleEventFooter = ({
                     <p className="text-xs text-neutral-600">Starting:</p>
                     <h3 className="font-bold text-xl">{price === "Free" ? price : "₦ "+ price}</h3>
                 </div>
-                <Button className="rounded-full px-5 py-6" onClick={() => {router.push(`/m/order/${event.id}?prev=${encodeURIComponent(currentPathUrl!)}`)}}>
+                <Button
+                    className="rounded-full px-5 py-6"
+                    onClick={() => {router.push(`/m/order/${event.id}?prev=${encodeURIComponent(currentPathUrl!)}`)}}
+                    disabled={new Date(event.stopTime) < new Date(Date.now())}
+                >
                     Get Tickets
                 </Button>
             </div>

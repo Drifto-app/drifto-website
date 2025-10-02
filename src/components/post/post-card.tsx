@@ -44,15 +44,16 @@ export const PostCard = ({
         setIsLikedLoading(true);
 
         const newLiked = !isLiked;
-        setIsLiked(newLiked);
         setTotalReactions((prev) => prev + (newLiked ? 1 : -1));
 
         try {
+            setIsLiked(newLiked);
             await authApi.post(`/reaction/react`, {
                 reactionType: "POST",
                 postId: postContent.id,
             })
         } catch (err: any) {
+            setIsLiked(!newLiked);
             showTopToast("error", err.message);
             setTotalReactions((prev) => prev + (newLiked ? -1 : 1));
         } finally {
@@ -100,42 +101,42 @@ export const PostCard = ({
                           <p className="text-sm text-neutral-500">
                             {new Date(postContent.createdAt).toLocaleDateString()}
                           </p>
-                          <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
-                            <DrawerTrigger asChild>
-                              <button
-                                  className="bg-none pl-5"
-                                  onClick={() => setDrawerOpen(true)}
-                              >
-                                <SlOptionsVertical className="text-neutral-500" />
-                              </button>
-                            </DrawerTrigger>
+                            {disabled ||  <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
+                                <DrawerTrigger asChild>
+                                    <button
+                                        className="bg-none pl-5"
+                                        onClick={() => setDrawerOpen(true)}
+                                    >
+                                        <SlOptionsVertical className="text-neutral-500" />
+                                    </button>
+                                </DrawerTrigger>
 
-                            <DrawerContent className="z-99999">
-                              <div className="w-full px-4 pb-4">
-                                <DrawerHeader>
-                                  <DrawerTitle>Action</DrawerTitle>
-                                </DrawerHeader>
+                                <DrawerContent className="z-99999">
+                                    <div className="w-full px-4 pb-4">
+                                        <DrawerHeader>
+                                            <DrawerTitle>Action</DrawerTitle>
+                                        </DrawerHeader>
 
-                                  {isForUser ? (
-                                      <button
-                                          className="flex gap-2 items-center py-4 text-red-600"
-                                          onClick={handleDelete}
-                                          disabled={isDeleteLoading}
-                                      >
-                                          <MdDeleteOutline size={20} />
-                                          <span className="font-semibold">
+                                        {isForUser ? (
+                                            <button
+                                                className="flex gap-2 items-center py-4 text-red-600"
+                                                onClick={handleDelete}
+                                                disabled={isDeleteLoading}
+                                            >
+                                                <MdDeleteOutline size={20} />
+                                                <span className="font-semibold">
                                       {isDeleteLoading ? "Deleting..." : "Delete"}
                                     </span>
-                                      </button>
-                                  ) : (
-                                      <button className="flex gap-2 items-center py-4">
-                                          <FaFlag />
-                                          <span className="font-semibold">Report</span>
-                                      </button>
-                                  )}
-                              </div>
-                            </DrawerContent>
-                          </Drawer>
+                                            </button>
+                                        ) : (
+                                            <button className="flex gap-2 items-center py-4">
+                                                <FaFlag />
+                                                <span className="font-semibold">Report</span>
+                                            </button>
+                                        )}
+                                    </div>
+                                </DrawerContent>
+                            </Drawer>}
                         </span>
                     </div>
                     <div className="w-full flex flex-col gap-2">

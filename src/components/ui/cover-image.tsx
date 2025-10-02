@@ -7,7 +7,7 @@ import Image from "next/image";
 import {FaRegEdit} from "react-icons/fa";
 import {showTopToast} from "@/components/toast/toast-util";
 import {LoaderSmall} from "@/components/ui/loader";
-import {cn, MAX_IMAGE_SIZE} from "@/lib/utils";
+import {cn, MAX_IMAGE_SIZE, uploadMedia} from "@/lib/utils";
 
 interface CoverImageUploaderProps extends ComponentProps<"div">{
     imageValue?: string;
@@ -43,24 +43,15 @@ export function CoverImageUploader({
         setSubmitDisabled(true)
 
         try {
-            const formData = new FormData();
-            formData.append("mediaFile", file);
-            formData.append("fileData",  new Blob([JSON.stringify({
-                "mediaFileType": mediaFileType
-            })], { type: 'application/json' }))
-            const response = await authApi.post("/file/upload", formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            const response =  await uploadMedia(file, mediaFileType)
 
-            if (!response.data.success) {
-                showTopToast("error", response.data.description)
+            if (!response) {
+                showTopToast("error", "Upload failed.");
                 return
             }
 
-            const body = response.data.data;
-
-            if (body.url) {
-                onImageValueChange?.(body.url);
+            if (response) {
+                onImageValueChange?.(response);
                 // Clean up the local preview URL
                 URL.revokeObjectURL(previewUrl);
             }

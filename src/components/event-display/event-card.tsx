@@ -53,16 +53,17 @@ export const EventCard = ({ event, currentPathUrl, className, ...props }: EventC
         if (isLikedLoading) return;
 
         setIsLikedLoading(true);
+        const likedState: boolean = isLiked
 
         try {
-            setIsLiked(!isLiked);
+            setIsLiked(!likedState);
             await authApi.post(`/reaction/react`, {
                 reactionType: "EVENT",
                 eventId: event.id,
             })
         } catch (err: any) {
             showTopToast("error", err.message);
-            setIsLiked(!isLiked);
+            setIsLiked(likedState);
         } finally {
             setIsLikedLoading(false);
         }

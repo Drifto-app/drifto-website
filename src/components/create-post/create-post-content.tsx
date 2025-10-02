@@ -1,6 +1,6 @@
 "use client"
 
-import {cn, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE} from "@/lib/utils";
+import {cn, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE, uploadMedia} from "@/lib/utils";
 import {ChangeEvent, ComponentProps, useState, useRef, useEffect, useCallback} from "react";
 import {FaArrowLeft, FaPlay} from "react-icons/fa";
 import * as React from "react";
@@ -128,25 +128,14 @@ export const CreatePostContent = ({
 
     const uploadSingle = async (file: File): Promise<string | null> => {
         try {
-            const formData = new FormData();
-            formData.append("mediaFile", file);
-            formData.append(
-                "fileData",
-                new Blob([JSON.stringify({ mediaFileType: "CHAT_MESSAGE_MEDIA" })], {
-                    type: "application/json",
-                })
-            );
+            const response = await uploadMedia(file, "CHAT_MESSAGE_MEDIA")
 
-            const res = await authApi.post("/file/upload", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-
-            if (!res.data?.success) {
-                showTopToast("error", res.data?.description || "Upload failed.");
+            if (!response) {
+                showTopToast("error", "Upload failed.");
                 return null;
             }
 
-            return res.data.data?.url ?? null;
+            return response;
         } catch (error: any) {
             showTopToast(
                 "error",

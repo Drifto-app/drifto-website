@@ -20,9 +20,9 @@ body {
   box-sizing: border-box;
 }
 
-a {
-  color: inherit;
-}
+/*a {*/
+/*  color: inherit;*/
+/*}*/
 
 @media (prefers-color-scheme: dark) {
   html {
@@ -177,6 +177,10 @@ a {
 }
 .slide-up-animation {
   animation: slideUpFromBottom 0.7s ease-out;
+}
+
+.otp-slot {
+  @apply h-14 w-12 text-xl rounded-lg border;
 }
 
 @utility no-scrollbar {

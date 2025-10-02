@@ -219,7 +219,13 @@ export const SingleEventReviews = ({
 
             <div className="w-full flex flex-col gap-6 px-4 py-4">
                 {comments.map((c) => (
-                    <CommentCard key={c.id} comment={c} currentPathUrl={currentPathUrl} />
+                    <CommentCard
+                        key={c.id}
+                        comment={c}
+                        currentPathUrl={currentPathUrl}
+                        isForUser={c.mine}
+                        onDelete={(commentId: string) => setComments(comments => comments.filter((c) => c.id !== commentId))}
+                    />
                 ))}
             </div>
 

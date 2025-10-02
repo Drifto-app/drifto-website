@@ -9,8 +9,9 @@ import { useAuthStore } from "@/store/auth-store";
 import { ScreenProvider } from "@/components/screen/screen-provider";
 import { useSearchParams, useRouter } from "next/navigation";
 import PlanningDisplay from "./planning-display/planning-display";
-import {PostDisplay} from "@/components/post/post-display";
-import {ProfileDisplay} from "@/components/profile-display/profile-display";
+import { PostDisplay } from "@/components/post/post-display";
+import { ProfileDisplay } from "@/components/profile-display/profile-display";
+import UpdateDisplay from "./updates-display";
 
 interface EventDisplayRef {
   refresh: () => void;
@@ -46,23 +47,17 @@ export default function HomeContent() {
   const render = () => {
     switch (activeScreen) {
       case "plans":
-        return (
-            <PlanningDisplay />
-        );
+        return <PlanningDisplay />;
       case "posts":
-        return (
-            <PostDisplay />
-        );
+        return <PostDisplay />;
       case "updates":
         return (
           <div className="w-full">
-            <div>update</div>
+            <UpdateDisplay />
           </div>
         );
       case "profile":
-        return (
-          <ProfileDisplay handleScreenChange={handleScreen} />
-        );
+        return <ProfileDisplay handleScreenChange={handleScreen} />;
       default:
         return (
           <div className="w-full bg-gray-50">

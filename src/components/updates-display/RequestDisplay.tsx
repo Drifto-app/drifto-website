@@ -197,7 +197,7 @@ const RequestDisplay = () => {
                   <img
                     src={user.profileImageUrl}
                     alt={user.username}
-                    className="rounded-full object-cover h-12 w-12"
+                    className="rounded-full object-cover h-12 w-12 flex-shrink-0"
                   />
 
                   {/* Username + checkmark */}

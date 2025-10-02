@@ -220,18 +220,40 @@ function NotificationComponent({
 }) {
   const router = useRouter();
 
-  function formatTime(isoString: string) {
+  function formatTime(isoString: string): string {
     const date = new Date(isoString);
+    const now = new Date();
 
-    let hours = date.getHours();
-    let minutes = date.getMinutes();
+    const isToday =
+      date.getDate() === now.getDate() &&
+      date.getMonth() === now.getMonth() &&
+      date.getFullYear() === now.getFullYear();
 
-    const ampm = hours >= 12 ? "PM" : "AM";
-    hours = hours % 12 || 12;
+    if (isToday) {
+      // Format as time (e.g. 9:45 AM)
+      let hours = date.getHours();
+      let minutes = date.getMinutes();
 
-    const formattedMinutes = minutes.toString().padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
+      hours = hours % 12 || 12;
 
-    return `${hours}:${formattedMinutes} ${ampm}`;
+      const formattedMinutes = minutes.toString().padStart(2, "0");
+      return `${hours}:${formattedMinutes} ${ampm}`;
+    }
+
+    const yearDiff = now.getFullYear() - date.getFullYear();
+
+    if (yearDiff === 0) {
+      // Same year, not today → return e.g. "28 Jan"
+      return date.toLocaleDateString("en-US", {
+        day: "2-digit",
+        month: "short",
+      });
+    } else if (yearDiff === 1) {
+      return "Last year";
+    } else {
+      return `${yearDiff} years ago`;
+    }
   }
 
   const handleNotificationClick = () => {

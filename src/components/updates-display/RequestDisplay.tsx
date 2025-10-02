@@ -195,8 +195,8 @@ const RequestDisplay = () => {
                 <div className="flex items-center gap-3">
                   {/* Profile Image */}
                   <img
-                    src={user.profileImageUrl}
-                    alt={user.username}
+                    src={event.titleFileUrl}
+                    alt={event.title}
                     className="rounded-full object-cover h-12 w-12 flex-shrink-0"
                   />
 

@@ -2,6 +2,7 @@ import { authApi } from "@/lib/axios";
 import { Check, ChevronDown, ChevronUp, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { UserVerificationBadge } from "../ui/user-placeholder";
+import { useRouter } from "next/navigation";
 
 // User info type
 type UserPlaceholder = {
@@ -42,6 +43,8 @@ const RequestDisplay = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const fetchRequests = async () => {
     try {
@@ -120,11 +123,13 @@ const RequestDisplay = () => {
   };
 
   const handleViewProfile = (userId: string) => {
+    router.push(`/m/user/${userId}?prev=/?screen=updates`);
     console.log("View profile:", userId);
     // Add your view profile logic here
   };
-  const handleViewEvent = (userId: string) => {
-    console.log("View profile:", userId);
+  const handleViewEvent = (eventId: string) => {
+    router.push(`/m/events/${eventId}?prev=/?screen=updates`);
+    console.log("View profile:", eventId);
     // Add your view profile logic here
   };
 
@@ -241,12 +246,9 @@ const RequestDisplay = () => {
                       )
                     }
                     disabled={isActionLoading}
-                    className={
-                      "w-fit flex items-center gap-2 px-4 py-2 whitespace-nowrap border border-black rounded-full bg-white hover:bg-neutral-100 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed" +
-                      isInviteExpired(invite.expireAt)
-                        ? " hidden"
-                        : ""
-                    }
+                    className={`w-fit flex items-center gap-2 px-4 py-2 whitespace-nowrap border border-black rounded-full bg-white hover:bg-neutral-100 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed
+                      ${isInviteExpired(invite.expireAt) ? " hidden" : " flex"}
+                      `}
                   >
                     {isActionLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />
@@ -263,12 +265,10 @@ const RequestDisplay = () => {
                       )
                     }
                     disabled={isActionLoading}
-                    className={
-                      "w-fit flex items-center gap-2 px-4 py-2 whitespace-nowrap border border-black rounded-full bg-white hover:bg-neutral-100 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed" +
-                      isInviteExpired(invite.expireAt)
-                        ? " hidden"
-                        : ""
-                    }
+                    className={`w-fit  items-center gap-2 px-4 py-2 whitespace-nowrap border border-black rounded-full bg-white hover:bg-neutral-100 transition-colors text-left disabled:opacity-50 disabled:cursor-not-allowed 
+                      ${
+                        isInviteExpired(invite.expireAt) ? " hidden" : " flex"
+                      }`}
                   >
                     {isActionLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin" />

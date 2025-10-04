@@ -7,7 +7,7 @@ export default function Error({ error, reset }:  {
   reset: () => void
 }) {
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-4">
+    <div className="min-h-[100dvh] bg-black flex items-center justify-center px-4">
       <div className="text-center animate-in fade-in duration-700">
         {/* Logo */}
         <div className="mb-12 flex justify-center">

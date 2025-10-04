@@ -185,7 +185,7 @@ export const ForgotPassword = ({
             setLoading(false);
             setPassword("")
             setConfirmPassword("")
-            setForgotPassword(false);
+            setForgotPassword(true);
         } catch (err: any) {
             setLoading(false);
             showTopToast("error", err.response?.data?.description || 'Reset failed');

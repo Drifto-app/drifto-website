@@ -20,6 +20,7 @@ interface LoginFormProps extends React.ComponentProps<"form"> {
   setLoginPrincipal: (value: string) => void;
   setForgotPassword: (val: boolean) => void;
   setIsSignUp: (val: boolean) => void;
+  nextUrl: string | null;
 }
 
 export function LoginForm({
@@ -27,6 +28,7 @@ export function LoginForm({
     setLoginPrincipal,
     setForgotPassword,
     setIsSignUp,
+    nextUrl,
     ...props
 }: LoginFormProps) {
   const { login, googleLogin, isLoading } = useAuthStore();
@@ -57,7 +59,7 @@ export function LoginForm({
         await login({ username: principal, password });
       }
 
-      router.push('/');
+      router.push(nextUrl ?? '/');
     } catch (err: any) {
       setError(err.response?.data?.description || 'Login failed');
       showTopToast("error", err.response?.data?.description || 'Login failed')
@@ -123,6 +125,7 @@ export function LoginForm({
                 try {
                     const idToken = credentialResponse.credential;
                     await googleLogin(idToken!);
+                  router.push(nextUrl ?? '/');
                 } catch (err: any) {
                     setError(err.response?.data?.description || 'Google Auth failed');
                     showTopToast("error", err.response?.data?.description || 'Google Auth failed')

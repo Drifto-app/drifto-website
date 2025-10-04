@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {useAuthStore} from '@/store/auth-store';
 import {Loader} from "@/components/ui/loader";
 
@@ -11,12 +11,15 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, redirectTo = '/login' }: ProtectedRouteProps) {
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
+
     const { isAuthenticated, isLoading, hasTriedRefresh } = useAuthStore();
     const router = useRouter();
 
     useEffect(() => {
         if (hasTriedRefresh && !isLoading && !isAuthenticated) {
-            router.push(redirectTo);
+                router.push(`${redirectTo}?next=${encodeURIComponent(pathname + "?" + searchParams)}`);
         }
     }, [isAuthenticated, isLoading, router, redirectTo, hasTriedRefresh]);
 

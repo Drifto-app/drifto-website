@@ -20,10 +20,12 @@ import {showTopToast} from "@/components/toast/toast-util";
 
 interface SignUpFormProps extends React.ComponentProps<"form"> {
     setIsSignUp: (value: boolean) => void;
+    nextUrl: string | null;
 }
 
 export const SignUpForm = ({
     setIsSignUp,
+    nextUrl,
     className,
     ...props
 }: SignUpFormProps) => {
@@ -267,7 +269,7 @@ export const SignUpForm = ({
 
             setUser(data.data.user)
 
-            router.push("/")
+            router.push(nextUrl ?? "/")
         } catch (err: any) {
             setLoading(false);
             showTopToast("error", err.response?.data?.description || 'Email Request Failed');

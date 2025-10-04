@@ -1,82 +1,16 @@
-"use client";
+import { Loader } from '@/components/ui/loader';
+import { Suspense } from 'react';
+import LoginPage from '@/components/auth/auth-page';
 
-import { LoginForm } from "@/components/auth/login-form";
-import { useAuthStore } from "@/store/auth-store";
-import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import Image from "next/image";
-import { ForgotPassword } from "@/components/auth/forgot-password";
-import { SignUpForm } from "@/components/auth/sign-up";
-import { ScreenProvider } from "@/components/screen/screen-provider";
-
-type View = "login" | "signup" | "forgot";
-
-export default function LoginPage() {
-    const { isAuthenticated } = useAuthStore();
-    const router = useRouter();
-
-    const [loginPrincipal, setLoginPrincipal] = useState<string>("");
-    const [view, setView] = useState<View>("login");
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            router.push("/");
-        }
-    }, [isAuthenticated, router]);
-
-    if (isAuthenticated) return null;
-
-    const renderForm = () => {
-        switch (view) {
-            case "forgot":
-                return (
-                    <ForgotPassword
-                        loginPrincipal={loginPrincipal}
-                        setForgotPassword={(val) => setView(val ? "login" : "forgot")}
-                    />
-                );
-            case "signup":
-                return (
-                    <SignUpForm setIsSignUp={(val) => setView(val ? "signup" : "login")} />
-                );
-            case "login":
-            default:
-                return (
-                    <LoginForm
-                        setLoginPrincipal={setLoginPrincipal}
-                        setForgotPassword={(val) => setView(val ? "forgot" : "login")}
-                        setIsSignUp={(val) => setView(val ? "signup" : "login")}
-                    />
-                );
-        }
-    };
+export default function AuthPage() {
 
     return (
-        <ScreenProvider>
-            <div className="grid min-h-svh lg:grid-cols-2">
-                <div className="flex flex-col gap-4 p-6 md:p-10">
-                    <div className="flex flex-1 items-center justify-center">
-                        <div className="w-full max-w-sm flex flex-col gap-12">
-                            <div className="relative w-12 h-12">
-                                <Image
-                                    src="/logo.png"
-                                    alt="Logo"
-                                    fill
-                                    className="object-contain"
-                                />
-                            </div>
-                            {renderForm()}
-                        </div>
-                    </div>
-                </div>
-                <div className="bg-muted relative hidden lg:block">
-                    <img
-                        src="/login-side-pic.jpeg"
-                        alt="Image"
-                        className="absolute inset-0 h-full w-full object-cover"
-                    />
-                </div>
-            </div>
-        </ScreenProvider>
-    );
+      <Suspense fallback={
+          <div className="w-full h-screen flex items-center justify-center">
+              <Loader />
+          </div>
+      }>
+          <LoginPage />
+      </Suspense>
+    )
 }

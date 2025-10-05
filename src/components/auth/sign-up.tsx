@@ -1,5 +1,5 @@
 import * as React from "react";
-import {cn, passwordRegex} from "@/lib/utils";
+import { cn, passwordRegex, usernameRegex } from '@/lib/utils';
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -96,6 +96,11 @@ export const SignUpForm = ({
         // only check once they’ve typed at least 3 chars
         if (username.trim().length < 3) {
             setUsernameError("Username must be at least 3 characters");
+            return;
+        }
+
+        if(!usernameRegex.test(username)) {
+            setUsernameError("Username can only contain letters, numbers, and underscores.");
             return;
         }
 
@@ -230,6 +235,11 @@ export const SignUpForm = ({
             return;
         }
 
+        if(!usernameRegex.test(username)) {
+            showTopToast("error", "Username can only contain letters, numbers, and underscores.");
+            return;
+        }
+
 
         if(!firstName || !lastName || !password || !username || !dob || !city || !isAgreed) {
             showTopToast("error", "Complete all filed")
@@ -259,7 +269,7 @@ export const SignUpForm = ({
             });
 
             setLoading(false);
-            showTopToast("success", data.message);
+            showTopToast("success", "Sign up successful");
             setIsSignUp(false)
 
             setTokens(

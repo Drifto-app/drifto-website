@@ -468,14 +468,13 @@ export const SignUpForm = ({
                             type="file"
                             accept="image/*"
                             onChange={handleFileChange}
-                            required
                         />
                     </div>
                     <Button
                         type="submit"
                         size="lg"
                         className="w-full"
-                        disabled={isLoading}
+                        disabled={isLoading || !isAgreed}
                     >
                         {!isLoading ? "Submit" : <LoaderSmall className=""/>}
                     </Button>

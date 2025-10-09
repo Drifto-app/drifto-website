@@ -31,7 +31,7 @@ export default function RootLayout({
                     content="The ultimate mobile platform for discovering, booking, and managing experiences."/>
               <meta name="author" content="Drifto"/>
               <meta property="og:type" content="website" />
-              {/*<meta property="og:image" content="/logo-extend.png" />*/}
+              <meta property="og:image" content="/logo-white.svg" />
           </head>
           <body className={`${geistSans.variable} ${geistMono.variable}`}>
           <ClientProviders>

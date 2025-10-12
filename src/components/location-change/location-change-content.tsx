@@ -27,6 +27,7 @@ export const LocationChangeContent = ({
     const {setUser, user} = useAuthStore()
 
     const [city, setCity] = React.useState<string>("");
+    const [state, setState] = React.useState<string>("");
     const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -38,23 +39,31 @@ export const LocationChangeContent = ({
     });
 
     const autocompleteOptions = useMemo(
-        () => ({
-            types: ["(cities)"],
-            componentRestrictions: { country: "ng" },
-        }),
-        []
+      () => ({
+          types: ["(cities)"],
+          componentRestrictions: { country: "ng" },
+      }),
+      []
     );
 
     const onPlaceChanged = useCallback(() => {
         if (!autocomplete) return;
 
         const place = autocomplete.getPlace();
+
+        // Extract city from locality or administrative_area_level_1
         const cityComponent =
-            place.address_components?.find((c) => c.types.includes("locality")) ||
-            place.address_components?.find((c) =>
-                c.types.includes("administrative_area_level_1")
-            );
+          place.address_components?.find((c) => c.types.includes("locality")) ||
+          place.address_components?.find((c) =>
+            c.types.includes("administrative_area_level_1")
+          );
         setCity(cityComponent?.long_name || place.formatted_address || "");
+
+        // Extract state from administrative_area_level_1
+        const stateComponent = place.address_components?.find((c) =>
+          c.types.includes("administrative_area_level_1")
+        );
+        setState(stateComponent?.long_name || "");
     }, [autocomplete]);
 
     const handleBackClick = () => {
@@ -67,10 +76,11 @@ export const LocationChangeContent = ({
 
         try {
             await authApi.patch("/user/update", {
-                city
+                city,
+                state
             })
 
-            setUser({...user, city})
+            setUser({...user, city, state})
 
             setLoading(false);
             router.push(prev ?? "/");
@@ -82,81 +92,87 @@ export const LocationChangeContent = ({
     };
 
     return (
-        <div className={cn("w-full min-h-[100dvh] flex flex-col", className)} {...props}>
-            <div
-                className={cn(
-                    "w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-20 flex-shrink-0"
-                )}
-            >
-                <div className="flex flex-row items-center px-8">
-                    <FaArrowLeft
-                        size={20}
-                        onClick={handleBackClick}
-                        className="cursor-pointer hover:text-neutral-700 transition-colors"
-                        aria-label="Go back"
-                        role="button"
-                        tabIndex={0}
-                    />
-                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
-                        Location
-                    </p>
-                </div>
-            </div>
+      <div className={cn("w-full min-h-[100dvh] flex flex-col", className)} {...props}>
+          <div
+            className={cn(
+              "w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-20 flex-shrink-0"
+            )}
+          >
+              <div className="flex flex-row items-center px-8">
+                  <FaArrowLeft
+                    size={20}
+                    onClick={handleBackClick}
+                    className="cursor-pointer hover:text-neutral-700 transition-colors"
+                    aria-label="Go back"
+                    role="button"
+                    tabIndex={0}
+                  />
+                  <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+                      Location
+                  </p>
+              </div>
+          </div>
 
-            <form
-                onSubmit={handleSubmit}
-                className="flex flex-col justify-between w-full flex-1 pt-6 px-4 pb-6 overflow-hidden"
-            >
-                <div className="w-full flex flex-col gap-4 flex-shrink-0">
-                    <div className="flex flex-col gap-2">
-                        <h1 className="font-bold text-2xl">Select your City</h1>
-                        <p className="font-semibold text-neutral-400">
-                            Your city helps us connect you with local events and communities
-                        </p>
-                    </div>
+          <form
+            onSubmit={handleSubmit}
+            className="flex flex-col justify-between w-full flex-1 pt-6 px-4 pb-6 overflow-hidden"
+          >
+              <div className="w-full flex flex-col gap-4 flex-shrink-0">
+                  <div className="flex flex-col gap-2">
+                      <h1 className="font-bold text-2xl">Select your City</h1>
+                      <p className="font-semibold text-neutral-400">
+                          Your city helps us connect you with local events and communities
+                      </p>
+                  </div>
 
-                    <div className="flex items-center justify-between h-16 px-4 gap-2 rounded-full border border-neutral-200">
-                        {loadError && (
-                            <span className="text-sm text-red-600">
+                  <div className="flex items-center justify-between h-16 px-4 gap-2 rounded-full border border-neutral-200">
+                      {loadError && (
+                        <span className="text-sm text-red-600">
                                  Failed to load Google Maps. Please refresh.
                              </span>
-                        )}
+                      )}
 
-                        {!isLoaded && !loadError && (
-                            <span className="text-sm text-neutral-500">Loading…</span>
-                        )}
+                      {!isLoaded && !loadError && (
+                        <span className="text-sm text-neutral-500">Loading…</span>
+                      )}
 
-                        {isLoaded && (
-                            <Autocomplete
-                                onLoad={(inst) => setAutocomplete(inst)}
-                                onPlaceChanged={onPlaceChanged}
-                                options={autocompleteOptions as google.maps.places.AutocompleteOptions}
-                                className="w-full h-full outline-none border-none shadow-none"
-                            >
-                                <Input
-                                    name="city"
-                                    type="text"
-                                    className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-semibold text-lg"
-                                    placeholder="Search your city"
-                                    value={city}
-                                    onChange={(e) => setCity(e.target.value)}
-                                    aria-label="Search your city"
-                                />
-                            </Autocomplete>
-                        )}
+                      {isLoaded && (
+                        <Autocomplete
+                          onLoad={(inst) => setAutocomplete(inst)}
+                          onPlaceChanged={onPlaceChanged}
+                          options={autocompleteOptions as google.maps.places.AutocompleteOptions}
+                          className="w-full h-full outline-none border-none shadow-none"
+                        >
+                            <Input
+                              name="city"
+                              type="text"
+                              className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-semibold text-lg"
+                              placeholder="Search your city"
+                              value={city}
+                              onChange={(e) => setCity(e.target.value)}
+                              aria-label="Search your city"
+                            />
+                        </Autocomplete>
+                      )}
 
-                        <IoSearchSharp size={30} className="text-neutral-400" />
-                    </div>
-                </div>
+                      <IoSearchSharp size={30} className="text-neutral-400" />
+                  </div>
 
-                <Button
-                    type="submit"
-                    disabled={ !!loadError || !isLoaded || loading}
-                    className="bg-blue-800 hover:bg-blue-800 text-lg font-bold py-8 rounded-md disabled:opacity-60 flex-shrink-0"
-                >
-                    {loading ? <LoaderSmall /> : "Continue"}
-                </Button>
-            </form>
-        </div>
+                  {state && (
+                    <p className="text-sm text-neutral-600 px-2">
+                        Detected state: <span className="font-semibold">{state}</span>
+                    </p>
+                  )}
+              </div>
+
+              <Button
+                type="submit"
+                disabled={ !!loadError || !isLoaded || loading}
+                className="bg-blue-800 hover:bg-blue-800 text-lg font-bold py-8 rounded-md disabled:opacity-60 flex-shrink-0"
+              >
+                  {loading ? <LoaderSmall /> : "Continue"}
+              </Button>
+          </form>
+      </div>
     );
 };

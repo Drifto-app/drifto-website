@@ -105,7 +105,7 @@ const UpdatePhoneContent = ({
         }
 
         try {
-            await authApi.patch("/user/update", params);
+            await authApi.patch("/user/update/phoneNumber", params);
             setUser({...user, phoneNumber: newPhoneNumber});
             showTopToast("success", "Phone number updated successfully");
             router.push(prev ?? "/m/settings");

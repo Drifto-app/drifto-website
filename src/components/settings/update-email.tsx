@@ -105,7 +105,7 @@ const UpdateEmailContent = ({
         }
 
         try {
-            await authApi.patch("/user/update", params);
+            await authApi.patch("/user/update/email", params);
             setUser({...user, email: newEmail});
             showTopToast("success", "Email updated successfully");
             router.push(prev ?? "/m/settings");

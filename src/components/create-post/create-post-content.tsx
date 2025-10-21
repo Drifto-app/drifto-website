@@ -128,7 +128,7 @@ export const CreatePostContent = ({
 
     const uploadSingle = async (file: File): Promise<string | null> => {
         try {
-            const response = await uploadMedia(file, "CHAT_MESSAGE_MEDIA")
+            const response = await uploadMedia(file, "POST_MEDIA")
 
             if (!response) {
                 showTopToast("error", "Upload failed.");

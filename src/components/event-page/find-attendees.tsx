@@ -186,7 +186,7 @@ export const    FindAttendees = ({
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                         type="text"
-                        placeholder="Search username or ticket reference"
+                        placeholder="Search email, username or ticket reference"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className="w-full pl-10 pr-4 py-6 rounded-full bg-gray-100 focus:bg-white"
@@ -228,6 +228,7 @@ export const    FindAttendees = ({
                                         <h3 className="font-semibold text-gray-900">{ticket.userPlaceHolderResponse.username}</h3>
                                         <p className="text-gray-600">{ticket.ticketName}</p>
                                     </div>
+                                    <p className="text-sm text-neutral-500 font-mono text-wrap">{ticket.userPlaceHolderResponse.email}</p>
                                     <p className="text-sm text-neutral-500 font-mono text-wrap">{ticket.ticketReference}</p>
                                 </div>
                             </div>

@@ -52,7 +52,7 @@ export const    FindAttendees = ({
                 ...(search && { search: search.trim() })
             };
 
-            const response = await authApi.get(`/userTicket/event/${event.id}`, params);
+            const response = await authApi.get(`/userTicket/event/${event.id}`, { params });
 
             const data = response.data.data.data;
 
@@ -169,11 +169,6 @@ export const    FindAttendees = ({
         setSelectedTicket(null);
     };
 
-    const filteredTickets = tickets.filter(ticket =>
-        ticket.userPlaceHolderResponse.username.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ticket.ticketReference.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-
     return (
         <div
             className={cn("w-full flex-1 px-4 ", className)}
@@ -198,7 +193,7 @@ export const    FindAttendees = ({
                     ref={scrollRef}
                     className="flex-1 overflow-y-auto space-y-3 pb-20 no-scrollbar"
                 >
-                    {filteredTickets.map((ticket) => (
+                    {tickets.map((ticket) => (
                         <div
                             key={ticket.id}
                             className="flex flex-col items-start gap-4 justify-between p-4 bg-white rounded-lg border border-gray-200"
@@ -257,7 +252,7 @@ export const    FindAttendees = ({
                         </div>
                     )}
 
-                    {!hasMore && filteredTickets.length > 0 && (
+                    {!hasMore && tickets.length > 0 && (
                         <div className="text-center py-4 text-gray-500">
                             No more tickets to load
                         </div>

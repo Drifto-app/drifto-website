@@ -24,7 +24,7 @@ interface GoogleMapComponentProps {
     eventAddress?: string;
 }
 
-const GoogleMapComponent: React.FC<DialGoogleMapComponentProps> = ({
+const GoogleMapComponent: React.FC<GoogleMapComponentProps> = ({
     center, markerPosition, isFullscreen = false, onToggleFullscreen, eventTitle, eventAddress
 }) => {
     const mapRef = useRef<HTMLDivElement>(null);

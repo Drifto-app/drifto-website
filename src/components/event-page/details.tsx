@@ -35,9 +35,6 @@ export const SingleEventDetails = ({
 }: SingleEventDetailsProps) => {
     const router = useRouter();
 
-    const pathname = usePathname();
-    const searchParams = useSearchParams();
-
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
     const [isOpen, setIsOpen] = React.useState(false);
@@ -264,7 +261,7 @@ export const SingleEventDetails = ({
                         <EventSingleContentText headText={"Event Screenshots"} isLine={false} className="flex-col shadow-xl">
                             <SnapshotCarousel snapshots={event.screenshots} />
                         </EventSingleContentText>
-                        <EventSingleContentText isLine={false} headText="Hosted By" className="flex-col items-start shadow-xl">
+                        <EventSingleContentText isLine={false} headText="Hosts" className="flex-col items-start shadow-xl">
                             {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
                                 <UserEventSinglePlaceholder
                                     user={coHost}
@@ -274,20 +271,27 @@ export const SingleEventDetails = ({
                                 />
                             ))}
                             {event.hostCollaborationStatus == "HOST" && (
-                                <div className="w-full flex flex-col gap-8 items-center text-md text-blue-600 my-4">
-                                    <p
-                                        className="underline font-bold underline-offset-3 cursor-pointer hover:text-blue-800 transition-colors"
-                                        onClick={() => setActiveScreen!('co-host-manage')}
-                                    >
-                                        Manage Co-Host
-                                    </p>
-                                    <p
-                                        className="underline font-bold underline-offset-3 cursor-pointer hover:text-blue-800 transition-colors"
-                                        onClick={() => setActiveScreen!('host-invites')}
-                                    >
-                                        See All Host Invites
-                                    </p>
-                                </div>
+                              <div className="w-full flex flex-row gap-8 items-center text-md text-black my-4 overflow-x-auto no-scrollbar px-2 ">
+                                  <p
+                                    className="whitespace-nowrap font-bold underline-offset-3 cursor-pointer  transition-colors px-4 py-2 border-1 border-neutral-400 rounded-full"
+                                    onClick={() => setActiveScreen!('co-host-manage')}
+                                  >
+                                      Manage Co-Host
+                                  </p>
+                                  <p
+                                    className="whitespace-nowrap font-bold underline-offset-3 cursor-pointer  transition-colors px-4 py-2 border-1 border-neutral-400 rounded-full"
+                                    onClick={() => setActiveScreen!('host-invites')}
+                                  >
+                                      See All Host Invites
+                                  </p>
+                                  <p
+                                    className="whitespace-nowrap font-bold underline-offset-3 cursor-pointer  transition-colors px-4 py-2 border-1 border-neutral-400 rounded-full"
+                                    onClick={() => setActiveScreen!('referral-manage')}
+                                  >
+                                      Manage Referral
+                                  </p>
+                              </div>
+
                             )}
                         </EventSingleContentText>
                     </div>

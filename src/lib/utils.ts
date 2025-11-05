@@ -12,6 +12,7 @@ export const emailRegex: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 export const usernameRegex: RegExp = /^[a-zA-Z0-9_]+$/
 
 export const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E])[A-Za-z\d\x21-\x2F\x3A-\x40\x5B-\x60\x7B-\x7E]{8,}$/;
+export const referralCodeRegex = /^[a-zA-Z0-9_]+$/
 
 
 export const MAX_IMAGE_SIZE = 10 * 1024 * 1024;

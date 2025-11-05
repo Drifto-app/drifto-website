@@ -12,6 +12,7 @@ import {HostInvites} from "@/components/event-page/host-invites";
 import {CoHostManage} from "@/components/event-page/co-host-manage";
 import {useRouter, useSearchParams} from "next/navigation";
 import {useEffect, useMemo, useState} from "react";
+import { EventReferral } from '@/components/event-page/event-referral';
 
 interface SingleEventHostPageProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -48,6 +49,8 @@ export default function SingleEventHostPage(
                 case "host-invites":
                     setScreenTitle("Co-Host Invites");
                     break;
+                case "referral-manage":
+                    setScreenTitle("Manage Referral");
             }
         }
         changeTitle()
@@ -113,6 +116,11 @@ export default function SingleEventHostPage(
                 return (
                     <HostInvites event={event} />
                 );
+
+            case 'referral-manage':
+                return (
+                  <EventReferral event={event}/>
+                )
 
             default:
                 return (

@@ -8,16 +8,21 @@ import {FiBell, FiPhone} from "react-icons/fi";
 import {IoCardOutline} from "react-icons/io5";
 import {TbArrowsLeftRight} from "react-icons/tb";
 import {AiOutlineQrcode} from "react-icons/ai";
-import {BsBank} from "react-icons/bs";
-import {useMemo, useState} from "react";
+import {BsBank, BsGrid3X3Gap} from "react-icons/bs";
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {PayButton} from "@/components/payment/pay-button";
 import {useAuthStore} from "@/store/auth-store";
 import {OrderSuccessDetails} from "@/components/order/order-sucess";
 import {showTopToast} from "@/components/toast/toast-util";
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { authApi } from '@/lib/axios';
+import { LoaderSmall } from '@/components/ui/loader';
 
 interface PaymentContentProps extends React.ComponentProps<"div"> {
     order: {[key: string]: any};
     orderContent: {[key: string]: any};
+    setOrderContent: (content: {[key: string]: any}) => void;
     prev: string | null;
 }
 
@@ -36,7 +41,7 @@ const paymentsOptions: PaymentOptions[] = [
 ]
 
 export const PaymentContent = ({
-    order, orderContent, prev, className, ...props
+    order, orderContent, setOrderContent, prev, className, ...props
 }: PaymentContentProps) => {
     const router = useRouter();
 
@@ -44,6 +49,11 @@ export const PaymentContent = ({
 
     const [activeScreen, setActiveScreen] = useState<string>("payment");
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
+
+    const [referralCode, setReferralCode] = useState<string>(orderContent.referralCode == null ? "" : orderContent.referralCode);
+    const [referralLoading, setReferralLoading] = useState<boolean>(false);
+    const [referralError, setReferralError] = useState<string | null>(null);
+
 
     const optionByValue = useMemo<Record<string, PaymentOptions>>(
         () => Object.fromEntries(paymentsOptions.map(o => [o.value, o])) as Record<string, PaymentOptions>,
@@ -62,6 +72,47 @@ export const PaymentContent = ({
             router.push(prev != null ? prev : "/");
         }
     }
+
+    const handleReferralChange = (code: string) => {
+        if(!code.trim()) {
+            setReferralError(null);
+        }
+
+        setReferralCode(code.toUpperCase())
+    }
+
+    const handleOrderUpdate = useCallback( async (code: string) => {
+        setReferralLoading(true);
+
+        const param = {
+            referralCode: code.trim()
+        }
+
+        try {
+            await authApi.patch(`/order/${orderContent.id}`, param);
+            showTopToast("success", "Applied referral code")
+            setReferralError(null);
+            setOrderContent({ ...orderContent, referralCode: code });
+        } catch (err: any) {
+            const msg = err?.response?.data?.description || "Error apply referral code";
+            showTopToast("error", msg);
+            setReferralError(msg);
+        } finally {
+            setReferralLoading(false);
+        }
+    }, [orderContent.id])
+
+    useEffect(() => {
+        if (!referralCode?.trim() && !orderContent.referralCode) return;
+        if (orderContent.referralCode === referralCode) return;
+        if (referralLoading) return;
+
+        const t = setTimeout(() => {
+            handleOrderUpdate(referralCode);
+        }, 700);
+
+        return () => clearTimeout(t);
+    }, [referralCode]);
 
     if(isSuccess) {
         return (
@@ -165,6 +216,20 @@ export const PaymentContent = ({
                                 <p>Total:</p>
                                 <p>₦ {orderContent.totalPrice}</p>
                             </div>
+                        </div>
+                        <div className={cn(
+                          "w-full flex items-center px-4 my-4 border-neutral-300 border-1 rounded-md",
+                          referralError ? "border-red-500" : "focus-within:border-blue-600"
+                        )}>
+                            <BsGrid3X3Gap size={25} className="text-neutral-400" />
+                            <Input
+                              placeholder="Referral code (Optional)"
+                              className="w-full py-7 text-lg border-none"
+                              value={referralCode}
+                              onChange={(e) => handleReferralChange(e.target.value)}
+                              disabled={referralLoading}
+                            />
+                            {referralLoading ? <LoaderSmall /> : null}
                         </div>
                         {paymentsOptions.map((item: PaymentOptions, index: number) => (
                             <div

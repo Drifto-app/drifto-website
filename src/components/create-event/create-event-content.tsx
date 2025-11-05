@@ -104,6 +104,7 @@ export const CreateEventContent = ({
             longitude: number
         } | undefined>(undefined);
     const [locationSecure, setLocationSecure] = useState<boolean>(false);
+    const [isFeeOnUser, setFeeOnUser] = useState<boolean>(false);
     const [isPublic, setIsPublic] = useState<boolean>(true);
     const [startTime, setStartTime] = useState<Date | undefined>(undefined);
     const [stopTime, setStopTime] = useState<Date | undefined>(undefined);
@@ -307,6 +308,7 @@ export const CreateEventContent = ({
             location: coordinates,
             address,
             isAgeRestricted,
+            isFeeOnUser,
             minimumAge:  minimumAge === "" || minimumAge === "0" ? null : parseInt(minimumAge, 10),
             tags: eventTags,
             eventTheme: eventTheme,
@@ -650,6 +652,10 @@ export const CreateEventContent = ({
                                     </div>
                                 </div>
                                 <div className="w-full flex flex-col gap-6">
+                                    <div className="w-full flex gap-4 items-center">
+                                        <Switch id="secure-location" size="medium" checked={isFeeOnUser} onCheckedChange={() => {setFeeOnUser(!isFeeOnUser)}} />
+                                        <span className="font-semibold">Pass fees to the ticket buyer</span>
+                                    </div>
                                     <div className="w-full flex gap-4 items-center">
                                         <Switch id="secure-location" size="medium" checked={locationSecure} onCheckedChange={() => {setLocationSecure(!locationSecure)}} />
                                         <span className="font-semibold">Extra Security</span>

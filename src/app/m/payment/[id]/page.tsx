@@ -76,7 +76,7 @@ export default function PaymentPage() {
         <ProtectedRoute>
             <ScreenProvider>
                 <div className="w-full">
-                    <PaymentContent order={order} prev={prev} orderContent={orderContent} />
+                    <PaymentContent order={order} prev={prev} orderContent={orderContent} setOrderContent={setOrderContent}/>
                 </div>
             </ScreenProvider>
         </ProtectedRoute>

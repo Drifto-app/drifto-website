@@ -54,6 +54,7 @@ export const EventEdit = ({
     const [coordinates, setCoordinates] = useState<{[key: string]: number}>(event.location);
     const [locationSecure, setLocationSecure] = useState<boolean>(event.locationSecure);
     const [isPublic, setIsPublic] = useState<boolean>(event.public);
+    const [isFeeOnUser, setFeeOnUser] = useState<boolean>(event.feeOnUser);
     const [startTime, setStartTime] = useState<Date | undefined>(new Date(event.startTime));
     const [stopTime, setStopTime] = useState<Date | undefined>(new Date(event.stopTime));
     const [isAgeRestricted, setIsAgeRestricted] = useState<boolean>(event.ageRestricted);
@@ -161,6 +162,7 @@ export const EventEdit = ({
             description,
             isLocationSecure: locationSecure,
             isPublic,
+            isFeeOnUser,
             startTime,
             stopTime,
             screenshots,
@@ -270,6 +272,21 @@ export const EventEdit = ({
                                         <p className="text-sm text-neutral-500">Enable to make the event visible to all users.</p>
                                     </div>
                                     <Switch id="event-visible" size="medium" checked={isPublic} onCheckedChange={() => {setIsPublic(!isPublic)}} />
+                                </div>
+                            </div>
+                            <div className="grid gap-2 w-full">
+                                <Label htmlFor="fee-bearer" className="text-neutral-500">Fee Bearer</Label>
+                                <div className="flex flex-row justify-between items-center rounded-md px-4 py-4 bg-white gap-2">
+                                    <div className="flex flex-col gap-1">
+                                        <h3 className="font-bold">Pass fee to the ticket buyer</h3>
+                                        <p className="text-sm text-neutral-500">Enable to charge ticket fees directly to the buyer.</p>
+                                    </div>
+                                    <Switch
+                                      id="fee-bearer"
+                                      size="medium"
+                                      checked={isFeeOnUser}
+                                      onCheckedChange={() => setFeeOnUser(!isFeeOnUser)}
+                                    />
                                 </div>
                             </div>
                             <div className="w-full flex flex-col gap-1">

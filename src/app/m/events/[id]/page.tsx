@@ -51,7 +51,7 @@ export default function EventPage() {
       <div className="w-full h-screen flex justify-center items-center">
         <div className="flex justify-center items-center gap-2">
           <MdErrorOutline size={30} className="text-red-500" />
-          <p className="font-semibold text-lg">No event found</p>
+          <p className="font-semibold text-lg">Error loading event</p>
         </div>
       </div>
     );

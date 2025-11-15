@@ -113,20 +113,40 @@ export const EventCard = ({
       <div className="w-full rounded-lg flex flex-col gap-1">
         <div className="relative w-full max-h-[75vh] overflow-hidden">
           {/* 👉 UPDATED VIDEO WITH LAZY LOADING */}
-          <video
-            ref={videoRef}
-            className="w-full h-full object-cover rounded-lg"
-            preload="none"
-            autoPlay
-            muted
-            playsInline
-            controls={false}
-            poster={event.titleImage}
-          >
-            {/* data-src means browser won’t load yet */}
-            <source data-src={event.coverVideo} type="video/mp4" />
-            Your browser does not support the video tag.
-          </video>
+
+          {event.coverVideo ? (
+            <video
+              ref={videoRef}
+              className="w-full h-full object-cover rounded-lg"
+              preload="none"
+              autoPlay
+              muted
+              playsInline
+              loop
+              controls={false}
+              poster={event.titleImage}
+            >
+              {/* data-src means browser won’t load yet */}
+              <source data-src={event.coverVideo} type="video/mp4" />
+              Your browser does not support the video tag.
+            </video>
+          ) : (
+            <Image
+              src={event.titleImage}
+              alt={event.title}
+              width={800}
+              height={500}
+              className="w-full h-auto object-cover rounded-lg"
+              style={{ maxHeight: "75vh" }}
+              onClick={() => {
+                router.push(
+                  `/m/events/${event.id}?prev=${encodeURIComponent(
+                    currentPathUrl
+                  )}`
+                );
+              }}
+            />
+          )}
 
           {event.original && (
             <div className="absolute top-4 left-2 rounded-full py-2 px-2 text-xs shadow-md font-semibold bg-white">

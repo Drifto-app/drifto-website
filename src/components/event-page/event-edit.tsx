@@ -183,7 +183,7 @@ export const EventEdit = ({
             location: coordinates,
             address,
             isAgeRestricted,
-            coverVideo,
+            coverVideo: coverVideo ? coverVideo : "",
             minimumAge:  minimumAge === "" || minimumAge === "0" ? null : parseInt(minimumAge, 10),
             tags: eventTags,
             eventTheme: eventTheme,

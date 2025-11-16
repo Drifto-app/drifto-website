@@ -69,7 +69,13 @@ export const EventFavouriteCard = ({
                     <div className="p-3 absolute top-3 right-2 z-1000 h-15 w-15" onClick={handleReaction}>
                         <button className="absolute top-3 right-2 text-white rounded-full bg-neutral-800 p-2 opacity-90 z-90" disabled={isLikedLoading}>
                             {isLiked ? (
-                                <FaHeart size={25} className="text-red-500" />
+                              <FaHeart
+                                size={25}
+                                className="text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
+                                style={{
+                                    animation: 'heartBeat 0.2s ease-in-out'
+                                }}
+                              />
                             ) : (
                                 <IoMdHeartEmpty size={25} />
                             )}

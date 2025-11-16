@@ -6,6 +6,7 @@ import Image from "next/image";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { FaHeart } from "react-icons/fa";
 import { IoTicket } from "react-icons/io5";
+import { HiVolumeUp, HiVolumeOff } from "react-icons/hi";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { authApi } from "@/lib/axios";
@@ -19,21 +20,23 @@ interface EventCardProps extends React.ComponentProps<"div"> {
 }
 
 export const EventCard = ({
-  event,
-  currentPathUrl,
-  className,
-  ...props
-}: EventCardProps) => {
+                            event,
+                            currentPathUrl,
+                            className,
+                            ...props
+                          }: EventCardProps) => {
   const router = useRouter();
 
   const [price, setPrice] = useState<string>("");
   const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
   const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
+  const [isMuted, setIsMuted] = useState<boolean>(true);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
 
-  // 👉 NEW REF FOR LAZY-LOADING
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
-  // 👉 PRICE LOGIC
+  // PRICE LOGIC
   useEffect(() => {
     if (event.tickets) {
       const newPrice: number = event.tickets.reduce(
@@ -51,10 +54,11 @@ export const EventCard = ({
     }
   }, [event.tickets]);
 
-  // 👉 NEW EFFECT: INTERSECTION OBSERVER VIDEO LAZY LOAD
+  // INTERSECTION OBSERVER FOR VIDEO PLAYBACK CONTROL
   useEffect(() => {
     const video = videoRef.current;
-    if (!video) return;
+    const container = containerRef.current;
+    if (!video || !container) return;
 
     const source = video.querySelector("source");
     if (!source) return;
@@ -64,18 +68,42 @@ export const EventCard = ({
         const entry = entries[0];
 
         if (entry.isIntersecting) {
-          // Move data-src → src
-          source.src = event.coverVideo;
-          video.load(); // Start loading
-          observer.unobserve(video);
+          // Load video if not loaded yet
+          if (!source.src) {
+            source.src = event.coverVideo;
+            video.load();
+          }
+
+          // Play video when it's in view (center 50% of viewport)
+          video.play().then(() => {
+            setIsPlaying(true);
+          }).catch(err => {
+            console.log("Video play failed:", err);
+          });
+        } else {
+          // Pause video when out of view
+          video.pause();
+          setIsPlaying(false);
         }
       },
-      { threshold: 0.25 }
+      {
+        threshold: 0.5, // Play when 50% visible
+        rootMargin: "-25% 0px -25% 0px" // Focus on center of viewport
+      }
     );
 
-    observer.observe(video);
+    observer.observe(container);
     return () => observer.disconnect();
   }, [event.coverVideo]);
+
+  // Handle mute/unmute
+  const toggleMute = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (videoRef.current) {
+      videoRef.current.muted = !isMuted;
+      setIsMuted(!isMuted);
+    }
+  };
 
   // DATE FORMAT
   const dt = new Date(event.startTime);
@@ -111,22 +139,28 @@ export const EventCard = ({
   return (
     <div className={cn("flex flex-col border-none", className)} {...props}>
       <div className="w-full rounded-lg flex flex-col gap-1">
-        <div className="relative w-full max-h-[75vh] overflow-hidden">
-          {/* 👉 UPDATED VIDEO WITH LAZY LOADING */}
-
+        <div
+          ref={containerRef}
+          className="relative w-full max-h-[75vh] overflow-hidden"
+        >
           {event.coverVideo ? (
             <video
               ref={videoRef}
               className="w-full h-full object-cover rounded-lg"
               preload="none"
-              autoPlay
-              muted
+              muted={isMuted}
               playsInline
               loop
               controls={false}
               poster={event.titleImage}
+              onClick={() => {
+                router.push(
+                  `/m/events/${event.id}?prev=${encodeURIComponent(
+                    currentPathUrl
+                  )}`
+                );
+              }}
             >
-              {/* data-src means browser won’t load yet */}
               <source data-src={event.coverVideo} type="video/mp4" />
               Your browser does not support the video tag.
             </video>
@@ -153,6 +187,22 @@ export const EventCard = ({
               Drifto Original
             </div>
           )}
+          {event.coverVideo && (
+            <div className="absolute bottom-0 left-0 pr-6 pl-2 pt-6 pb-4 ">
+              <button
+                className="text-white rounded-full bg-neutral-800 p-2 opacity-90 z-90"
+                onClick={toggleMute}
+              >
+                {isMuted ? (
+                  <HiVolumeOff size={20} />
+                ) : (
+                  <HiVolumeUp size={20} />
+                )}
+              </button>
+            </div>
+          )}
+
+          {/* Like Button */}
           <div
             className="p-3 absolute top-3 right-2 z-1000 h-15 w-15"
             onClick={handleReaction}
@@ -162,7 +212,13 @@ export const EventCard = ({
               disabled={isLikedLoading}
             >
               {isLiked ? (
-                <FaHeart size={25} className="text-red-500" />
+                <FaHeart
+                  size={25}
+                  className="text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
+                  style={{
+                    animation: 'heartBeat 0.2s ease-in-out'
+                  }}
+                />
               ) : (
                 <IoMdHeartEmpty size={25} />
               )}

@@ -169,7 +169,12 @@ export const CreateEventContent = ({
   const handleTitleImageChange = useCallback((newUrl: string) => {
     setTitleImage(newUrl);
   }, []);
-  const handleCoverVideoChange = useCallback((newUrl: string) => {
+
+  const handleCoverVideoChange = useCallback((newUrl: string | null) => {
+    if(!newUrl) {
+      setCoverVideo(undefined);
+      return;
+    }
     setCoverVideo(newUrl);
   }, []);
 
@@ -423,12 +428,6 @@ export const CreateEventContent = ({
               mediaFileType={"EVENT_HEADER"}
               setSubmitDisabled={setSubmitDisabled}
             />
-            <CoverVideoUploader
-              videoValue={coverVideo}
-              onVideoValueChange={handleCoverVideoChange}
-              mediaFileType={"EVENT_COVER_VIDEO"}
-              setSubmitDisabled={setSubmitDisabled}
-            />
             <div className="w-full flex flex-col px-4 gap-5 mt-4 pb-15">
               <div className="grid gap-2">
                 <Label htmlFor="title" className="text-neutral-500">
@@ -544,6 +543,21 @@ export const CreateEventContent = ({
                   maxImages={20}
                   onImageAdd={setScreenshots}
                   onImageRemove={setScreenshots}
+                />
+              </div>
+              <div className="grid gap-2 w-full">
+                <div className="flex flex-col">
+                  <div className="font-bold">Cover Video (Optional)</div>
+                  <p className="text-neutral-400 text-xs font-semibold">
+                    Add short video teaser (max 60s) to grab attention
+                  </p>
+                </div>
+                <CoverVideoUploader
+                  videoValue={coverVideo}
+                  onVideoValueChange={handleCoverVideoChange}
+                  mediaFileType={"EVENT_COVER_VIDEO"}
+                  setSubmitDisabled={setSubmitDisabled}
+                  className="mb-10"
                 />
               </div>
               <Button

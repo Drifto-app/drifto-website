@@ -150,7 +150,12 @@ export const CommentCard  =({
                             className={cn("font-inherit transition-opacity", (isLikedLoading || isDisabled) && "opacity-50")}
                         >
                             {isLiked ? (
-                                <FaHeart className="w-6 h-6 text-red-500" />
+                                <FaHeart
+                                  className="w-6 h-6 text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
+                                  style={{
+                                    animation: 'heartBeat 0.2s ease-in-out'
+                                  }}
+                                />
                             ) : (
                                 <FaRegHeart className="w-6 h-6" />
                             )}

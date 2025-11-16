@@ -16,6 +16,7 @@ import {authApi} from "@/lib/axios";
 import {LoaderSmall} from "@/components/ui/loader";
 import {showTopToast} from "@/components/toast/toast-util";
 import {EventThemeSelector} from "@/components/event-page/event-theme";
+import { CoverVideoUploader } from '@/components/ui/cover-video';
 
 interface EventEditProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -62,7 +63,17 @@ export const EventEdit = ({
     const [eventTags, setEventTags] = useState<string[]>(event.eventTags)
     const [screenshots, setScreenshots] = useState<string[]>(event.screenshots)
     const [tickets, setTickets] = useState<any[]>(event.tickets);
+    const [coverVideo, setCoverVideo] = useState<string | undefined>(event.coverVideo);
     const [eventTheme, setEventTheme] = useState<[string, string]>(event.eventTheme === null ? ["#fff", "#fff"] : event.eventTheme);
+
+
+    const handleCoverVideoChange = useCallback((newUrl: string | null) => {
+        if(!newUrl) {
+            setCoverVideo(undefined);
+            return;
+        }
+        setCoverVideo(newUrl);
+    }, []);
 
 
     const handleTitleImageChange = useCallback((newUrl: string) => {
@@ -336,6 +347,13 @@ export const EventEdit = ({
                                 <Label htmlFor="m-age" className="text-neutral-500">Snapshots</Label>
                                 <ImageSnapshots setSubmitDisabled={setSubmitDisabled} initialImages={screenshots} maxImages={50} onImageAdd={setScreenshots} onImageRemove={setScreenshots}/>
                             </div>
+                            <CoverVideoUploader
+                              videoValue={coverVideo}
+                              onVideoValueChange={handleCoverVideoChange}
+                              mediaFileType={"EVENT_COVER_VIDEO"}
+                              setSubmitDisabled={setSubmitDisabled}
+                              className="mb-10"
+                            />
                             <div className="bg-white pt-2 border-none border-t border-white w-full fixed inset-x-0 bottom-0 z-60 pb-4 flex items-center justify-center safe-area-inset-bottom">
                                 <Button
                                     type="submit"

@@ -185,7 +185,12 @@ export const PostCard = ({
                                 className="font-inherit"
                             >
                                 {isLiked ? (
-                                    <FaHeart className="w-6 h-6 text-red-500" />
+                                    <FaHeart
+                                      className="w-6 h-6 text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
+                                      style={{
+                                          animation: 'heartBeat 0.2s ease-in-out'
+                                      }}
+                                    />
                                 ) : (
                                     <FaRegHeart className="w-6 h-6" />
                                 )}

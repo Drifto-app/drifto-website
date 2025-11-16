@@ -22,13 +22,13 @@ import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {useShare} from "@/hooks/share-option";
 import {ShareDialog} from "@/components/share-button/share-option";
 import {showTopToast} from "@/components/toast/toast-util";
+import { CoverVideoSection } from "./cover-video-section";
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
     isCoHost: boolean;
     setActiveScreen?: (activeScreen: string, title?: string) => void;
 }
-
 
 export const SingleEventDetails = ({
     event, setActiveScreen, isCoHost, className, ...props
@@ -261,6 +261,11 @@ export const SingleEventDetails = ({
                         <EventSingleContentText headText={"Event Screenshots"} isLine={false} className="flex-col shadow-xl">
                             <SnapshotCarousel snapshots={event.screenshots} />
                         </EventSingleContentText>
+                        <CoverVideoSection
+                          coverVideo={event.coverVideo}
+                          poster={event.titleImage}
+                          className="shadow-xl"
+                        />
                         <EventSingleContentText isLine={false} headText="Hosts" className="flex-col items-start shadow-xl">
                             {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
                                 <UserEventSinglePlaceholder
@@ -356,7 +361,13 @@ export const SingleEventDetails = ({
                         <div className="absolute top-3 right-2 flex flex-row gap-3">
                             <button className=" text-white rounded-full bg-neutral-800 p-2 opacity-90" onClick={handleReaction} disabled={isLikedLoading}>
                                 {isLiked ? (
-                                    <FaHeart size={25} className="text-red-500" />
+                                  <FaHeart
+                                    size={25}
+                                    className="text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
+                                    style={{
+                                        animation: 'heartBeat 0.2s ease-in-out'
+                                    }}
+                                  />
                                 ) : (
                                     <IoMdHeartEmpty size={25} />
                                 )}
@@ -369,6 +380,8 @@ export const SingleEventDetails = ({
                             </button>
                         </div>
                     </div>
+
+
                     <h1 className="capitalize font-black text-2xl w-full text-neutral-950">{event.title}</h1>
                     <EventSingleContent>
                         <FaRegCalendar size={18}/>
@@ -424,6 +437,11 @@ export const SingleEventDetails = ({
                     <EventSingleContentText headText="Snapshots" className="flex-col">
                         <SnapshotCarousel snapshots={event.screenshots} />
                     </EventSingleContentText>
+                    <CoverVideoSection
+                      coverVideo={event.coverVideo}
+                      poster={event.titleImage}
+                      className="flex-col"
+                    />
                     <EventSingleContentText headText="Hosted By" className="flex-col items-start">
                         {event.coHosts.map((coHost: {[key: string]: any}, i: number) => (
                             <UserEventSinglePlaceholder

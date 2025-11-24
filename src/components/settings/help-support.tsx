@@ -55,7 +55,7 @@ export const HelpSupportContent = ({ prev, currentPathUrl, className, ...props }
     const { user } = useAuthStore();
 
     // mailto link for report issue
-    const email = "driftoapp@gmail.com";
+    const email = "support@drifto.app";
     const subject = "Drifto Issue Report";
     const fromEmail = user?.email ? `\n\nUser Email: ${user.email}` : "";
     const body = `Please describe the issue you encountered.${fromEmail}`;

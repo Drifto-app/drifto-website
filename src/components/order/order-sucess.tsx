@@ -25,7 +25,7 @@ export const OrderSuccessDetails = ({
                    <p>Check your Tickets! View your purchases details in the Plans Tab</p>
                    <p>Share the Excitement! Let other know about your event experience.</p>
                    <p>Change of plans? Easily request a refund if eligible</p>
-                   <p>Need help? Contact <a href="mailto:driftoapp@gmail.com" className="font-bold">Drifto Support</a></p>
+                   <p>Need help? Contact <a href="mailto:support@drifto.app" className="font-bold">Drifto Support</a></p>
                </div>
            </div>
             <Button

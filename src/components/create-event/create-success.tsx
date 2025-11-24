@@ -63,7 +63,7 @@ export const CreateEventSuccess = ({ event, onContinue }: CreateSuccessProps) =>
                         <div>
                             <p className="text-gray-700">
                                 Need urgent assistance? Contact{' '}
-                                <a href="mailto:driftoapp@gmail.com" className="font-semibold text-gray-900">Drifto Support</a>.
+                                <a href="mailto:support@drifto.app" className="font-semibold text-gray-900">Drifto Support</a>.
                             </p>
                         </div>
                     </div>

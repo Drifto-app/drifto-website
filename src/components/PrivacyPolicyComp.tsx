@@ -190,7 +190,7 @@ const PrivacyPolicyComp = () => {
                                 If you have questions or concerns about this Privacy Policy, please contact us:
                             </p>
                             <div className="bg-gray-50 p-6 rounded-lg">
-                                <p><strong>Email:</strong> <a href="mailto:driftoapp@gmail.com" className="text-blue-600 hover:text-blue-700">driftoapp@gmail.com</a></p>
+                                <p><strong>Email:</strong> <a href="mailto:contact@drifto.app" className="text-blue-600 hover:text-blue-700">contact@drifto.app</a></p>
                                 <p><strong>Website:</strong> <a href="/" className="text-blue-600 hover:text-blue-700">https://www.drifto.me</a></p>
                             </div>
                         </section>

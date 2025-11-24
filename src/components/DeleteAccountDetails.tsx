@@ -4,7 +4,7 @@ import {Footer} from "@/components/Footer.tsx";
 
 const DeleteAccountDetails = () => {
     const handleContactSupport = () => {
-        window.open('mailto:driftoapp@gmail.com?subject=Account Deletion Request&body=Hi Drifto Team,%0A%0AI would like to request the deletion of my Drifto account.%0A%0AAccount details:%0A- Email: [Your email address]%0A- Username: [Your username]%0A%0AThank you.', '_blank');
+        window.open('mailto:contact@drifto.app?subject=Account Deletion Request&body=Hi Drifto Team,%0A%0AI would like to request the deletion of my Drifto account.%0A%0AAccount details:%0A- Email: [Your email address]%0A- Username: [Your username]%0A%0AThank you.', '_blank');
     };
 
     const handleBackToHome = () => {
@@ -242,8 +242,8 @@ const DeleteAccountDetails = () => {
                         </p>
                         <div className="flex items-center justify-center text-gray-600">
                             <Mail className="w-4 h-4 mr-2" />
-                            <a href="mailto:driftoapp@gmail.com" className="text-blue-600 hover:text-blue-700 font-medium">
-                                driftoapp@gmail.com
+                            <a href="mailto:contact@drifto.app" className="text-blue-600 hover:text-blue-700 font-medium">
+                                contact@drifto.app
                             </a>
                         </div>
                     </div>

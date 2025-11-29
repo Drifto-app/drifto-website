@@ -22,7 +22,7 @@ interface PageProps {
 // Server-side fetch without auth (for bots and crawlers)
 async function getPublicEvent(eventId: string): Promise<Event | null> {
     try {
-        const response = await api.get(`/event/public/${eventId}`)
+        const response = await api.get(`/event/public/${eventId}/meta`)
         return response.data.data
     } catch (error) {
         console.error('Failed to fetch public event:', error)

@@ -17,11 +17,13 @@ import { AspectRatio } from "../ui/aspect-ratio";
 interface EventCardProps extends React.ComponentProps<"div"> {
   event: { [key: string]: any };
   currentPathUrl: string;
+  isAuthenticated: boolean;
 }
 
 export const EventCard = ({
                             event,
                             currentPathUrl,
+                            isAuthenticated,
                             className,
                             ...props
                           }: EventCardProps) => {
@@ -203,7 +205,7 @@ export const EventCard = ({
           )}
 
           {/* Like Button */}
-          <div
+          {isAuthenticated && <div
             className="p-3 absolute top-3 right-2 z-1000 h-15 w-15"
             onClick={handleReaction}
           >
@@ -223,7 +225,7 @@ export const EventCard = ({
                 <IoMdHeartEmpty size={25} />
               )}
             </button>
-          </div>
+          </div>}
         </div>
 
         <h3 className="mt-2 font-semibold text-xl capitalize">{event.title}</h3>

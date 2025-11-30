@@ -19,7 +19,9 @@ export function ProtectedRoute({ children, redirectTo = '/login' }: ProtectedRou
 
     useEffect(() => {
         if (hasTriedRefresh && !isLoading && !isAuthenticated) {
-                router.push(`${redirectTo}?next=${encodeURIComponent(pathname + "?" + searchParams)}`);
+            const returnUrl = encodeURIComponent(`${pathname}?${searchParams}`);
+
+            router.replace(`${redirectTo}?next=${returnUrl}`);
         }
     }, [isAuthenticated, isLoading, router, redirectTo, hasTriedRefresh]);
 

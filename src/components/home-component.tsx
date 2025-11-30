@@ -22,11 +22,12 @@ export default function HomeContent() {
   const searchParams = useSearchParams();
 
   const { user } = useAuthStore.getState();
+  const { isAuthenticated, isLoading, hasTriedRefresh, locationPublic } = useAuthStore();
 
   const screen = searchParams.get("screen");
 
   const [activeScreen, setActiveScreen] = useState<string>(screen ?? "events");
-  const [location, setLocation] = useState<string | null>(user?.city);
+  const [location, setLocation] = useState<string | null>(isAuthenticated ? user?.city : locationPublic?.city);
   const eventDisplayRef = useRef<EventDisplayRef>(null);
 
   const handleScreen = (value: string) => {
@@ -71,6 +72,23 @@ export default function HomeContent() {
         );
     }
   };
+
+  if (hasTriedRefresh && !isLoading && !isAuthenticated) {
+    return (
+      <ScreenProvider>
+        <div className="min-h-[100dvh] w-full">
+          <div className="w-full bg-gray-50">
+            <HeaderMobile
+              location={location}
+              setLocation={setLocation}
+              activeScreen={activeScreen}
+            />
+            <EventDisplay ref={eventDisplayRef} location={location} />
+          </div>
+        </div>
+      </ScreenProvider>
+    )
+  }
 
   return (
     <ProtectedRoute>

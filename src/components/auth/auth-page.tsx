@@ -8,6 +8,9 @@ import Image from "next/image";
 import { ForgotPassword } from "@/components/auth/forgot-password";
 import { SignUpForm } from "@/components/auth/sign-up";
 import { ScreenProvider } from "@/components/screen/screen-provider";
+import { Button } from '@/components/ui/button';
+import { FaArrowLeftLong } from 'react-icons/fa6';
+import * as React from 'react';
 
 type View = "login" | "signup" | "forgot";
 
@@ -61,6 +64,19 @@ export default function LoginPage() {
         <div className="flex flex-col gap-4 p-6 md:p-10">
           <div className="flex flex-1 items-center justify-center">
             <div className="w-full max-w-sm flex flex-col gap-12">
+              <div className="">
+                {view !== "login" &&
+                  <Button
+                    variant={'outline'}
+                    onClick={() => {
+                      setView("login");
+                    }}
+                  >
+                    <FaArrowLeftLong />
+                    Go back
+                  </Button>
+                }
+              </div>
               <div className="relative w-12 h-12">
                 <Image
                   src="/logo.png"

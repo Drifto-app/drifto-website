@@ -17,6 +17,7 @@ import {Calendar28} from "@/components/ui/date-input";
 import {Autocomplete, useLoadScript} from "@react-google-maps/api";
 import GoogleButton from "@/components/ui/google-button";
 import {showTopToast} from "@/components/toast/toast-util";
+import { FaArrowLeftLong } from 'react-icons/fa6';
 
 interface SignUpFormProps extends React.ComponentProps<"form"> {
     setIsSignUp: (value: boolean) => void;

@@ -11,6 +11,7 @@ import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
 import {IoSend} from "react-icons/io5";
 import { showTopToast } from "../toast/toast-util";
+import { useAuthStore } from '@/store/auth-store';
 
 interface SingleEventReviewsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -19,6 +20,8 @@ interface SingleEventReviewsProps extends React.ComponentProps<"div">{
 
 export const SingleEventReviews = ({
   event, currentPathUrl, className, ...props}: SingleEventReviewsProps) => {
+    const { isAuthenticated, isLoading } = useAuthStore();
+
     // State for infinite scroll
     const [comments, setComments] = useState<any[]>([]);
     const [numOfComments, setNumOfComments] = useState<number>(0);
@@ -89,9 +92,17 @@ export const SingleEventReviews = ({
                 commentType: "EVENT"
             };
 
-            const response = await authApi.get(`/comment/entity/${event.id}`, {
-                params
-            });
+            let response;
+            if (!isLoading && isAuthenticated) {
+                response = await authApi.get(`/comment/entity/${event.id}`, {
+                    params
+                });
+            } else {
+                response = await authApi.get(`/comment/public/entity/${event.id}`, {
+                    params
+                });
+
+            }
 
             const newComments = response.data.data.data;
             setNumOfComments(response.data.data.totalElements)
@@ -229,15 +240,16 @@ export const SingleEventReviews = ({
                 ))}
             </div>
 
-            <form
+            {isAuthenticated &&
+              <form
                 onSubmit={handleCommentSubmit}
                 className="fixed inset-x-0 z-60 border-t bg-white border-neutral-200 safe-area-inset-bottom flex flex-row"
                 style={{
                     bottom: keyboardOffset,
                     transition: "bottom 0.2s ease",
                 }}
-            >
-                <Input
+              >
+                  <Input
                     ref={inputRef}
                     type="text"
                     name="comments"
@@ -245,20 +257,21 @@ export const SingleEventReviews = ({
                     placeholder="Add a comment…"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
-                />
-                <div className="flex items-center py-0 px-3">
-                    <button className={cn(
+                  />
+                  <div className="flex items-center py-0 px-3">
+                      <button className={cn(
                         "p-3 rounded-full",
                         comment.length === 0 ? "bg-neutral-300" : "bg-blue-700"
-                    )} type="submit" disabled={comment.length === 0 || submitCommentLoading}>
-                        {
-                            !submitCommentLoading
+                      )} type="submit" disabled={comment.length === 0 || submitCommentLoading}>
+                          {
+                              !submitCommentLoading
                                 ? <IoSend size={20} className="text-white" />
                                 : <LoaderSmall />
-                        }
-                    </button>
-                </div>
-            </form>
+                          }
+                      </button>
+                  </div>
+              </form>
+            }
 
             {/* Loading indicator for pagination */}
             {loading && !initialLoading && (

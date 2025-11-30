@@ -10,9 +10,13 @@ import * as React from "react";
 import EventSinglePage from "@/components/event-page/event-single-page";
 import SingleEventHostPage from "@/components/event-page/event-single-host-page";
 import { MdErrorOutline } from "react-icons/md";
+import { useAuthStore } from '@/store/auth-store';
 
 export default function EventPage() {
   const { id } = useParams();
+
+  const { isAuthenticated, isLoading, hasTriedRefresh } = useAuthStore();
+
 
   const queryParams = useSearchParams();
   const prev = queryParams.get("prev");
@@ -30,8 +34,15 @@ export default function EventPage() {
     const fetchEvent = async () => {
       setLoading(true);
       try {
-        const response = await authApi.get(`/event/${id}`);
+        let response;
+        if (!isLoading && isAuthenticated) {
+          response = await authApi.get(`/event/${id}`);
+        } else {
+          response = await authApi.get(`/event/public/${id}`);
+
+        }
         setEvent(response.data.data);
+
 
         if (response.data.data.hostCollaborationStatus != null) {
           setCoHost(response.data.data.hostCollaborationStatus);
@@ -59,14 +70,22 @@ export default function EventPage() {
 
   if (loading) {
     return (
-      <ProtectedRoute>
-        <ScreenProvider>
-          <div className="w-full h-screen flex flex-col items-center justify-center">
-            <Loader className="h-10 w-10" />
-          </div>
-        </ScreenProvider>
-      </ProtectedRoute>
+      <ScreenProvider>
+        <div className="w-full h-screen flex flex-col items-center justify-center">
+          <Loader className="h-10 w-10" />
+        </div>
+      </ScreenProvider>
     );
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <ScreenProvider>
+        <div className="w-full">
+          <EventSinglePage event={event} prev={prev}/>
+        </div>
+      </ScreenProvider>
+    )
   }
 
   if (coHost) {

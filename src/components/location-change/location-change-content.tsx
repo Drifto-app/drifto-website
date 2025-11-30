@@ -20,11 +20,11 @@ interface LocationChangeContentProps extends React.ComponentProps<"div"> {
 }
 
 export const LocationChangeContent = ({
-                                          prev, className, ...props
-                                      }: LocationChangeContentProps) => {
+    prev, className, ...props
+}: LocationChangeContentProps) => {
     const router = useRouter();
 
-    const {setUser, user} = useAuthStore()
+    const {setUser, user, isLoading, isAuthenticated, setLocationPublic} = useAuthStore()
 
     const [city, setCity] = React.useState<string>("");
     const [state, setState] = React.useState<string>("");
@@ -75,12 +75,16 @@ export const LocationChangeContent = ({
         setLoading(true);
 
         try {
-            await authApi.patch("/user/update", {
-                city,
-                state
-            })
+          if (!isLoading && isAuthenticated) {
+               await authApi.patch("/user/update", {
+                   city,
+                   state
+               })
 
-            setUser({...user, city, state})
+               setUser({...user, city, state})
+           } else {
+                setLocationPublic({city, state})
+           }
 
             setLoading(false);
             router.push(prev ?? "/");

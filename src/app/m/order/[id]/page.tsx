@@ -9,12 +9,15 @@ import {authApi} from "@/lib/axios";
 import {MdErrorOutline} from "react-icons/md";
 import * as React from "react";
 import {Loader} from "@/components/ui/loader";
+import { useAuthStore } from '@/store/auth-store';
 
 export default function OrderPage() {
     const { id } = useParams();
     const searchParams = useSearchParams();
 
     const prev = searchParams.get("prev");
+
+    const { isAuthenticated, isLoading, hasTriedRefresh } = useAuthStore();
 
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -28,7 +31,12 @@ export default function OrderPage() {
 
         const fetchEvent = async () => {
             try {
-                const response = await authApi.get(`/event/${id}`)
+                let response;
+                if (!isLoading && isAuthenticated) {
+                    response = await authApi.get(`/event/${id}`)
+                } else {
+                    response = await authApi.get(`/event/public/${id}`)
+                }
                 setEvent(response.data.data);
             } catch (err: any) {
                 setError(err.message);
@@ -42,28 +50,34 @@ export default function OrderPage() {
 
     if(error) {
         return (
-            <ProtectedRoute>
-                <ScreenProvider>
-                    <div className="w-full h-screen flex justify-center items-center">
-                        <div className="flex justify-center items-center gap-2">
-                            <MdErrorOutline size={30} className="text-red-500" />
-                            <p className="font-semibold text-lg">No event found</p>
-                        </div>
-                    </div>
-                </ScreenProvider>
-            </ProtectedRoute>
+          <ScreenProvider>
+              <div className="w-full h-screen flex justify-center items-center">
+                  <div className="flex justify-center items-center gap-2">
+                      <MdErrorOutline size={30} className="text-red-500" />
+                      <p className="font-semibold text-lg">No event found</p>
+                  </div>
+              </div>
+          </ScreenProvider>
         )
     }
 
     if(loading) {
         return (
-            <ProtectedRoute>
-                <ScreenProvider>
-                    <div className="w-full h-screen flex flex-col items-center justify-center">
-                        <Loader className="h-10 w-10"/>
-                    </div>
-                </ScreenProvider>
-            </ProtectedRoute>
+          <ScreenProvider>
+              <div className="w-full h-screen flex flex-col items-center justify-center">
+                  <Loader className="h-10 w-10"/>
+              </div>
+          </ScreenProvider>
+        )
+    }
+
+    if(!isAuthenticated) {
+        return (
+          <ScreenProvider>
+              <div className="w-full">
+                  <OrderContent event={event} prev={prev} />
+              </div>
+          </ScreenProvider>
         )
     }
 

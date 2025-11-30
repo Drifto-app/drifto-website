@@ -3,6 +3,11 @@ import {create} from "zustand";
 import {api, authApi} from "@/lib/axios";
 import {showTopToast} from "@/components/toast/toast-util";
 
+interface LocationPublic {
+  city: string | null;
+  state: string | null;
+}
+
 interface AuthState {
     user: {[key: string]: any} | null;
     accessToken: string | null;
@@ -10,6 +15,7 @@ interface AuthState {
     isAuthenticated: boolean;
     isLoading: boolean;
     hasTriedRefresh: boolean;
+    locationPublic: LocationPublic
 }
 
  export interface LoginCredentials {
@@ -36,6 +42,7 @@ interface AuthStore extends AuthState {
     setTokens: (accessToken: string, refreshToken: string) => void;
     clearAuth: () => void;
     setLoading: (loading: boolean) => void;
+    setLocationPublic: (locationPublic: LocationPublic) => void;
 }
 
 export const useAuthStore = create<AuthStore>()(
@@ -47,6 +54,9 @@ export const useAuthStore = create<AuthStore>()(
             isAuthenticated: false,
             isLoading: false,
             hasTriedRefresh: false,
+            locationPublic: {
+              state: null, city: null,
+            },
 
             login: async (credentials: LoginCredentials) => {
                 try{
@@ -165,6 +175,8 @@ export const useAuthStore = create<AuthStore>()(
                 }),
 
             setLoading: (isLoading: boolean) => set({ isLoading }),
+
+            setLocationPublic: (locationPublic: LocationPublic) => set({ locationPublic }),
         }),
         {
             name: 'auth-storage',
@@ -174,6 +186,7 @@ export const useAuthStore = create<AuthStore>()(
                 isAuthenticated: state.isAuthenticated,
                 isLoading: state.isLoading,
                 hasTriedRefresh: state.hasTriedRefresh,
+                locationPublic: state.locationPublic,
             }),
         }
     )

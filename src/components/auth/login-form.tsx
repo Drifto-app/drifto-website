@@ -135,7 +135,7 @@ export function LoginForm({
         </div>
         <div className="text-center text-sm flex flex-row justify-center gap-2">
           Don&apos;t have an account?{" "}
-          <p onClick={() => setIsSignUp(true)} className="hover:underline cursor-pointer">
+          <p onClick={() => setIsSignUp(true)} className="hover:underline cursor-pointer text-blue-800">
             Sign up
           </p>
         </div>

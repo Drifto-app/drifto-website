@@ -9,6 +9,7 @@ import {Loader} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Tabs} from "@/components/event-display/tabs";
+import { useAuthStore } from '@/store/auth-store';
 
 interface EventDisplayProps extends ComponentProps<"div"> {
     location: string | null;
@@ -24,6 +25,8 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
     const router = useRouter();
     const searchParams = useSearchParams();
     const pathname = usePathname();
+
+    const { isAuthenticated } = useAuthStore();
 
     const [activeEventItem, setActiveEventItem] = useState<string | null>(null);
     const [events, setEvents] = useState<any[]>([]);
@@ -63,9 +66,17 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                 params.location = location;
             }
 
-            const response = await authApi.get("/feed/event", {
-                params
-            });
+            let response;
+
+            if(isAuthenticated) {
+                response = await authApi.get("/feed/event", {
+                    params
+                });
+            } else {
+                response = await authApi.get("/feed/public/event", {
+                    params
+                });
+            }
 
             const newEvents = response.data.data.data;
 
@@ -205,11 +216,18 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
 
             <div className="flex flex-col gap-10 px-4 mt-4 w-full max-w-7xl ">
                 {events.map((evt, index) => (
-                    <EventCard key={evt.id} event={evt} currentPathUrl={pathname + "?" + searchParams}/>
+                    <EventCard key={evt.id} isAuthenticated={isAuthenticated} event={evt} currentPathUrl={pathname + "?" + searchParams}/>
                 ))}
             </div>
 
-            <Button size="lg" className="fixed bottom-20 rounded-full z-1000 bg-blue-800" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}>
+            <Button
+              size="lg"
+              className={cn(
+                'fixed rounded-full z-1000 bg-blue-800',
+                isAuthenticated ? "bottom-20" : "bottom-8"
+              )}
+              onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}
+            >
                 Create Experience
             </Button>
 

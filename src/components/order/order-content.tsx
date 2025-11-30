@@ -13,6 +13,7 @@ import {LoaderSmall} from "@/components/ui/loader";
 import {authApi} from "@/lib/axios";
 import {OrderSuccessDetails} from "@/components/order/order-sucess";
 import {showTopToast} from "@/components/toast/toast-util";
+import { useAuthStore } from '@/store/auth-store';
 
 interface OrderContentProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -31,6 +32,8 @@ export const OrderContent = ({
 
     const searchParams = useSearchParams();
     const pathname = usePathname();
+
+    const { isAuthenticated, isLoading} = useAuthStore();
 
     const [isOrderSuccessful, setIsOrderSuccessful] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
@@ -73,6 +76,11 @@ export const OrderContent = ({
         if(total <= 0) return
 
         setLoading(true);
+
+        if(!isAuthenticated) {
+            router.push(`/login?next=${encodeURIComponent(pathname + "?" + searchParams)}}`);
+            return;
+        }
 
         const param: {[key: string]: any} = {
             receiveUpdateOnEvent: true,

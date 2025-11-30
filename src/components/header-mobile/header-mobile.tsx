@@ -4,7 +4,9 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { IoSearchSharp } from "react-icons/io5";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {useState} from "react";
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/store/auth-store';
 
 interface HeaderMobileProps extends React.ComponentProps<"div"> {
     activeScreen: string;
@@ -74,7 +76,9 @@ export const HeaderMobile = ({
 
     const [lineIndex, setLineIndex] = useState(0);
 
-    React.useEffect(() => {
+    const { isAuthenticated } = useAuthStore();
+
+    useEffect(() => {
         const interval = setInterval(() => {
             setLineIndex((prevIndex) => (prevIndex + 1) % FOLLOW_UP_LINES.length);
         }, 15000);
@@ -99,11 +103,29 @@ export const HeaderMobile = ({
             )}
             {...props}
         >
-            <div
-                className="h-full w-90 rounded-full shadow-none border-none text-neutral-700 text-center font-black mb-3 capitalize te"
-                onClick={handleLocationClick}
-            >
-                {location || "No location"}
+            <div className={cn(
+              "w-full flex items-center",
+              isAuthenticated ? "justify-center" : "justify-between px-6 pb-6"
+            )}>
+                <div
+                  className={cn(
+                    "rounded-full shadow-none border-none text-neutral-700 text-center font-black capitalize",
+                    isAuthenticated ? "w-90 mb-3" : ""
+                  )}
+                  onClick={handleLocationClick}
+                >
+                    {location || "No location"}
+                </div>
+
+                {!isAuthenticated &&
+                    <Button
+                        className="bg-blue-800 font-semibold py-5 px-6"
+                        onClick={() => {
+                            router.push(`/login`);
+                        }}
+                    >
+                        Sign in
+                    </Button>}
             </div>
 
             <div

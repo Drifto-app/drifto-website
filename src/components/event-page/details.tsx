@@ -23,6 +23,7 @@ import {useShare} from "@/hooks/share-option";
 import {ShareDialog} from "@/components/share-button/share-option";
 import {showTopToast} from "@/components/toast/toast-util";
 import { CoverVideoSection } from "./cover-video-section";
+import { useAuthStore } from '@/store/auth-store';
 
 interface SingleEventDetailsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -34,6 +35,8 @@ export const SingleEventDetails = ({
     event, setActiveScreen, isCoHost, className, ...props
 }: SingleEventDetailsProps) => {
     const router = useRouter();
+
+    const { isAuthenticated } = useAuthStore();
 
     const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
@@ -359,7 +362,8 @@ export const SingleEventDetails = ({
                         )}
 
                         <div className="absolute top-3 right-2 flex flex-row gap-3">
-                            <button className=" text-white rounded-full bg-neutral-800 p-2 opacity-90" onClick={handleReaction} disabled={isLikedLoading}>
+                            {isAuthenticated &&
+                              <button className=" text-white rounded-full bg-neutral-800 p-2 opacity-90" onClick={handleReaction} disabled={isLikedLoading}>
                                 {isLiked ? (
                                   <FaHeart
                                     size={25}
@@ -369,9 +373,10 @@ export const SingleEventDetails = ({
                                     }}
                                   />
                                 ) : (
-                                    <IoMdHeartEmpty size={25} />
+                                  <IoMdHeartEmpty size={25} />
                                 )}
-                            </button>
+                                </button>
+                            }
                             <button
                                 className="text-white rounded-full bg-neutral-800 p-2 opacity-90"
                                 onClick={handleQuickShare}
@@ -451,9 +456,11 @@ export const SingleEventDetails = ({
                                 prev={`/m/events/${event.id}`} />
                         ))}
                     </EventSingleContentText>
-                    <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">
-                        Report Event
-                    </div>
+                    {isAuthenticated &&
+                      <div className="text-red-600 font-semibold underline w-full text-center py-2 cursor-pointer">
+                          Report Event
+                      </div>
+                    }
                 </div>
             </div>
 

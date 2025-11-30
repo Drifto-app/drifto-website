@@ -7,6 +7,7 @@ import {EventCard} from "@/components/event-display/event-card";
 import {Loader} from "@/components/ui/loader";
 import {Button} from "@/components/ui/button";
 import {useCallback, useEffect, useRef, useState} from "react";
+import { useAuthStore } from '@/store/auth-store';
 
 interface SingleEventRelatedProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -16,6 +17,8 @@ interface SingleEventRelatedProps extends React.ComponentProps<"div">{
 export const SingleEventRelated = ({
                                        event, currentPathUrl, className, ...props
                                    }: SingleEventRelatedProps) => {
+    const { isAuthenticated, isLoading } = useAuthStore();
+
     const [relatedEvents, setRelatedEvents] = useState<any[]>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
@@ -41,12 +44,22 @@ export const SingleEventRelated = ({
         try {
             const currentPage = resetData ? 1 : pageRef.current;
 
-            const response = await authApi.get(`/event/${event.id}/related`, {
-                params: {
-                    pageSize: 10,
-                    pageNumber: currentPage,
-                }
-            });
+            let response;
+            if(isAuthenticated && !isLoading    ) {
+                response = await authApi.get(`/event/${event.id}/related`, {
+                    params: {
+                        pageSize: 10,
+                        pageNumber: currentPage,
+                    }
+                });
+            } else {
+                response = await authApi.get(`/event/public/${event.id}/related`, {
+                    params: {
+                        pageSize: 10,
+                        pageNumber: currentPage,
+                    }
+                });
+            }
 
             const newEvents = response.data.data.data || [];
             const isLast = response.data.data.isLast !== undefined
@@ -208,6 +221,7 @@ export const SingleEventRelated = ({
                             key={evt.id}
                             event={evt}
                             currentPathUrl={currentPathUrl}
+                            isAuthenticated={isAuthenticated}
                         />
                     ))}
                 </div>

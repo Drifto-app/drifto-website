@@ -23,6 +23,7 @@ import {
 import { SlOptionsVertical } from "react-icons/sl";
 import { MdDeleteOutline } from "react-icons/md";
 import {ComponentProps, FC, memo, useCallback, useMemo, useState} from "react";
+import { useAuthStore } from '@/store/auth-store';
 
 type AnyRecord = Record<string, any>;
 
@@ -43,6 +44,8 @@ export const CommentCard  =({
     const pathname = usePathname();
 
     const isDisabled = Boolean(disabled);
+
+    const { isAuthenticated } = useAuthStore();
 
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
@@ -139,28 +142,30 @@ export const CommentCard  =({
                 {/* actions */}
                 <div className="flex items-center justify-between gap-6 text-neutral-400 font-bold">
                     {/* Likes */}
-                    <div className="flex items-center gap-2">
-                        <span className="text-md">{totalReactions}</span>
-                        <button
+                    {isAuthenticated &&
+                      <div className="flex items-center gap-2">
+                          <span className="text-md">{totalReactions}</span>
+                          <button
                             type="button"
                             onClick={handleReaction}
                             disabled={isLikedLoading || isDisabled}
                             aria-pressed={isLiked}
                             aria-busy={isLikedLoading}
                             className={cn("font-inherit transition-opacity", (isLikedLoading || isDisabled) && "opacity-50")}
-                        >
-                            {isLiked ? (
+                          >
+                              {isLiked ? (
                                 <FaHeart
                                   className="w-6 h-6 text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
                                   style={{
-                                    animation: 'heartBeat 0.2s ease-in-out'
+                                      animation: 'heartBeat 0.2s ease-in-out'
                                   }}
                                 />
-                            ) : (
+                              ) : (
                                 <FaRegHeart className="w-6 h-6" />
-                            )}
-                        </button>
-                    </div>
+                              )}
+                          </button>
+                      </div>
+                    }
 
                     {/* Replies */}
                     <button

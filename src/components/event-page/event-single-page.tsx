@@ -74,7 +74,7 @@ export default function EventSinglePage(
     return(
         <div
             className={cn(
-                "w-full ",
+                "w-full min-h-[100dvh]",
                 className,
                 event.eventTheme !== null ? "" : "bg-neutral-100",
             )}

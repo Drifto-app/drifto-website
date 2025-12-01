@@ -5,6 +5,7 @@ import {api} from "@/lib/axios";
 import Image from "next/image";
 
 interface Event {
+    slug: string;
     id: string,
     title: string,
     description: string,
@@ -65,7 +66,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const event = await getPublicEvent(id)
     if (!event) return { title: 'Event Not Found', description: 'The requested event could not be found.' }
     const optimizedImage = optimizeCloudinaryUrl(event.titleFileUrl)
-    const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/m/events/${event.id}`
+    const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/m/events/${event.slug}`
 
 
     return {

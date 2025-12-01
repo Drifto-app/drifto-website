@@ -82,7 +82,7 @@ export const SingleEventDetails = ({
         description: `This event is now ${event.eventDisplayStatus}`
     }
 
-    const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/event/${event.id}`;
+    const eventUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/event/${event.slug}`;
     const {
         isShareDialogOpen,
         closeShareDialog,

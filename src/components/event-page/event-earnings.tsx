@@ -123,7 +123,7 @@ export const EventEarnings = ({
                 </EventSingleContentText>
                 <EventSingleContentText isLine={false} headText={"Platform Fee"} className="shadow-xl gap-6 items-start">
                     <p className="text-lg font-semibold">
-                        {eventEarnings.driftoPercentage}%
+                        {eventEarnings.driftoPercentage}% + ₦{eventEarnings.driftoServiceFee}
                     </p>
                 </EventSingleContentText>
                 <EventSingleContentText isLine={false} headText={"Total Tickets Sold"} className="shadow-xl gap-6 items-start">

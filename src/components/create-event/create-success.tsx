@@ -10,7 +10,7 @@ interface CreateSuccessProps {
 }
 
 export const CreateEventSuccess = ({ event, onContinue }: CreateSuccessProps) => {
-    const eventUrl = event && `${typeof window !== 'undefined' ? window.location.origin : ''}/event/${event.id}`;
+    const eventUrl = event && `${typeof window !== 'undefined' ? window.location.origin : ''}/event/${event.slug}`;
     const {
         isShareDialogOpen,
         closeShareDialog,

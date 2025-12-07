@@ -87,7 +87,7 @@ export function Tabs({
     onClick?: (v: string | null) => void;
 }) {
     return (
-        <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4 no-scrollbar">
+        <ul className="flex flex-row flex-nowrap w-full gap-1 overflow-x-auto px-4 pt-2 no-scrollbar">
             {eventItems.map((item) => {
                 const colors = tabColors[item.label] || { active: '#000', inactive: '#666' };
                 const isActive = active === item.value;

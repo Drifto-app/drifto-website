@@ -129,7 +129,7 @@ export const HeaderMobile = ({
             </div>
 
             <div
-                className="w-9/10 max-w-xl flex flex-row items-center border rounded-full px-4 py-3 shadow-md"
+                className="w-9/10 max-w-xl flex flex-row items-center border rounded-full px-4 py-3 shadow-xl"
                 onClick={handleSearchClick}
             >
                 <IoSearchSharp size={25} />

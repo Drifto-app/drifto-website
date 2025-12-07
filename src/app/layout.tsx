@@ -1,18 +1,24 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Poppins } from 'next/font/google';
 import "./globals.css";
 import 'react-toastify/dist/ReactToastify.css';
 import {ClientProviders} from "@/components/client-providers";
 import {Analytics} from "@vercel/analytics/next";
 import {SpeedInsights} from "@vercel/speed-insights/next";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+// const geistSans = Geist({
+//   variable: "--font-geist-sans",
+//   subsets: ["latin"],
+// });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// const geistMono = Geist_Mono({
+//   variable: "--font-geist-mono",
+//   subsets: ["latin"],
+// });
+
+const poppins = Poppins({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-poppins",
 });
 
 export default function RootLayout({
@@ -33,7 +39,7 @@ export default function RootLayout({
               <meta property="og:type" content="website" />
               <meta property="og:image" content="/logo-white.svg" />
           </head>
-          <body className={`${geistSans.variable} ${geistMono.variable}`}>
+          <body className={`${poppins.variable} font-sans`}>
           <ClientProviders>
               <main>{children}</main>
               <Analytics />

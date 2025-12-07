@@ -61,7 +61,7 @@ export default function HomeContent() {
         return <ProfileDisplay handleScreenChange={handleScreen} />;
       default:
         return (
-          <div className="w-full bg-gray-50">
+          <div className="w-full flex-1 bg-neutral-50">
             <HeaderMobile
               location={location}
               setLocation={setLocation}
@@ -76,8 +76,8 @@ export default function HomeContent() {
   if (hasTriedRefresh && !isLoading && !isAuthenticated) {
     return (
       <ScreenProvider>
-        <div className="min-h-[100dvh] w-full">
-          <div className="w-full bg-gray-50">
+        <div className="min-h-[100dvh] flex flex-col w-full">
+          <div className="w-full flex-1 bg-neutral-50">
             <HeaderMobile
               location={location}
               setLocation={setLocation}
@@ -93,7 +93,7 @@ export default function HomeContent() {
   return (
     <ProtectedRoute>
       <ScreenProvider>
-        <div className="min-h-[100dvh] w-full">
+        <div className="min-h-[100dvh] flex flex-col w-full">
           {render()}
           <BottomNavbar
             activeScreen={activeScreen}

@@ -33,8 +33,8 @@ export const TicketCard = ({ ticket, removeTicket, onChange }: TicketCardProps) 
 
     const [ticketName, setTicketName] = useState<string>(ticket.title);
     const [description, setDescription] = useState<string>(ticket.description);
-    const [price, setPrice] = useState<string>(String(ticket.price ?? "")); // keep as string in the input
-    const [isPaid , setIsPaid] = useState<boolean>((ticket.price ?? 0) > 0);
+    const [price, setPrice] = useState<string>(String(ticket.basePrice ?? "")); // keep as string in the input
+    const [isPaid , setIsPaid] = useState<boolean>((ticket.basePrice ?? 0) > 0);
 
     const [quantity, setQuantity] = useState<string>(String(ticket.totalQuantity ?? ""));
     const [quantityError, setQuantityError] = useState<boolean>(false);

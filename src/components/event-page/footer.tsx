@@ -3,7 +3,7 @@
 import * as React from "react";
 import {cn} from "@/lib/utils";
 import {Button} from "@/components/ui/button";
-import {useEffect, useState} from "react";
+import { useEffect, useMemo, useState } from 'react';
 import {useRouter} from "next/navigation";
 import {
     Dialog,
@@ -33,7 +33,22 @@ export const SingleEventFooter = ({
 }: SingleEventFooterProps) => {
     const router = useRouter();
 
-    const [price, setPrice] = useState<string>("5000");
+    const priceLabel = useMemo(() => {
+        if (!event.tickets || event.tickets.length === 0) return "Unavailable";
+
+        const minPrice = event.tickets.reduce((min: number, ticket: { price: any }) => {
+            const currentPrice = parseFloat(ticket.price);
+
+            if (isNaN(currentPrice)) return min;
+
+            return currentPrice < min ? currentPrice : min;
+        }, Infinity);
+
+        if (minPrice === Infinity) return "Unavailable";
+        if (minPrice === 0) return "Free";
+
+        return "₦ " + minPrice.toFixed(2);
+    }, [event.tickets]);
 
     const handleEventDelete = async () => {
         setLoading!(true);
@@ -50,17 +65,7 @@ export const SingleEventFooter = ({
         }
     }
 
-    useEffect(() => {
-        const newPrice: number = event.tickets.reduce((min: number, ticket: { price: number; }) => {
-            return ticket.price < min ? ticket.price : min;
-        }, Infinity);
 
-        if(newPrice === 0) {
-            setPrice("Free");
-        }else {
-            setPrice(newPrice.toFixed(2).toString());
-        }
-    }, [price])
 
     if(isCoHost) {
         return(
@@ -142,7 +147,7 @@ export const SingleEventFooter = ({
             <div className="w-full flex flex-row items-center justify-between px-6 py-3">
                 <div>
                     <p className="text-xs text-neutral-600">Starting:</p>
-                    <h3 className="font-bold text-xl">{price === "Free" ? price : "₦ "+ price}</h3>
+                    <h3 className="font-bold text-xl">{priceLabel}</h3>
                 </div>
                 <Button
                     className="rounded-full px-5 py-6"

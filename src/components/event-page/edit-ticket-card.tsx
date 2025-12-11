@@ -135,7 +135,7 @@ export const TicketCard = ({ ticket, removeTicket, onChange }: TicketCardProps) 
             {/* Title & Price */}
             <div className="w-full flex items-center justify-between text-lg">
                 <p className="font-semibold capitalize">{ticket.title}</p>
-                <p>{!ticket.isPaid ? "Free" : "₦" + Number(ticket.price).toFixed(2)}</p>
+                <p>{!ticket.isPaid ? "Free" : "₦" + Number(ticket.basePrice).toFixed(2)}</p>
             </div>
 
             {/* Ticket Info */}

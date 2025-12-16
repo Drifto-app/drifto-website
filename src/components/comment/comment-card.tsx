@@ -49,7 +49,7 @@ export const CommentCard  =({
 
     const [drawerOpen, setDrawerOpen] = useState(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState(false);
-    const [isLiked, setIsLiked] = useState<boolean>(comment.likedByUser);
+    const [isLiked, setIsLiked] = useState<boolean>(comment.isLikedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState(false);
     const [totalReactions, setTotalReactions] = useState<number>(comment.totalLikes);
 

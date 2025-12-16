@@ -29,7 +29,7 @@ export const PostCard = ({
 
     const [drawerOpen, setDrawerOpen] = useState<boolean>(false);
     const [isDeleteLoading, setIsDeleteLoading] = useState<boolean>(false);
-    const [isLiked, setIsLiked] = useState<boolean>(postContent.likedByUser);
+    const [isLiked, setIsLiked] = useState<boolean>(postContent.isLikedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
     const [totalReactions, setTotalReactions] = useState<number>(
         postContent.totalLikes

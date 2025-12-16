@@ -1,18 +1,19 @@
-import {ComponentProps, useState} from "react";
-import {cn} from "@/lib/utils";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { ComponentProps, useState } from "react";
+import { cn } from "@/lib/utils";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 import * as React from "react";
-import {UserVerificationBadge} from "@/components/ui/user-placeholder";
-import {Button} from "@/components/ui/button";
-import {useRouter} from "next/navigation";
-import {LoaderSmall} from "@/components/ui/loader";
-import {authApi} from "@/lib/axios";
-import {showTopToast} from "@/components/toast/toast-util";
+import { UserVerificationBadge } from "@/components/ui/user-placeholder";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { LoaderSmall } from "@/components/ui/loader";
+import { authApi } from "@/lib/axios";
+import { showTopToast } from "@/components/toast/toast-util";
+import defaultImage from "@/assests/default.jpeg";
 
 interface UserSubscriberCardProps extends ComponentProps<"div"> {
-    user: {[key: string]: any};
-    onUserChange: (user: {[key: string]: any}) => void;
+    user: { [key: string]: any };
+    onUserChange: (user: { [key: string]: any }) => void;
 }
 
 export const UserSubscriberCard = ({
@@ -27,7 +28,7 @@ export const UserSubscriberCard = ({
 
         try {
             await authApi.post(`/userFollow/follow/user/${user.userId}`)
-            onUserChange({...user, followed: true})
+            onUserChange({ ...user, followed: true })
         } catch (error: any) {
             showTopToast("error", error.response?.data?.description);
         } finally {
@@ -40,7 +41,7 @@ export const UserSubscriberCard = ({
 
         try {
             await authApi.post(`/userFollow/unfollow/user/${user.userId}`)
-            onUserChange({...user, followed: false})
+            onUserChange({ ...user, followed: false })
         } catch (error: any) {
             showTopToast("error", error.response?.data?.description);
         } finally {
@@ -63,7 +64,7 @@ export const UserSubscriberCard = ({
                 <div className="w-8 h-8 flex flex-row items-center">
                     <AspectRatio ratio={1}>
                         <Image
-                            src={user.profileImage || "/default.jpeg"}
+                            src={user.profileImage || defaultImage}
                             alt={user.username}
                             fill
                             className="object-cover rounded-full" />

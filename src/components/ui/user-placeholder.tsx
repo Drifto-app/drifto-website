@@ -1,22 +1,23 @@
 "use client"
 
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {MdDeleteOutline, MdVerified} from "react-icons/md";
-import {cn} from "@/lib/utils";
+import { MdDeleteOutline, MdVerified } from "react-icons/md";
+import { cn } from "@/lib/utils";
 import * as React from "react";
-import {useRouter} from "next/navigation";
-import {GoDash} from "react-icons/go";
-import {useState} from "react";
-import {LoaderSmall} from "@/components/ui/loader";
-import {Button} from "@/components/ui/button";
-import {Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger} from "@/components/ui/drawer";
-import {SlOptionsVertical} from "react-icons/sl";
-import {FaFlag} from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { GoDash } from "react-icons/go";
+import { useState } from "react";
+import { LoaderSmall } from "@/components/ui/loader";
+import { Button } from "@/components/ui/button";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
+import { SlOptionsVertical } from "react-icons/sl";
+import { FaFlag } from "react-icons/fa";
 import { IoIosInformationCircle } from "react-icons/io";
+import defaultImage from "@/assests/default.jpeg";
 
 interface UserPlaceholderProps extends React.ComponentProps<"div"> {
-    user: {[key: string]: any};
+    user: { [key: string]: any };
     prev?: string;
 }
 
@@ -25,24 +26,24 @@ interface UserEventSinglePlaceholderProps extends UserPlaceholderProps {
     removeClick?: (username: string) => void;
 }
 
-function UserVerificationBadge({user, isClickable = false}: {user: {[key: string]: any}, isClickable?: boolean}) {
+function UserVerificationBadge({ user, isClickable = false }: { user: { [key: string]: any }, isClickable?: boolean }) {
     let verificationStyle = "";
     let description = ""
 
-    if(user.userVerificationType === "ORGANIZATION_VERIFICATION") {
+    if (user.userVerificationType === "ORGANIZATION_VERIFICATION") {
         verificationStyle = "text-black";
         description = "The account is verified as an affiliated account to Drifto";
-    } else if(user.userVerificationType === "USER_VERIFICATION") {
+    } else if (user.userVerificationType === "USER_VERIFICATION") {
         verificationStyle = "text-blue-600"
         description = "The account is a verified user on Drifto";
-    } else if(user.userVerificationType === "HOST_VERIFICATION") {
+    } else if (user.userVerificationType === "HOST_VERIFICATION") {
         verificationStyle = "text-yellow-500"
         description = "The account is a verified host account on Drifto";
 
     }
 
 
-    if(user.verified) {
+    if (user.verified) {
         if (isClickable) {
             return (
                 <Drawer>
@@ -58,7 +59,7 @@ function UserVerificationBadge({user, isClickable = false}: {user: {[key: string
                                 <DrawerTitle>Verification Info</DrawerTitle>
                             </DrawerHeader>
                             <div className="flex items-center gap-2">
-                                <IoIosInformationCircle size={25}/>
+                                <IoIosInformationCircle size={25} />
                                 <span className="font-bold">
                                     {description}
                                 </span>
@@ -79,7 +80,7 @@ function UserVerificationBadge({user, isClickable = false}: {user: {[key: string
     return null;
 }
 
-function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className, ...props }: UserEventSinglePlaceholderProps) {
+function UserEventSinglePlaceholder({ user, isHost, removeClick, prev, className, ...props }: UserEventSinglePlaceholderProps) {
     const router = useRouter();
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -93,7 +94,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
 
         try {
             await removeClick!(username);
-        } catch(error: any) {
+        } catch (error: any) {
             console.log(error);
         } finally {
             setLoading(false);
@@ -104,7 +105,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
         router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`);
     }
 
-    if(removeClick) {
+    if (removeClick) {
         return (
             <div key={user.id} className={cn(
                 "flex justify-between items-center",
@@ -114,7 +115,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
                     <div className="w-12 h-12 flex flex-row items-center">
                         <AspectRatio ratio={1}>
                             <Image
-                                src={user.profileImageUrl || "/default.jpeg"}
+                                src={user.profileImageUrl || defaultImage}
                                 alt={user.username}
                                 fill
                                 className="object-cover rounded-full" />
@@ -151,7 +152,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
             <div className="w-12 h-12 flex flex-row items-center">
                 <AspectRatio ratio={1}>
                     <Image
-                        src={user.profileImageUrl || "/default.jpeg"}
+                        src={user.profileImageUrl || defaultImage}
                         alt={user.username}
                         fill
                         className="object-cover rounded-full" />
@@ -168,7 +169,7 @@ function UserEventSinglePlaceholder({user, isHost, removeClick, prev, className,
     )
 }
 
-function UserSinglePlaceholder({user, prev, className, ...props }: UserPlaceholderProps) {
+function UserSinglePlaceholder({ user, prev, className, ...props }: UserPlaceholderProps) {
     const router = useRouter();
 
     return (
@@ -176,14 +177,14 @@ function UserSinglePlaceholder({user, prev, className, ...props }: UserPlacehold
             className={cn(
                 "flex flex-row gap-4 cursor-pointer",
                 className
-             )}
+            )}
             {...props}
             onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`)}
         >
             <div className="w-8 h-8 flex flex-row items-center">
                 <AspectRatio ratio={1}>
                     <Image
-                        src={user.profileImageUrl || "/default.jpeg"}
+                        src={user.profileImageUrl || defaultImage}
                         alt={user.username}
                         fill
                         className="object-cover rounded-full" />
@@ -197,4 +198,4 @@ function UserSinglePlaceholder({user, prev, className, ...props }: UserPlacehold
     )
 }
 
-export {UserEventSinglePlaceholder, UserSinglePlaceholder, UserVerificationBadge};
+export { UserEventSinglePlaceholder, UserSinglePlaceholder, UserVerificationBadge };

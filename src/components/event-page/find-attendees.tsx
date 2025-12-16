@@ -1,14 +1,14 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
-import {Search, QrCode, CheckCircle, AlertTriangle} from "lucide-react";
-import {authApi} from "@/lib/axios";
-import {useCallback, useEffect, useRef, useState} from "react";
-import {toast} from "react-toastify";
+import { Search, QrCode, CheckCircle, AlertTriangle } from "lucide-react";
+import { authApi } from "@/lib/axios";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { toast } from "react-toastify";
 import Image from "next/image";
-import {Button} from "@/components/ui/button";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
-import {Input} from "@/components/ui/input";
-import {Loader, LoaderSmall} from "@/components/ui/loader";
+import { Button } from "@/components/ui/button";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Input } from "@/components/ui/input";
+import { Loader, LoaderSmall } from "@/components/ui/loader";
 import {
     Dialog,
     DialogContent,
@@ -18,14 +18,15 @@ import {
     DialogClose, DialogDescription,
 } from "@/components/ui/dialog";
 import QrScannerDialog from "@/components/event-page/qrcode-dialog";
-import {Transition} from "@headlessui/react";
-import {showTopToast} from "@/components/toast/toast-util";
+import { Transition } from "@headlessui/react";
+import { showTopToast } from "@/components/toast/toast-util";
+import defaultImage from "@/assests/default.jpeg";
 
 interface FindAttendeesProps extends React.ComponentProps<"div"> {
     event: { [key: string]: any };
 }
 
-export const    FindAttendees = ({
+export const FindAttendees = ({
     event, className, ...props
 }: FindAttendeesProps) => {
     const [tickets, setTickets] = useState<any[]>([]);
@@ -33,7 +34,7 @@ export const    FindAttendees = ({
     const [loading, setLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
     const [page, setPage] = useState(1);
-    const [selectedTicket, setSelectedTicket] = useState<{[key: string]: any} | null>(null);
+    const [selectedTicket, setSelectedTicket] = useState<{ [key: string]: any } | null>(null);
     const [showModal, setShowModal] = useState(false);
     const [markingUsed, setMarkingUsed] = useState(false);
     const [scannerOpen, setScannerOpen] = useState(false);
@@ -45,7 +46,7 @@ export const    FindAttendees = ({
         setLoading(true);
 
         try {
-            const params: {[key: string]: string | number} = {
+            const params: { [key: string]: string | number } = {
                 pageSize: '20',
                 dir: 'desc',
                 pageNumber: pageNum.toString(),
@@ -130,7 +131,7 @@ export const    FindAttendees = ({
         }
     }, [handleScroll]);
 
-    const handleMarkAsUsed = (ticket: {[key: string]: any} ) => {
+    const handleMarkAsUsed = (ticket: { [key: string]: any }) => {
         setSelectedTicket(ticket);
         setShowModal(true);
     };
@@ -202,16 +203,16 @@ export const    FindAttendees = ({
                                 <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
                                     {
                                         ticket.userPlaceHolderResponse?.profileImageUrl !== null ?
-                                            <AspectRatio ratio={1/1}>
+                                            <AspectRatio ratio={1 / 1}>
                                                 <Image
                                                     src={ticket.userPlaceHolderResponse?.profileImageUrl}
                                                     alt={ticket.userPlaceHolderResponse.username}
                                                     fill
                                                     className="object-cover rounded-full" />
                                             </AspectRatio> :
-                                            <AspectRatio ratio={1/1}>
+                                            <AspectRatio ratio={1 / 1}>
                                                 <Image
-                                                    src={"/default.jpeg "}
+                                                    src={defaultImage}
                                                     alt={ticket.userPlaceHolderResponse.username}
                                                     fill
                                                     className="object-cover rounded-full" />
@@ -289,16 +290,16 @@ export const    FindAttendees = ({
                 <DialogContent
                     className="w-full max-w-sm sm:rounded-lg flex flex-col items-center justify-center"
                 >
-                        <DialogHeader>
-                            <DialogTitle className="text-lg text-center">
-                                Mark Ticket as Used
-                            </DialogTitle>
-                            <DialogDescription className="text-center">
-                                Are you sure you want to mark{" "}
-                                {selectedTicket?.userPlaceHolderResponse?.username}
-                                {"'"}s {selectedTicket?.ticketType} ticket as used?
-                            </DialogDescription>
-                        </DialogHeader>
+                    <DialogHeader>
+                        <DialogTitle className="text-lg text-center">
+                            Mark Ticket as Used
+                        </DialogTitle>
+                        <DialogDescription className="text-center">
+                            Are you sure you want to mark{" "}
+                            {selectedTicket?.userPlaceHolderResponse?.username}
+                            {"'"}s {selectedTicket?.ticketType} ticket as used?
+                        </DialogDescription>
+                    </DialogHeader>
 
                     <DialogFooter className="w-full flex flex-row sm:justify-between justify-between gap-3">
                         <DialogClose asChild>

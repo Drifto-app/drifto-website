@@ -1,18 +1,19 @@
 "use client"
 
 import * as React from "react";
-import {cn} from "@/lib/utils";
-import {useState, useEffect} from "react";
-import {authApi} from "@/lib/axios";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
+import { useState, useEffect } from "react";
+import { authApi } from "@/lib/axios";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {Loader, LoaderSmall} from "@/components/ui/loader";
-import {toast} from "react-toastify";
-import {UserVerificationBadge} from "@/components/ui/user-placeholder";
-import {showTopToast} from "@/components/toast/toast-util";
+import { Loader, LoaderSmall } from "@/components/ui/loader";
+import { toast } from "react-toastify";
+import { UserVerificationBadge } from "@/components/ui/user-placeholder";
+import { showTopToast } from "@/components/toast/toast-util";
+import defaultImage from "@/assests/default.jpeg";
 
-interface HostInvitesProps extends React.ComponentProps<"div">{
-    event: {[key: string]: any};
+interface HostInvitesProps extends React.ComponentProps<"div"> {
+    event: { [key: string]: any };
 }
 
 export const HostInvites = ({
@@ -30,7 +31,7 @@ export const HostInvites = ({
         try {
             const response = await authApi.get(`/invite/event/${event.id}`)
             setInvites(response.data.data)
-        } catch(error: any) {
+        } catch (error: any) {
             setError(error.response?.data?.description || "Failed to fetch invites")
         } finally {
             setLoading(false)
@@ -44,7 +45,7 @@ export const HostInvites = ({
             await authApi.post(`/invite/${inviteId}/revoke`)
             // Remove the invite from the list after successful revocation
             setInvites(prev => prev.filter(invite => invite.inviteId !== inviteId))
-        } catch(error: any) {
+        } catch (error: any) {
             showTopToast("error", "Error revoking invite")
         } finally {
             setCancellingInvites(prev => {
@@ -132,16 +133,16 @@ export const HostInvites = ({
                                     <div className="w-12 h-12 rounded-full flex items-center justify-center">
                                         {
                                             invite.userPlaceHolder?.profileImageUrl !== null ?
-                                                <AspectRatio ratio={1/1}>
+                                                <AspectRatio ratio={1 / 1}>
                                                     <Image
                                                         src={invite.userPlaceHolder?.profileImageUrl}
                                                         alt={invite.userPlaceHolder.username}
                                                         fill
                                                         className="object-cover rounded-full" />
                                                 </AspectRatio> :
-                                                <AspectRatio ratio={1/1}>
+                                                <AspectRatio ratio={1 / 1}>
                                                     <Image
-                                                        src={"/default.jpeg "}
+                                                        src={defaultImage}
                                                         alt={invite.userPlaceHolder.username}
                                                         fill
                                                         className="object-cover rounded-full" />
@@ -153,8 +154,8 @@ export const HostInvites = ({
                                     <div className="flex flex-col">
                                         <div className="flex gap-1 items-center">
                                             <span className="font-bold text-neutral-900">
-                                            {invite.userPlaceHolder.username}
-                                        </span>
+                                                {invite.userPlaceHolder.username}
+                                            </span>
                                             <UserVerificationBadge user={invite.userPlaceHolder} />
                                         </div>
                                         <span className="text-xs text-neutral-500 uppercase font-medium">
@@ -169,7 +170,7 @@ export const HostInvites = ({
                                     disabled={cancellingInvites.has(invite.inviteId)}
                                     className="text-red-500 font-bold text-base disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
-                                    {cancellingInvites.has(invite.inviteId) ? <LoaderSmall />: "Cancel"}
+                                    {cancellingInvites.has(invite.inviteId) ? <LoaderSmall /> : "Cancel"}
                                 </button>
                             </div>
                         ))}

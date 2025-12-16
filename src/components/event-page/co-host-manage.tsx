@@ -1,23 +1,24 @@
 "use client"
 
 import * as React from "react";
-import {cn} from "@/lib/utils";
-import {useState, useEffect, useRef, useCallback} from "react";
-import {UserEventSinglePlaceholder, UserVerificationBadge} from "@/components/ui/user-placeholder";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {toast} from "react-toastify";
-import {authApi} from "@/lib/axios";
-import {Button} from "@/components/ui/button";
-import {Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle} from "@/components/ui/dialog";
-import {Search, CheckCircle} from "lucide-react";
-import {Input} from "@/components/ui/input";
-import {Loader, LoaderSmall} from "@/components/ui/loader";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { UserEventSinglePlaceholder, UserVerificationBadge } from "@/components/ui/user-placeholder";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
+import { authApi } from "@/lib/axios";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Search, CheckCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Loader, LoaderSmall } from "@/components/ui/loader";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {showTopToast} from "@/components/toast/toast-util";
+import { showTopToast } from "@/components/toast/toast-util";
+import defaultImage from "@/assests/default.jpeg";
 
-interface CoHostManageProps extends React.ComponentProps<"div">{
-    event: {[key: string]: any};
+interface CoHostManageProps extends React.ComponentProps<"div"> {
+    event: { [key: string]: any };
 }
 
 interface User {
@@ -29,8 +30,8 @@ interface User {
 }
 
 export const CoHostManage = ({
-                                 event, className, ...props
-                             }: CoHostManageProps) => {
+    event, className, ...props
+}: CoHostManageProps) => {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
@@ -69,7 +70,7 @@ export const CoHostManage = ({
         setSearchLoading(true);
 
         try {
-            const params: {[key: string]: string | number} = {
+            const params: { [key: string]: string | number } = {
                 search: search.trim(),
                 searchType: 'USER',
                 pageSize: '20',
@@ -206,8 +207,8 @@ export const CoHostManage = ({
                 <div className="w-full">
                     <h3 className="font-semibold text-lg">Hosts</h3>
                     <ul className="flex flex-col gap-3">
-                        {coHosts.map((coHost: {[key: string]: any}, i: number) => {
-                            if((i + 1) === event.coHosts.length) {
+                        {coHosts.map((coHost: { [key: string]: any }, i: number) => {
+                            if ((i + 1) === event.coHosts.length) {
                                 coHost.username = "You"
                             }
 
@@ -267,11 +268,11 @@ export const CoHostManage = ({
                                             key={user.id}
                                             className="flex items-center justify-between gap-3 p-3 w-full border-b-neutral-200 border-b-1"
                                         >
-                                            <div className="flex items-center justify-center gap-4" onClick={() => {handleUserClick(user.id)}}>
+                                            <div className="flex items-center justify-center gap-4" onClick={() => { handleUserClick(user.id) }}>
                                                 <div className="relative w-12 h-12 rounded-full flex items-center justify-center">
-                                                    <AspectRatio ratio={1/1}>
+                                                    <AspectRatio ratio={1 / 1}>
                                                         <Image
-                                                            src={user.profileImage || "/default.jpeg"}
+                                                            src={user.profileImage || defaultImage}
                                                             alt={user.username}
                                                             fill
                                                             className="object-cover rounded-full"

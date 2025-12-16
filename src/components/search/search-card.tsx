@@ -10,6 +10,7 @@ import {ComponentProps} from "react";
 import {router} from "next/client";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {UserVerificationBadge} from "@/components/ui/user-placeholder";
+import defaultImage from "@/assests/default.jpeg";
 
 interface RecentSearchCardProps extends React.ComponentProps<"div"> {
     item: {[key: string]: any};
@@ -68,7 +69,7 @@ export const RecentSearchCard = ({
                     <div className="relative w-18 h-18 rounded-full flex items-center justify-center">
                         <AspectRatio ratio={1}>
                             <Image
-                                src={item.eventTitleImage || "/default.jpeg"}
+                                src={item.eventTitleImage || defaultImage}
                                 alt={item.title ?? "Title"}
                                 fill
                                 className="object-cover rounded-md"
@@ -104,7 +105,7 @@ export const RecentSearchCard = ({
                 <div className="relative w-18 h-18 rounded-full flex items-center justify-center" onClick={onClick}>
                     <AspectRatio ratio={1}>
                         <Image
-                            src={item.profileImage || "/default.jpeg"}
+                            src={item.profileImage || defaultImage}
                             alt={item.username}
                             fill
                             className="object-cover rounded-full"

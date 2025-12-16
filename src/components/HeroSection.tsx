@@ -1,9 +1,17 @@
 
-import { useState } from "react";
+import {ReactNode, useState} from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { Calendar, Clock, Star } from "lucide-react";
+import {FaApple, FaGooglePlay} from "react-icons/fa";
+
+const platformData: {
+  icon: ReactNode, value: string
+}[] = [
+  {icon: <FaGooglePlay size={25} />, value: "Coming soon"},
+  {icon: <FaApple size={29} />, value: "Coming soon"}
+]
 
 export const HeroSection = () => {
   const [email, setEmail] = useState("");
@@ -11,7 +19,6 @@ export const HeroSection = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Redirect to Google Form
     window.open('https://docs.google.com/forms/d/e/1FAIpQLScuRBvlaoMWh08pZoOflVtiNPknmDKFD3ISkfYKk6JIPa-O3w/viewform?usp=sharing&ouid=111268504502329986988', '_blank');
   };
 
@@ -49,11 +56,6 @@ export const HeroSection = () => {
       <div className="relative z-10 flex-1 flex items-center justify-center">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <div className="animate-fade-in">
-            {/* Badge */}
-            <div className="inline-flex items-center px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-8 border border-white/20">
-              <Star className="w-4 h-4 mr-2 text-blue-400" />
-              Coming Soon - Mobile App
-            </div>
 
             {/* Main heading */}
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
@@ -85,6 +87,18 @@ export const HeroSection = () => {
                 </div>
               ))}
             </div>
+
+            <ul className="flex flex-col sm:flex-row justify-center gap-4 pb-10 text-white">
+              {platformData.map((item, index) => (
+                  <li
+                    key={index}
+                    className="flex flex-row items-center justify-center gap-3 px-8 py-4 bg-blue-600 hover:bg-blue-700 transition-all duration-300 rounded-full"
+                  >
+                    <span>{item.icon}</span>
+                    <span className="text-lg font-medium">{item.value}</span>
+                  </li>
+              ))}
+            </ul>
 
             {/* Email signup form */}
             <div className="max-w-md mx-auto mb-6">

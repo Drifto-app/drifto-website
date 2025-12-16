@@ -30,7 +30,7 @@ export const EventCard = ({
   const router = useRouter();
 
   const [price, setPrice] = useState<string>("");
-  const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
+  const [isLiked, setIsLiked] = useState<boolean>(event.isLikedByUser);
   const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
   const [isMuted, setIsMuted] = useState<boolean>(true);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);

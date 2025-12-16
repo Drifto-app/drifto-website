@@ -38,7 +38,7 @@ export const SingleEventDetails = ({
 
     const { isAuthenticated } = useAuthStore();
 
-    const [isLiked, setIsLiked] = useState<boolean>(event.likedByUser);
+    const [isLiked, setIsLiked] = useState<boolean>(event.isLikedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState<boolean>(false);
     const [isOpen, setIsOpen] = React.useState(false);
     const [activeSrc, setActiveSrc] = React.useState<string | null>(null);

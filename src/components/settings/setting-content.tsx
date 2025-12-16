@@ -14,6 +14,7 @@ import {TbTools} from "react-icons/tb";
 import {IoMdHappy} from "react-icons/io";
 import {PiAt} from "react-icons/pi";
 import {useAuthStore} from "@/store/auth-store";
+import infoImage from "@/assests/settings-info.jpg"
 
 interface SettingContentProps extends ComponentProps<"div"> {
     prev: string | null;
@@ -134,7 +135,7 @@ export const SettingContent = ({
                             </span>
                             <span className="w-[40%] h-32 flex flex-row items-center relative">
                                 <Image
-                                    src={"/settings-info.jpg"}
+                                    src={infoImage}
                                     alt={"Become a host"}
                                     fill
                                     className="object-contain"

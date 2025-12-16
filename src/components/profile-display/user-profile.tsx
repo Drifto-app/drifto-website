@@ -1,23 +1,24 @@
-import {cn} from "@/lib/utils";
-import {ComponentProps, useState} from "react";
-import {useAuthStore} from "@/store/auth-store";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
+import { ComponentProps, useState } from "react";
+import { useAuthStore } from "@/store/auth-store";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 import * as React from "react";
-import {UserVerificationBadge} from "@/components/ui/user-placeholder";
-import {Button} from "@/components/ui/button";
-import {ShareDialog} from "@/components/share-button/share-option";
-import {useShare} from "@/hooks/share-option";
-import {PiFireSimpleBold} from "react-icons/pi";
-import {FaHashtag, FaRegClock} from "react-icons/fa";
-import {useRouter} from "next/navigation";
-import {BiCalendarAlt} from "react-icons/bi";
-import {ActiveScreenType} from "@/components/profile-display/profile-display";
-import {UserEvents} from "@/components/user/user-events";
-import {UserPosts} from "@/components/user/user-posts";
-import {UserOrders} from "@/components/order/user-orders";
-import {UserSubscribers} from "@/components/user/user-subscribers";
-import {router} from "next/client";
+import { UserVerificationBadge } from "@/components/ui/user-placeholder";
+import { Button } from "@/components/ui/button";
+import { ShareDialog } from "@/components/share-button/share-option";
+import { useShare } from "@/hooks/share-option";
+import { PiFireSimpleBold } from "react-icons/pi";
+import { FaHashtag, FaRegClock } from "react-icons/fa";
+import { useRouter } from "next/navigation";
+import { BiCalendarAlt } from "react-icons/bi";
+import { ActiveScreenType } from "@/components/profile-display/profile-display";
+import { UserEvents } from "@/components/user/user-events";
+import { UserPosts } from "@/components/user/user-posts";
+import { UserOrders } from "@/components/order/user-orders";
+import { UserSubscribers } from "@/components/user/user-subscribers";
+import { router } from "next/client";
+import defaultImage from "@/assests/default.jpeg";
 
 interface UserProfileProps extends ComponentProps<"div"> {
     handleScreenChange: (value: string) => void;
@@ -28,7 +29,7 @@ interface UserProfileProps extends ComponentProps<"div"> {
 export const UserProfile = ({
     activeScreen, setActiveScreen, handleScreenChange, className, ...props
 }: UserProfileProps) => {
-    const {user} = useAuthStore();
+    const { user } = useAuthStore();
     const router = useRouter();
 
     const userUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/user/${user?.id}`;
@@ -41,10 +42,10 @@ export const UserProfile = ({
         url: userUrl,
     });
 
-    const userStats: {name: string, value: string | number}[] = [
-        {name: "Ticket Sold", value: user?.participantCount || 0},
-        {name: "Experience", value: user?.eventCount || 0},
-        {name: "Subscribers", value: user?.totalFollowers || 0},
+    const userStats: { name: string, value: string | number }[] = [
+        { name: "Ticket Sold", value: user?.participantCount || 0 },
+        { name: "Experience", value: user?.eventCount || 0 },
+        { name: "Subscribers", value: user?.totalFollowers || 0 },
     ]
 
     const render = () => {
@@ -69,7 +70,7 @@ export const UserProfile = ({
                                 <div className="w-20 h-20 flex flex-row items-center cursor-pointer" onClick={() => router.push(`/m/settings/profile-picture?prev=${encodeURIComponent(`/?screen=profile`)}`)}>
                                     <AspectRatio ratio={1}>
                                         <Image
-                                            src={user?.profileImage || "/default.jpeg"}
+                                            src={user?.profileImage || defaultImage}
                                             alt={user?.username}
                                             fill
                                             className="object-cover rounded-full" />
@@ -86,9 +87,9 @@ export const UserProfile = ({
                                         key={index}
                                         className="flex flex-col items-center justify-center gap-1 cursor-pointer"
                                         onClick={() => {
-                                            if(item.name === "Subscribers") {
+                                            if (item.name === "Subscribers") {
                                                 setActiveScreen("subscribers");
-                                            }else if(item.name === "Experience") {
+                                            } else if (item.name === "Experience") {
                                                 router.push(
                                                     `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
                                                 );
@@ -118,7 +119,7 @@ export const UserProfile = ({
                                 </Button>
                             </div>
                             <div className="w-full grid grid-cols-2 gap-4">
-                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() =>  router.push(
+                                <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() => router.push(
                                     `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
                                 )}>
                                     <div className="h-10 flex items-center justify-center">

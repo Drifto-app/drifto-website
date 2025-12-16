@@ -1,35 +1,36 @@
 "use client"
 
-import {cn, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE, uploadMedia} from "@/lib/utils";
-import {ChangeEvent, ComponentProps, useState, useRef, useEffect, useCallback} from "react";
-import {FaArrowLeft, FaPlay} from "react-icons/fa";
+import { cn, MAX_IMAGE_SIZE, MAX_VIDEO_SIZE, uploadMedia } from "@/lib/utils";
+import { ChangeEvent, ComponentProps, useState, useRef, useEffect, useCallback } from "react";
+import { FaArrowLeft, FaPlay } from "react-icons/fa";
 import * as React from "react";
-import {useRouter} from "next/navigation";
-import {useAuthStore} from "@/store/auth-store";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth-store";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {Button} from "@/components/ui/button";
-import {HiOutlineRectangleStack} from "react-icons/hi2";
-import {Card, CardContent} from "@/components/ui/card";
-import {X, Hash} from "lucide-react";
-import {LoaderSmall} from "@/components/ui/loader";
-import {showTopToast} from "@/components/toast/toast-util";
-import {authApi} from "@/lib/axios";
-import {Dialog} from "@headlessui/react";
-import {UserVerificationBadge} from "@/components/ui/user-placeholder";
+import { Button } from "@/components/ui/button";
+import { HiOutlineRectangleStack } from "react-icons/hi2";
+import { Card, CardContent } from "@/components/ui/card";
+import { X, Hash } from "lucide-react";
+import { LoaderSmall } from "@/components/ui/loader";
+import { showTopToast } from "@/components/toast/toast-util";
+import { authApi } from "@/lib/axios";
+import { Dialog } from "@headlessui/react";
+import { UserVerificationBadge } from "@/components/ui/user-placeholder";
+import defaultImage from "@/assests/default.jpeg";
 
-interface CreatePostContentProps extends ComponentProps<"div">{
+interface CreatePostContentProps extends ComponentProps<"div"> {
     prev: string | null,
 }
 
-type MediaFileType = {url: string, type: "VIDEO" | "IMAGE"};
+type MediaFileType = { url: string, type: "VIDEO" | "IMAGE" };
 
 interface MentionState {
     isActive: boolean;
     searchTerm: string;
     type: 'user' | 'event' | null;
     position: number;
-    results: {[key: string]: any}[];
+    results: { [key: string]: any }[];
     selectedIndex: number;
     loading: boolean;
     hasMore: boolean;
@@ -37,18 +38,18 @@ interface MentionState {
 }
 
 export const CreatePostContent = ({
-                                      prev, className, ...props
-                                  }: CreatePostContentProps) => {
+    prev, className, ...props
+}: CreatePostContentProps) => {
     const router = useRouter();
-    const {user} = useAuthStore();
+    const { user } = useAuthStore();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const mentionDropdownRef = useRef<HTMLDivElement>(null);
     const debounceTimeoutRef = useRef<NodeJS.Timeout>(null);
 
     const [postText, setPostText] = useState<string>("");
     const [mediaFiles, setMediaFiles] = useState<MediaFileType[] | null>(null);
-    const [tagEvents, setTagEvents] = useState<{name: string, id: string}[]>([]);
-    const [tagUsers, setTagUsers] = useState<{name: string, id: string}[]>([]);
+    const [tagEvents, setTagEvents] = useState<{ name: string, id: string }[]>([]);
+    const [tagUsers, setTagUsers] = useState<{ name: string, id: string }[]>([]);
 
     const [isPostLoading, setIsPostLoading] = useState<boolean>(false);
     const [modalOpen, setModalOpen] = useState(false);
@@ -96,7 +97,7 @@ export const CreatePostContent = ({
         if (!files || files.length === 0) return;
 
         const all = Array.from(files);
-        const newMediaFiles: {file: File, type: "VIDEO" | "IMAGE"}[] = all.filter(
+        const newMediaFiles: { file: File, type: "VIDEO" | "IMAGE" }[] = all.filter(
             (file) =>
                 (file.type.startsWith("image/") && file.size <= MAX_IMAGE_SIZE) ||
                 (file.type.startsWith("video/") && file.size <= MAX_VIDEO_SIZE)
@@ -115,7 +116,7 @@ export const CreatePostContent = ({
 
         for (const file of newMediaFiles) {
             const url = await uploadSingle(file.file);
-            if (url) uploaded.push({url, type: file.type});
+            if (url) uploaded.push({ url, type: file.type });
         }
 
         if (uploaded.length > 0) {
@@ -146,7 +147,7 @@ export const CreatePostContent = ({
     };
 
     // Search API function
-    const searchAPI = async (query: string, type: 'user' | 'event', pageNum: number = 1): Promise<{results: {[key: string]: any}[], hasMore: boolean}> => {
+    const searchAPI = async (query: string, type: 'user' | 'event', pageNum: number = 1): Promise<{ results: { [key: string]: any }[], hasMore: boolean }> => {
         try {
             const searchType = type === 'user' ? 'USER' : 'EVENT';
             const res = await authApi.get("/search", {
@@ -264,7 +265,7 @@ export const CreatePostContent = ({
     };
 
     // Handle mention selection
-    const selectMention = (result: {[key: string]: any}) => {
+    const selectMention = (result: { [key: string]: any }) => {
         if (!textareaRef.current || !mentionState.isActive) return;
 
         const { position, type } = mentionState;
@@ -278,9 +279,9 @@ export const CreatePostContent = ({
 
         // Update tags
         if (type === 'user') {
-            setTagUsers(prev => [...prev, {name: `@${result.username}`, id: result.id}]);
+            setTagUsers(prev => [...prev, { name: `@${result.username}`, id: result.id }]);
         } else {
-            setTagEvents(prev => [...prev, {name: `#${result.title}`, id: result.id}]);
+            setTagEvents(prev => [...prev, { name: `#${result.title}`, id: result.id }]);
         }
 
         // Close mention dropdown
@@ -340,7 +341,7 @@ export const CreatePostContent = ({
     const handleDropdownScroll = (e: React.UIEvent<HTMLDivElement>) => {
         const { scrollTop, scrollHeight, clientHeight } = e.currentTarget;
 
-        if(!mentionState.hasMore) return;
+        if (!mentionState.hasMore) return;
 
         if (scrollHeight - scrollTop <= clientHeight + 10) {
             loadMoreResults();
@@ -357,14 +358,14 @@ export const CreatePostContent = ({
     }, []);
 
     const handlePostSubmit = async () => {
-        if(!postText && !mediaFiles) {
+        if (!postText && !mediaFiles) {
             showTopToast("error", "No content present")
             return;
         }
 
         setIsPostLoading(true);
 
-        const param: {[key: string]: any} = {
+        const param: { [key: string]: any } = {
             content: postText,
             mediaFiles: mediaFiles?.map((item) => item.url),
             tagEvents: tagEvents.map((item) => item.id),
@@ -412,25 +413,25 @@ export const CreatePostContent = ({
                 <div className="flex-1 w-full">
                     <div className="w-full flex flex-col items-center px-4 pt-6 gap-6">
                         <div className="w-full flex gap-4 relative">
-                        <span className="w-18 h-18">
-                            <AspectRatio ratio={1}>
-                                        <Image
-                                            src={user?.profileImage || "/default.jpeg"}
-                                            alt={user?.username}
-                                            fill
-                                            className="object-cover rounded-full" />
-                            </AspectRatio>
-                        </span>
+                            <span className="w-18 h-18">
+                                <AspectRatio ratio={1}>
+                                    <Image
+                                        src={user?.profileImage || defaultImage}
+                                        alt={user?.username}
+                                        fill
+                                        className="object-cover rounded-full" />
+                                </AspectRatio>
+                            </span>
                             <div className="flex-1 relative">
-                               <textarea
-                                   ref={textareaRef}
-                                   id="post-text"
-                                   placeholder="Share your thoughts (use @ to mention users, # for events)"
-                                   value={postText}
-                                   onChange={handleTextareaChange}
-                                   rows={5}
-                                   className="w-full py-2 px-3 bg-white rounded-md border-1 border-neutral-200 focus:border-blue-600 focus:border-1 focus:outline-hidden placeholder:text-lg"
-                               />
+                                <textarea
+                                    ref={textareaRef}
+                                    id="post-text"
+                                    placeholder="Share your thoughts (use @ to mention users, # for events)"
+                                    value={postText}
+                                    onChange={handleTextareaChange}
+                                    rows={5}
+                                    className="w-full py-2 px-3 bg-white rounded-md border-1 border-neutral-200 focus:border-blue-600 focus:border-1 focus:outline-hidden placeholder:text-lg"
+                                />
 
                                 {/* Mention/Hashtag Dropdown */}
                                 {mentionState.isActive && (
@@ -467,7 +468,7 @@ export const CreatePostContent = ({
                                                             <div className="relative w-8 h-8 rounded-full flex items-center justify-center" >
                                                                 <AspectRatio ratio={1}>
                                                                     <Image
-                                                                        src={result.profileImage || "/default.jpeg"}
+                                                                        src={result.profileImage || defaultImage}
                                                                         alt={result.username}
                                                                         fill
                                                                         className="object-cover rounded-full"
@@ -509,14 +510,14 @@ export const CreatePostContent = ({
                                     <p key={index} className="relative">
                                         {item.name}
                                     </p>
-                                ) )}
+                                ))}
                             </span>
                             <span className="text-blue-600 flex flex-wrap gap-2">
                                 {tagUsers.map((item, index) => (
                                     <p key={index} className="relative">
                                         {item.name}
                                     </p>
-                                ) )}
+                                ))}
                             </span>
                         </div>
 
@@ -553,7 +554,7 @@ export const CreatePostContent = ({
                                                 {file.type === "VIDEO" && (
                                                     <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
                                                         <div className="bg-black/50 rounded-full p-3">
-                                                            <FaPlay  className="text-white" />
+                                                            <FaPlay className="text-white" />
                                                         </div>
                                                     </div>
                                                 )}

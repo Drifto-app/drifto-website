@@ -8,6 +8,7 @@ import {FaRegEdit} from "react-icons/fa";
 import {showTopToast} from "@/components/toast/toast-util";
 import {LoaderSmall} from "@/components/ui/loader";
 import {cn, MAX_IMAGE_SIZE, uploadMedia} from "@/lib/utils";
+import createImage from "@/assests/createeventpic.jpg"
 
 interface CoverImageUploaderProps extends ComponentProps<"div">{
     imageValue?: string;
@@ -84,7 +85,7 @@ export function CoverImageUploader({
             {...props}
         >
             <Image
-                src={preview || "/createeventpic.jpg"}
+                src={preview || createImage}
                 alt="Cover preview"
                 fill
                 className="object-cover h-full w-full"

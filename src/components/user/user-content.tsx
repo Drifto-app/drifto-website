@@ -1,21 +1,21 @@
 "use client"
 
-import {ComponentProps, useState} from "react";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {cn} from "@/lib/utils";
-import {FaArrowLeft, FaHashtag} from "react-icons/fa";
+import { ComponentProps, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { cn } from "@/lib/utils";
+import { FaArrowLeft, FaHashtag } from "react-icons/fa";
 import * as React from "react";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {UserVerificationBadge} from "@/components/ui/user-placeholder";
-import {X} from "lucide-react";
-import {Dialog as HeadDialog} from "@headlessui/react";
-import {Button} from "@/components/ui/button";
-import {showTopToast} from "@/components/toast/toast-util";
-import {authApi} from "@/lib/axios";
-import {LoaderSmall} from "@/components/ui/loader";
-import {IoIosArrowForward} from "react-icons/io";
-import {PiFireSimpleBold} from "react-icons/pi";
+import { UserVerificationBadge } from "@/components/ui/user-placeholder";
+import { X } from "lucide-react";
+import { Dialog as HeadDialog } from "@headlessui/react";
+import { Button } from "@/components/ui/button";
+import { showTopToast } from "@/components/toast/toast-util";
+import { authApi } from "@/lib/axios";
+import { LoaderSmall } from "@/components/ui/loader";
+import { IoIosArrowForward } from "react-icons/io";
+import { PiFireSimpleBold } from "react-icons/pi";
 import {
     Dialog,
     DialogClose,
@@ -24,14 +24,15 @@ import {
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
-import {MdContentCopy} from "react-icons/md";
-import {useAuthStore} from "@/store/auth-store";
-import {UserEvents} from "@/components/user/user-events";
-import {UserPosts} from "@/components/user/user-posts";
+import { MdContentCopy } from "react-icons/md";
+import { useAuthStore } from "@/store/auth-store";
+import { UserEvents } from "@/components/user/user-events";
+import { UserPosts } from "@/components/user/user-posts";
+import defaultImage from "@/assests/default.jpeg";
 
 interface UserProps extends ComponentProps<"div"> {
-    user: {[key: string]: any}
-    setUser: (user: {[key: string]: boolean}) => void;
+    user: { [key: string]: any }
+    setUser: (user: { [key: string]: boolean }) => void;
     prev: string | null;
 }
 
@@ -41,22 +42,22 @@ export const UserContent = ({
     user, setUser, prev, className, ...props
 }: UserProps) => {
     const router = useRouter();
-    const {user: currentUser} = useAuthStore()
+    const { user: currentUser } = useAuthStore()
 
     const searchParams = useSearchParams();
     const pathname = usePathname();
 
-    const userStats: {name: string, value: string | number}[] = [
-        {name: "Ticket Sold", value: user.participantCount},
-        {name: "Experience", value: user.eventCount},
-        {name: "Subscribers", value: user.totalFollowers},
+    const userStats: { name: string, value: string | number }[] = [
+        { name: "Ticket Sold", value: user.participantCount },
+        { name: "Experience", value: user.eventCount },
+        { name: "Subscribers", value: user.totalFollowers },
     ]
 
-    const userAboutLinks: {name: string, value: string}[] = [
-        {name: "Website", value: user.website},
-        {name: "Instagram", value: user.instagramHandle},
-        {name: "Twitter", value: user.twitterHandle},
-        {name: "FaceBook", value: user.facebookHandle},
+    const userAboutLinks: { name: string, value: string }[] = [
+        { name: "Website", value: user.website },
+        { name: "Instagram", value: user.instagramHandle },
+        { name: "Twitter", value: user.twitterHandle },
+        { name: "FaceBook", value: user.facebookHandle },
     ]
 
     const isUserProfile: boolean = (currentUser?.id === user.id);
@@ -68,7 +69,7 @@ export const UserContent = ({
 
 
     const handleBackClick = () => {
-        if(activeScreen === "details") {
+        if (activeScreen === "details") {
             router.push(prev != null ? prev : "/");
         }
         setActiveScreen("details");
@@ -79,7 +80,7 @@ export const UserContent = ({
 
         try {
             await authApi.post(`/userFollow/follow/user/${user.id}`)
-            setUser({...user, followed: true})
+            setUser({ ...user, followed: true })
         } catch (error: any) {
             showTopToast("error", error.response?.data?.description);
         } finally {
@@ -92,7 +93,7 @@ export const UserContent = ({
 
         try {
             await authApi.post(`/userFollow/unfollow/user/${user.id}`)
-            setUser({...user, followed: false})
+            setUser({ ...user, followed: false })
         } catch (error: any) {
             showTopToast("error", error.response?.data?.description);
         } finally {
@@ -120,7 +121,7 @@ export const UserContent = ({
                             <div className="relative w-24 h-24 rounded-full flex items-center justify-center" onClick={() => setIsOpen(true)}>
                                 <AspectRatio ratio={1}>
                                     <Image
-                                        src={user.profileImage || "/default.jpeg"}
+                                        src={user.profileImage || defaultImage}
                                         alt={user.username}
                                         fill
                                         className="object-cover rounded-full"
@@ -138,9 +139,9 @@ export const UserContent = ({
                             <div className="w-full flex justify-between items-center px-6">
                                 {userStats.map((item, index) => (
                                     <span key={index} className="flex flex-col items-center justify-center gap-1">
-                                    <p className="text-neutral-400 text-md">{item.name}</p>
-                                    <p className="font-bold text-xl">{item.value}</p>
-                                </span>
+                                        <p className="text-neutral-400 text-md">{item.name}</p>
+                                        <p className="font-bold text-xl">{item.value}</p>
+                                    </span>
                                 ))}
                             </div>
                             {isUserProfile
@@ -194,7 +195,7 @@ export const UserContent = ({
                                 <DialogTrigger asChild>
                                     <div className="w-full flex justify-between items-center py-2">
                                         <span className="font-bold">About</span>
-                                        <IoIosArrowForward size={20}/>
+                                        <IoIosArrowForward size={20} />
                                     </div>
                                 </DialogTrigger>
 
@@ -203,9 +204,9 @@ export const UserContent = ({
                                         <DialogTitle className="text-left">About</DialogTitle>
                                     </DialogHeader>
                                     <div className="w-full flex flex-col gap-4 text-neutral-600">
-                                    <span className="font-medium text-md">
-                                        {user.aboutText}
-                                    </span>
+                                        <span className="font-medium text-md">
+                                            {user.aboutText}
+                                        </span>
                                         <div className="w-full flex flex-col gap-3">
                                             {userAboutLinks.map((item, index) => {
                                                 if (!item.value) return
@@ -213,14 +214,14 @@ export const UserContent = ({
                                                     <div key={index} className="flex flex-col">
                                                         <span className="font-bold text-neutral-700">{item.name}</span>
                                                         <span className="w-full flex items-center justify-between">
-                                                        <p>{item.value}</p>
-                                                        <span
-                                                            className="px-2"
-                                                            onClick={() => handleLinkCopy(item.value)}
-                                                        >
-                                                            <MdContentCopy className="text-blue-700" />
+                                                            <p>{item.value}</p>
+                                                            <span
+                                                                className="px-2"
+                                                                onClick={() => handleLinkCopy(item.value)}
+                                                            >
+                                                                <MdContentCopy className="text-blue-700" />
+                                                            </span>
                                                         </span>
-                                                    </span>
                                                     </div>
                                                 )
                                             })}
@@ -287,12 +288,12 @@ export const UserContent = ({
                 </div>
                 <HeadDialog.Panel className="bg-white overflow-hidden w-full max-h-[95%]">
                     <Image
-                        src={user.profileImage || "/default.jpeg"}
+                        src={user.profileImage || defaultImage}
                         alt="Snapshot"
                         width={800}
                         height={600}
                         className="object-contain w-full h-auto"
-                        // style={{ maxHeight: "95vh" }}
+                    // style={{ maxHeight: "95vh" }}
                     />
                 </HeadDialog.Panel>
             </HeadDialog>

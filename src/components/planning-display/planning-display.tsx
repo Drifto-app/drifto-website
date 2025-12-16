@@ -11,6 +11,7 @@ import { ShareDialog } from "@/components/share-button/share-option";
 import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { showTopToast } from "@/components/toast/toast-util";
+import defaultImage from "@/assests/default.jpeg";
 
 // Types
 interface BookingItem {
@@ -154,9 +155,8 @@ function FilterDropdown({
           </span>
           <ChevronDown
             size={16}
-            className={`text-gray-400 transition-transform duration-200 ${
-              isOpen ? "transform rotate-180" : ""
-            }`}
+            className={`text-gray-400 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""
+              }`}
           />
         </button>
 
@@ -582,9 +582,8 @@ interface EventsCardProp {
   event: EventItem;
 }
 function EventsCard({ event }: EventsCardProp) {
-  const eventUrl = `${
-    typeof window !== "undefined" ? window.location.origin : ""
-  }/event/${event.id}`;
+  const eventUrl = `${typeof window !== "undefined" ? window.location.origin : ""
+    }/event/${event.id}`;
   const { isShareDialogOpen, closeShareDialog, handleQuickShare } = useShare({
     title: event.title,
     url: eventUrl,
@@ -631,7 +630,7 @@ function EventsCard({ event }: EventsCardProp) {
                       alt={cohost.username}
                     />
                     <AvatarFallback>
-                      <Image src={"/default.jpeg"} alt={cohost.username} fill />
+                      <Image src={defaultImage} alt={cohost.username} fill />
                     </AvatarFallback>
                   </Avatar>
                 ))}
@@ -721,7 +720,7 @@ export default function PlanningDisplay() {
     //view hieght subtracted from navbar height
     <div className="w-full overflow-y-scroll bg-gray-50 flex flex-col min-h-[100dvh]">
       <div className="p-2">
-        <PageHeader headerTitle="Plans"  prev={"/?screen=plans"} />
+        <PageHeader headerTitle="Plans" prev={"/?screen=plans"} />
         <Tabs active={activeTab} onClick={setActiveTab} />
       </div>
 

@@ -11,6 +11,8 @@ import { ScreenProvider } from "@/components/screen/screen-provider";
 import { Button } from '@/components/ui/button';
 import { FaArrowLeftLong } from 'react-icons/fa6';
 import * as React from 'react';
+import loginSidePic from "@/assests/login-side-pic.jpeg"
+import logo from "@/assests/logo.png"
 
 type View = "login" | "signup" | "forgot";
 
@@ -79,7 +81,7 @@ export default function LoginPage() {
               </div>
               <div className="relative w-12 h-12">
                 <Image
-                  src="/logo.png"
+                  src={logo}
                   alt="Logo"
                   fill
                   className="object-contain"
@@ -90,8 +92,8 @@ export default function LoginPage() {
           </div>
         </div>
         <div className="bg-muted relative hidden lg:block">
-          <img
-            src="/login-side-pic.jpeg"
+          <Image
+            src={loginSidePic}
             alt="Image"
             className="absolute inset-0 h-full w-full object-cover"
           />

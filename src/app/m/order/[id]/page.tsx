@@ -29,6 +29,10 @@ export default function OrderPage() {
             return
         }
 
+        if (isLoading || (!isAuthenticated && !hasTriedRefresh)) {
+            return;
+        }
+
         const fetchEvent = async () => {
             try {
                 let response;
@@ -46,7 +50,7 @@ export default function OrderPage() {
         };
 
         fetchEvent();
-    }, [id]);
+    }, [id, isLoading, isAuthenticated]);
 
     if(error) {
         return (

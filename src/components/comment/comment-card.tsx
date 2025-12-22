@@ -74,7 +74,7 @@ export const CommentCard = ({
     }, [isDisabled, isDeleteLoading, comment.id, onDelete, closeDrawer]);
 
     const handleReaction = useCallback(async () => {
-        if (isDisabled || isLikedLoading) return;
+        if (isLikedLoading) return;
 
         setIsLikedLoading(true);
 
@@ -150,7 +150,7 @@ export const CommentCard = ({
                             <button
                                 type="button"
                                 onClick={handleReaction}
-                                disabled={isLikedLoading || isDisabled}
+                                disabled={isLikedLoading}
                                 aria-pressed={isLiked}
                                 aria-busy={isLikedLoading}
                                 className={cn("font-inherit transition-opacity", (isLikedLoading || isDisabled) && "opacity-50")}

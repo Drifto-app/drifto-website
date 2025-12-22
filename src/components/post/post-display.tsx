@@ -3,7 +3,7 @@
 import { ComponentProps, useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import * as React from "react";
-import { FiSettings } from "react-icons/fi";
+import { FiPlus, FiSettings } from 'react-icons/fi';
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { authApi } from "@/lib/axios";
 import { showTopToast } from "@/components/toast/toast-util";
@@ -162,8 +162,8 @@ export const PostDisplay = ({ className, ...props }: PostDisplayProps) => {
             <div ref={sentinelRef} aria-hidden className="h-1" />
 
             <div className="fixed bottom-20 right-4" onClick={() => router.push(`/m/post/create?prev=${encodeURIComponent("/?screen=posts")}`)}>
-                <span className="flex items-center justify-center rounded-full w-14 h-14 font-thin bg-blue-800 text-white text-4xl shadow-xl">
-                    +
+                <span className="flex items-center justify-center rounded-full w-14 h-14 bg-blue-800 text-white shadow-xl">
+                    <FiPlus size={22} />
                 </span>
             </div>
         </div>

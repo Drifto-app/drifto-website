@@ -1,6 +1,6 @@
 import { Settings } from "lucide-react";
 import React from "react";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
 interface PageHeaderProp {
   headerTitle: string;
@@ -8,14 +8,14 @@ interface PageHeaderProp {
 }
 
 export default function PageHeader({ headerTitle, prev }: PageHeaderProp) {
-    const router = useRouter();
+  const router = useRouter();
 
   return (
     <div>
       <div className="w-full flex justify-between font-bold px-4 items-center">
-        <h2 className=" text-3xl">{headerTitle}</h2>
+        <h2 className="text-xl">{headerTitle}</h2>
         <span onClick={() => router.push(`/m/settings?prev=${encodeURIComponent(prev)}`)}>
-          <Settings size={"25px"} />
+          <Settings size={20} />
         </span>
       </div>
     </div>

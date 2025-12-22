@@ -77,7 +77,7 @@ export const UserProfile = ({
                                     </AspectRatio>
                                 </div>
                                 <div className="flex flex-row gap-1 items-center">
-                                    <p className="font-semibold text-lg cursor-pointer" onClick={() => router.push(`/m/settings/username?prev=${encodeURIComponent(`/?screen=profile`)}`)} >{user?.username}</p>
+                                    <p className="font-semibold text-base cursor-pointer" onClick={() => router.push(`/m/settings/username?prev=${encodeURIComponent(`/?screen=profile`)}`)} >{user?.username}</p>
                                     <UserVerificationBadge user={user!} isClickable={true} />
                                 </div>
                             </div>
@@ -97,8 +97,8 @@ export const UserProfile = ({
                                             }
                                         }}
                                     >
-                                        <p className="text-neutral-400 text-md">{item.name}</p>
-                                        <p className="font-bold text-xl">{item.value}</p>
+                                        <p className="text-neutral-400 text-sm">{item.name}</p>
+                                        <p className="font-bold text-lg">{item.value}</p>
                                     </span>
                                 ))}
                             </div>
@@ -123,20 +123,20 @@ export const UserProfile = ({
                                     `/m/user-events?id=${user?.id}&prev=${encodeURIComponent("/?screen=profile")}`
                                 )}>
                                     <div className="h-10 flex items-center justify-center">
-                                        <PiFireSimpleBold size={40} />
+                                        <PiFireSimpleBold size={32} />
                                     </div>
                                     <span className="font-semibold">Experiences</span>
                                 </div>
 
                                 <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() => setActiveScreen("posts")}>
                                     <div className="h-10 flex items-center justify-center">
-                                        <FaHashtag size={30} />
+                                        <FaHashtag size={24} />
                                     </div>
                                     <span className="font-semibold">Posts</span>
                                 </div>
                                 <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer" onClick={() => setActiveScreen("orders")}>
                                     <div className="h-10 flex items-center justify-center">
-                                        <FaRegClock size={30} />
+                                        <FaRegClock size={24} />
                                     </div>
                                     <span className="font-semibold">Orders</span>
                                 </div>
@@ -144,7 +144,7 @@ export const UserProfile = ({
                                     className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start cursor-pointer"
                                     onClick={() => handleScreenChange("plans")}>
                                     <div className="h-10 flex items-center justify-center">
-                                        <BiCalendarAlt size={30} />
+                                        <BiCalendarAlt size={24} />
                                     </div>
                                     <span className="font-semibold">Plans</span>
                                 </div>

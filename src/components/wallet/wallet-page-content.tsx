@@ -1,18 +1,18 @@
 "use client"
 
-import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
-import {ScreenProvider} from "@/components/screen/screen-provider";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {ComponentProps, ReactNode, useEffect, useState} from "react";
-import {cn} from "@/lib/utils";
-import {FaArrowLeft} from "react-icons/fa";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoutes";
+import { ScreenProvider } from "@/components/screen/screen-provider";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ComponentProps, ReactNode, useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
+import { FaArrowLeft } from "react-icons/fa";
 import * as React from "react";
-import {showTopToast} from "@/components/toast/toast-util";
-import {authApi} from "@/lib/axios";
-import {LoaderSmall} from "@/components/ui/loader";
-import {GoDownload, GoPulse} from "react-icons/go";
-import {MdCreditCard} from "react-icons/md";
-import {IoIosHelpCircleOutline} from "react-icons/io";
+import { showTopToast } from "@/components/toast/toast-util";
+import { authApi } from "@/lib/axios";
+import { LoaderSmall } from "@/components/ui/loader";
+import { GoDownload, GoPulse } from "react-icons/go";
+import { MdCreditCard } from "react-icons/md";
+import { IoIosHelpCircleOutline } from "react-icons/io";
 
 export const WalletPageContent = () => {
     const searchParams = useSearchParams();
@@ -40,18 +40,18 @@ const WalletContent = ({
 }: WalletContentProps) => {
     const router = useRouter();
 
-    const [wallet, setWallet] = useState<{[key: string]: any}>({});
+    const [wallet, setWallet] = useState<{ [key: string]: any }>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     const actionButtons: {
         text: string, icon: ReactNode, onClick: () => void;
     }[] = [
-        {text: "Transactions", icon: <GoPulse size={25} />, onClick: () => {router.push(`/m/wallet/transactions?prev=${encodeURIComponent(currentPathUrl)}`)}},
-        {text: "Account", icon: <MdCreditCard size={25} />, onClick: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {text: "Withdraw", icon: <GoDownload size={25} />, onClick: () => {router.push(`/m/wallet/withdraw?prev=${encodeURIComponent(currentPathUrl)}`)}},
-        {text: "Support", icon: <IoIosHelpCircleOutline size={25} />, onClick: () => {}}
-    ]
+            { text: "Transactions", icon: <GoPulse size={20} />, onClick: () => { router.push(`/m/wallet/transactions?prev=${encodeURIComponent(currentPathUrl)}`) } },
+            { text: "Account", icon: <MdCreditCard size={20} />, onClick: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`) },
+            { text: "Withdraw", icon: <GoDownload size={20} />, onClick: () => { router.push(`/m/wallet/withdraw?prev=${encodeURIComponent(currentPathUrl)}`) } },
+            { text: "Support", icon: <IoIosHelpCircleOutline size={20} />, onClick: () => { } }
+        ]
 
     const handleBackClick = () => {
         router.push(prev ?? "/m/settings");
@@ -87,14 +87,14 @@ const WalletContent = ({
             <div className="w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-20 flex-shrink-0">
                 <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
-                        size={20}
+                        size={16}
                         onClick={handleBackClick}
                         className="cursor-pointer hover:text-neutral-700 transition-colors"
                         aria-label="Go back"
                         role="button"
                         tabIndex={0}
                     />
-                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+                    <p className="font-semibold text-neutral-950 text-sm w-full text-center capitalize truncate ml-4">
                         Wallet
                     </p>
                     <div className="w-5" /> {/* Spacer for centering */}
@@ -103,7 +103,7 @@ const WalletContent = ({
             <div className="w-full flex-1 flex flex-col gap-6 pt-6 px-4">
                 <div className="w-full flex flex-col px-4 py-6 rounded-lg bg-black text-white gap-6">
                     <p className="text-sm font-semibold">Withdrawable Balance</p>
-                    {isLoading ? <LoaderSmall /> : <p className="font-black text-3xl">
+                    {isLoading ? <LoaderSmall /> : <p className="font-black text-2xl">
                         {new Intl.NumberFormat("en-NG", {
                             style: "currency",
                             currency: "NGN",
@@ -114,7 +114,7 @@ const WalletContent = ({
                     {actionButtons.map((item, index) => (
                         <span key={index} className="flex gap-2 items-center px-2 py-3 rounded-md border-1 border-neutral-300 text-blue-800" onClick={item.onClick}>
                             {item.icon}
-                            <p className="text-lg text-black">{item.text}</p>
+                            <p className="text-base text-black">{item.text}</p>
                         </span>
                     ))}
                 </div>

@@ -1,49 +1,49 @@
 "use client"
 
 import * as React from "react";
-import {cn} from "@/lib/utils";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+import { cn } from "@/lib/utils";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
-import {SearchItem, useRecentSearchStore} from "@/store/recent-search-store";
-import {IoClose} from "react-icons/io5";
-import {ComponentProps} from "react";
-import {router} from "next/client";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {UserVerificationBadge} from "@/components/ui/user-placeholder";
+import { SearchItem, useRecentSearchStore } from "@/store/recent-search-store";
+import { IoClose } from "react-icons/io5";
+import { ComponentProps } from "react";
+import { router } from "next/client";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { UserVerificationBadge } from "@/components/ui/user-placeholder";
 import defaultImage from "@/assests/default.jpeg";
 
 interface RecentSearchCardProps extends React.ComponentProps<"div"> {
-    item: {[key: string]: any};
-    removeSearch?: (id:string) => void;
+    item: { [key: string]: any };
+    removeSearch?: (id: string) => void;
     type: "event" | "user";
 }
 
 interface SuggestionEventCardProp extends ComponentProps<"div"> {
-    event: {[key: string]: any}
+    event: { [key: string]: any }
 }
 
 export const RecentSearchCard = ({
-    item, type, removeSearch,  className, ...props
+    item, type, removeSearch, className, ...props
 }: RecentSearchCardProps) => {
     const router = useRouter();
 
     const searchParams = useSearchParams();
     const pathname = usePathname();
 
-    const {addSearch} = useRecentSearchStore();
+    const { addSearch } = useRecentSearchStore();
 
     const onClick = () => {
-        const prev = pathname + "?" +searchParams
+        const prev = pathname + "?" + searchParams
 
         addSearch(item, type)
-        if(type === "user") {
+        if (type === "user") {
             router.push(`/m/user/${item.id}?prev=${prev}`);
         } else {
             router.push(`/m/events/${item.id}?prev=${prev}`);
         }
     }
 
-    if (type=== "event") {
+    if (type === "event") {
         const date = new Date(item.startTime);
         const formatedDate = date.toLocaleString("en-US", {
             weekday: "short",
@@ -65,8 +65,8 @@ export const RecentSearchCard = ({
                 {...props}
             >
                 <div className="w-full flex gap-3 items-center"
-                     onClick={onClick}>
-                    <div className="relative w-18 h-18 rounded-full flex items-center justify-center">
+                    onClick={onClick}>
+                    <div className="relative w-14 h-14 rounded-full flex items-center justify-center">
                         <AspectRatio ratio={1}>
                             <Image
                                 src={item.eventTitleImage || defaultImage}
@@ -86,7 +86,7 @@ export const RecentSearchCard = ({
                     </div>
                 </div>
                 {removeSearch ? <div className="p-2" onClick={() => removeSearch(item.id)}>
-                    <IoClose size={20} className="text-neutral-400" />
+                    <IoClose size={16} className="text-neutral-400" />
                 </div> : null}
             </div>
         );
@@ -101,8 +101,8 @@ export const RecentSearchCard = ({
             {...props}
         >
             <div className="w-full flex gap-3 items-center"
-                 onClick={onClick}>
-                <div className="relative w-18 h-18 rounded-full flex items-center justify-center" onClick={onClick}>
+                onClick={onClick}>
+                <div className="relative w-14 h-14 rounded-full flex items-center justify-center" onClick={onClick}>
                     <AspectRatio ratio={1}>
                         <Image
                             src={item.profileImage || defaultImage}
@@ -121,7 +121,7 @@ export const RecentSearchCard = ({
                 </div>
             </div>
             {removeSearch ? <div className="p-2" onClick={() => removeSearch(item.id)}>
-                <IoClose size={20} className="text-neutral-400" />
+                <IoClose size={16} className="text-neutral-400" />
             </div> : null}
         </div>
     )
@@ -146,7 +146,7 @@ export const SuggestionEventCard = ({
             onClick={() => router.push(`/m/events/${event.id}?prev=${encodeURIComponent(pathname + "?" + searchParams)}`)}
         >
             <div className="relative w-50 flex rounded-md items-center justify-center">
-                <AspectRatio ratio={4/3}>
+                <AspectRatio ratio={4 / 3}>
                     <Image
                         src={event.titleImage}
                         alt={event.title}
@@ -157,7 +157,7 @@ export const SuggestionEventCard = ({
                 {event.original && (
                     <div className="absolute top-2 left-2 rounded-full bg-white px-2 py-[2px] shadow-md">
                         <span className="text-[10px] font-semibold text-neutral-700 leading-0">
-                          Drifto Original
+                            Drifto Original
                         </span>
                     </div>
                 )}

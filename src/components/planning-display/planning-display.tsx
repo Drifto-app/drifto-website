@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
+import React, { useCallback, useEffect, useState, useRef, ComponentProps } from 'react';
 import Image from "next/image";
 import PageHeader from "../page-header/page-header";
 import { Tabs } from "./tabs";
@@ -12,6 +12,9 @@ import { AvatarImage, Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { showTopToast } from "@/components/toast/toast-util";
 import defaultImage from "@/assests/default.jpeg";
+import { FaRegHeart } from 'react-icons/fa';
+import { BiCalendarAlt } from 'react-icons/bi';
+import { PiFireSimpleBold } from 'react-icons/pi';
 
 // Types
 interface BookingItem {
@@ -144,13 +147,13 @@ function FilterDropdown({
 
   return (
     <div className="flex justify-between items-baseline ">
-      <p className="text-base font-medium">Display Plans by</p>
+      <p className="text-sm font-medium">Display Plans by</p>
       <div className="relative mb-4" ref={dropdownRef}>
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="flex items-center justify-between w-36 py-2 text-left bg-white rounded-lg border-none outline-none"
         >
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-xs font-medium text-gray-700">
             {selectedOption?.label || "Select filter"}
           </span>
           <ChevronDown
@@ -170,7 +173,7 @@ function FilterDropdown({
                     onFilterChange(option.value);
                     setIsOpen(false);
                   }}
-                  className={`w-full px-4 py-3 text-left text-sm  border-b border-neutral-300 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 text-gray-700
+                  className={`w-full px-4 py-3 text-left text-xs  border-b border-neutral-300 hover:bg-gray-50 focus:outline-none focus:bg-gray-50 text-gray-700
                   `}
                 >
                   {option.label}
@@ -216,24 +219,24 @@ function BookingCard({ booking, isLast, lastElementRef }: BookingCardProps) {
         </div>
 
         <div className="p-3 space-y-2">
-          <h3 className="text-xl font-bold first-letter:uppercase line-clamp-2">
+          <h3 className="text-lg font-bold first-letter:uppercase line-clamp-2">
             {booking.title}
           </h3>
 
-          <div className="space-y-1 text-sm text-gray-600 flex flex-col gap-1">
-            <p className="font-normal text-base">{dateRange}</p>
+          <div className="space-y-1 text-xs text-gray-600 flex flex-col gap-1">
+            <p className="font-normal text-sm">{dateRange}</p>
             <p className=" flex gap-2 items-center">
               <Radio /> {booking.eventDisplayStatus || "ACTIVE"}
             </p>
             <p className=" flex gap-2 items-center">
-              <Briefcase size={25} />
+              <Briefcase size={20} />
               <span>{booking.numberOfTickets} Tickets</span>
             </p>
             <p
               className="truncate flex gap-2 items-center"
               title={booking.address}
             >
-              <MapPin size={25} />
+              <MapPin size={20} />
               <span>{booking.address}</span>
             </p>
           </div>
@@ -260,6 +263,7 @@ interface BookingsListProps {
   isLoadingMore: boolean;
   selectedFilter: UserPlanType;
   onFilterChange: (filter: UserPlanType) => void;
+  handleScreenChange: (value: string) => void;
 }
 
 function BookingsList({
@@ -271,6 +275,7 @@ function BookingsList({
   isLoadingMore,
   selectedFilter,
   onFilterChange,
+  handleScreenChange,
 }: BookingsListProps) {
   const lastElementRef = useInfiniteScroll(loadMore, hasMore, isLoadingMore);
 
@@ -300,10 +305,19 @@ function BookingsList({
           <Loader />
         </div>
       ) : !bookings.length ? (
-        <div className="text-center py-12">
-          <p className="text-gray-500">
-            No bookings found for the selected filter
-          </p>
+        <div className="flex flex-col items-center gap-4 text-center max-w-md px-4 mt-20">
+          <BiCalendarAlt size={40} className="text-blue-800"/>
+          <span className="flex flex-col gap-2">
+            <p className="text-neutral-500 text-sm font-semibold">
+              No upcoming or in-progress booking found!
+            </p>
+          </span>
+          <Button
+            onClick={() => handleScreenChange("events")}
+            className="rounded-full py-5 px-5"
+          >
+            Find events
+          </Button>
         </div>
       ) : (
         <div className="w-full flex flex-col gap-4 pb-15">
@@ -541,19 +555,20 @@ function EventsContent({
 
   if (events.length <= 0) {
     return (
-      <div className=" w-full flex flex-col items-center justify-center gap-3 min-h-[80dvh]">
-        <span className="text-neutral-500 text-sm">
-          You have not created or collaborated in any experience.
-        </span>
+      <div className="flex flex-col items-center gap-4 text-center max-w-md px-4 mt-20">
+        <PiFireSimpleBold size={40} className="text-blue-800"/>
+        <span className="flex flex-col gap-2">
+            <p className="text-neutral-500 text-sm font-semibold">
+              {"Looks like you haven't set up events yet"}
+            </p>
+          </span>
         <Button
-          className="font-bold bg-blue-800 hover:bg-blue-800 px-6 py-6 text-md"
-          onClick={() => {
-            router.push(
-              `/m/event-create?prev=${encodeURIComponent("/?screen=plans")}`
-            );
-          }}
+          onClick={() => router.push(
+            `/m/event-create?prev=${encodeURIComponent("/?screen=plans")}`
+          )}
+          className="rounded-full py-5 px-5"
         >
-          Create Event
+          Create event
         </Button>
       </div>
     );
@@ -601,7 +616,7 @@ function EventsCard({ event }: EventsCardProp) {
   const router = useRouter();
   return (
     <>
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-3">
         <Image
           width={800}
           height={500}
@@ -616,7 +631,7 @@ function EventsCard({ event }: EventsCardProp) {
           className="w-full max-h-96 object-cover rounded-2xl"
           alt=""
         />
-        <h3 className=" text-left text-xl font-semibold first-letter:capitalize">
+        <h3 className=" text-left text-lg font-semibold first-letter:capitalize">
           {event.title}
         </h3>
         <div className="flex justify-between items-center">
@@ -639,14 +654,14 @@ function EventsCard({ event }: EventsCardProp) {
             </span>
           )}
           <div className="flex gap-3 items-center ml-auto">
-            <span className=" text-white bg-black py-2 px-3 font-normal rounded-full flex ">
+            <span className=" text-white text-xs bg-black py-2 px-3 font-normal rounded-full flex ">
               {formatDateToMonthDay(event.startTime.toLocaleString())}
             </span>
             <span
               className=" text-white bg-black py-2 px-2 font-normal rounded-full flex"
               onClick={handleQuickShare}
             >
-              <Upload />
+              <Upload size={18} />
             </span>
           </div>
         </div>
@@ -663,8 +678,13 @@ function EventsCard({ event }: EventsCardProp) {
   );
 }
 
+interface PlanningDisplayProps  {
+  handleScreenChange: (value: string) => void;
+}
+
+
 // Main Component
-export default function PlanningDisplay() {
+export default function PlanningDisplay({handleScreenChange}: PlanningDisplayProps) {
   const [activeTab, setActiveTab] = useState<TabType>("bookings");
   const {
     bookings,
@@ -699,6 +719,7 @@ export default function PlanningDisplay() {
             isLoadingMore={isLoadingMore}
             selectedFilter={currentFilter}
             onFilterChange={changeFilter}
+            handleScreenChange={handleScreenChange}
           />
         );
       case "events":

@@ -1,22 +1,22 @@
 import * as React from "react";
 import { cn, passwordRegex, usernameRegex } from '@/lib/utils';
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
-import {Button} from "@/components/ui/button";
-import {LoaderSmall} from "@/components/ui/loader";
-import {toast} from "react-toastify";
-import {api} from "@/lib/axios";
-import {InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot} from "@/components/ui/input-otp";
-import {REGEXP_ONLY_DIGITS} from "input-otp";
-import {useEffect, useRef, useState} from "react";
-import {GoogleLogin} from "@react-oauth/google";
-import {useAuthStore} from "@/store/auth-store";
-import {useRouter} from "next/navigation";
-import {FaEye, FaEyeSlash} from "react-icons/fa";
-import {Calendar28} from "@/components/ui/date-input";
-import {Autocomplete, useLoadScript} from "@react-google-maps/api";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { LoaderSmall } from "@/components/ui/loader";
+import { toast } from "react-toastify";
+import { api } from "@/lib/axios";
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from "@/components/ui/input-otp";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useEffect, useRef, useState } from "react";
+import { GoogleLogin } from "@react-oauth/google";
+import { useAuthStore } from "@/store/auth-store";
+import { useRouter } from "next/navigation";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { Calendar28 } from "@/components/ui/date-input";
+import { Autocomplete, useLoadScript } from "@react-google-maps/api";
 import GoogleButton from "@/components/ui/google-button";
-import {showTopToast} from "@/components/toast/toast-util";
+import { showTopToast } from "@/components/toast/toast-util";
 import { FaArrowLeftLong } from 'react-icons/fa6';
 
 interface SignUpFormProps extends React.ComponentProps<"form"> {
@@ -30,7 +30,7 @@ export const SignUpForm = ({
     className,
     ...props
 }: SignUpFormProps) => {
-    const { googleLogin,  setUser, setTokens } = useAuthStore();
+    const { googleLogin, setUser, setTokens } = useAuthStore();
     const router = useRouter();
 
     const [isLoading, setLoading] = React.useState<boolean>(false);
@@ -41,7 +41,7 @@ export const SignUpForm = ({
     const [isPasswordShow, setIsPasswordShow] = useState<boolean>(false)
     const [autocomplete, setAutocomplete] = useState<google.maps.places.Autocomplete | null>(null);
     const [isCheckingUsername, setCheckingUsername] = useState(false);
-    const [isUsernameValid, setUsernameValid] = useState<boolean|null>(null);
+    const [isUsernameValid, setUsernameValid] = useState<boolean | null>(null);
     const [usernameError, setUsernameError] = useState<string>("");
 
     const { isLoaded, loadError } = useLoadScript({
@@ -64,7 +64,7 @@ export const SignUpForm = ({
 
     const delay: number = 30000
 
-    const usernameDebounce = useRef<NodeJS.Timeout|null>(null);
+    const usernameDebounce = useRef<NodeJS.Timeout | null>(null);
 
     const isPasswordValid = password != null && password != "" && passwordRegex.test(password);
     const showPasswordRequirementsMessage = password && !isPasswordValid;
@@ -100,7 +100,7 @@ export const SignUpForm = ({
             return;
         }
 
-        if(!usernameRegex.test(username)) {
+        if (!usernameRegex.test(username)) {
             setUsernameError("Username can only contain letters, numbers, and underscores.");
             return;
         }
@@ -168,7 +168,7 @@ export const SignUpForm = ({
             })
 
             setLoading(false);
-        }catch (err: any) {
+        } catch (err: any) {
             setLoading(false);
             showTopToast("error", err.response?.data?.description || 'Email Request Failed');
         }
@@ -189,7 +189,7 @@ export const SignUpForm = ({
 
             setLoading(false);
             setEmailOtp(true);
-        }catch (err: any) {
+        } catch (err: any) {
             setLoading(false);
             showTopToast("error", err.response?.data?.description || 'Email Request Failed');
         }
@@ -207,7 +207,7 @@ export const SignUpForm = ({
             setEmailOtp(false);
             setOtpValue("");
             setIsRegister(true)
-        }catch (err: any) {
+        } catch (err: any) {
             setLoading(false);
             showTopToast("error", err.response?.data?.description || 'Email Request Failed');
             setOtpValue("");
@@ -236,13 +236,13 @@ export const SignUpForm = ({
             return;
         }
 
-        if(!usernameRegex.test(username)) {
+        if (!usernameRegex.test(username)) {
             showTopToast("error", "Username can only contain letters, numbers, and underscores.");
             return;
         }
 
 
-        if(!firstName || !lastName || !password || !username || !dob || !city || !isAgreed) {
+        if (!firstName || !lastName || !password || !username || !dob || !city || !isAgreed) {
             showTopToast("error", "Complete all filed")
             return;
         }
@@ -265,7 +265,7 @@ export const SignUpForm = ({
 
 
         try {
-            const {data} = await api.post('/auth/register', formData, {
+            const { data } = await api.post('/auth/register', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -292,8 +292,8 @@ export const SignUpForm = ({
         return (
             <form className={cn("flex flex-col gap-6", className)} onSubmit={handleOtpVerify} {...props}>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-extrabold">Create Account</h1>
-                    <p className="text-muted-foreground text-base text-balance">
+                    <h1 className="text-2xl font-extrabold">Create Account</h1>
+                    <p className="text-muted-foreground text-sm text-balance">
                         Enter your OTP to continue
                     </p>
                 </div>
@@ -333,7 +333,7 @@ export const SignUpForm = ({
                     className="w-full"
                     disabled={isLoading}
                 >
-                    {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                    {!isLoading ? "Submit" : <LoaderSmall className="" />}
                 </Button>
                 <div className="flex flex-row gap-2 justify-center text-sm">
                     <p className="text-neutral-500">OTP not received?</p>
@@ -347,12 +347,12 @@ export const SignUpForm = ({
         )
     }
 
-    if(isRegister) {
+    if (isRegister) {
         return (
             <form className={cn("flex flex-col gap-6", className)} onSubmit={handleRegisterSubmit} {...props}>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-extrabold">Create Account</h1>
-                    <p className="text-muted-foreground text-base text-balance">
+                    <h1 className="text-2xl font-extrabold">Create Account</h1>
+                    <p className="text-muted-foreground text-sm text-balance">
                         Create an account with your info.
                     </p>
                 </div>
@@ -424,10 +424,10 @@ export const SignUpForm = ({
                                 placeholder="Password"
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
-                                className="w-full border-none shadow-none"/>
+                                className="w-full border-none shadow-none" />
                             <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                                 {isPasswordShow
-                                    ?<FaEyeSlash />
+                                    ? <FaEyeSlash />
                                     : <FaEye />}
                             </div>
                         </div>
@@ -487,7 +487,7 @@ export const SignUpForm = ({
                         className="w-full"
                         disabled={isLoading || !isAgreed}
                     >
-                        {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                        {!isLoading ? "Submit" : <LoaderSmall className="" />}
                     </Button>
                 </div>
                 <div className="text-center text-sm flex flex-row justify-center gap-2">
@@ -500,11 +500,11 @@ export const SignUpForm = ({
         )
     }
 
-    return(
+    return (
         <form className={cn("flex flex-col gap-6", className)} onSubmit={handleEmailRegister} {...props}>
             <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-extrabold">Create Account</h1>
-                <p className="text-muted-foreground text-base text-balance">
+                <h1 className="text-2xl font-extrabold">Create Account</h1>
+                <p className="text-muted-foreground text-sm text-balance">
                     Enter your email for verification
                 </p>
             </div>
@@ -525,14 +525,14 @@ export const SignUpForm = ({
                 className="w-full"
                 disabled={isLoading}
             >
-                {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                {!isLoading ? "Submit" : <LoaderSmall className="" />}
             </Button>
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
-              <span className="bg-background text-muted-foreground relative z-10 px-2">
-                Or
-              </span>
+                <span className="bg-background text-muted-foreground relative z-10 px-2">
+                    Or
+                </span>
             </div>
-            <div  className="w-full flex justify-center items-center">
+            <div className="w-full flex justify-center items-center">
                 <GoogleButton onSuccess={async (credentialResponse) => {
                     try {
                         const idToken = credentialResponse.credential;

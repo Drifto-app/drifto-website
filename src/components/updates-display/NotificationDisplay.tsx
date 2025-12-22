@@ -295,10 +295,10 @@ function NotificationComponent({
         <Image src="/logo-white.svg" alt="" width={40} height={40} />
       </div>
       <div className="flex-1 min-w-0">
-        <h3 className="font-bold text-lg mb-2 truncate">
+        <h3 className="font-bold text-base mb-2 truncate">
           {notification.title}
         </h3>
-        <p className="font-medium text-base line-clamp-2">
+        <p className="font-medium text-sm line-clamp-2">
           {notification.message}
         </p>
       </div>

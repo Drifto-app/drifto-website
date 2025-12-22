@@ -1,19 +1,19 @@
 "use client"
 
-import {ComponentProps, ReactNode, useState} from "react";
-import {cn} from "@/lib/utils";
-import {useRouter} from "next/navigation";
-import {FaArrowLeft, FaChevronRight, FaRegIdBadge, FaRegUser} from "react-icons/fa";
+import { ComponentProps, ReactNode, useState } from "react";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { FaArrowLeft, FaChevronRight, FaRegIdBadge, FaRegUser } from "react-icons/fa";
 import * as React from "react";
-import {LogoutButton} from "@/components/settings/logout-button";
+import { LogoutButton } from "@/components/settings/logout-button";
 import Image from "next/image";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
-import {IoCashOutline, IoDocumentTextOutline} from "react-icons/io5";
-import {MdNavigateNext, MdPayment} from "react-icons/md";
-import {TbTools} from "react-icons/tb";
-import {IoMdHappy} from "react-icons/io";
-import {PiAt} from "react-icons/pi";
-import {useAuthStore} from "@/store/auth-store";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { IoCashOutline, IoDocumentTextOutline } from "react-icons/io5";
+import { MdNavigateNext, MdPayment } from "react-icons/md";
+import { TbTools } from "react-icons/tb";
+import { IoMdHappy } from "react-icons/io";
+import { PiAt } from "react-icons/pi";
+import { useAuthStore } from "@/store/auth-store";
 import infoImage from "@/assests/settings-info.jpg"
 
 interface SettingContentProps extends ComponentProps<"div"> {
@@ -32,23 +32,23 @@ export const SettingContent = ({
     prev, currentPathUrl, className, ...props
 }: SettingContentProps) => {
     const router = useRouter();
-    const {user} = useAuthStore();
+    const { user } = useAuthStore();
 
     const [activeScreen, setActiveScreen] = useState<string>("settings");
 
     const settingsOptions: SettingsOptionType[] = [
-        {name: "Profile & Preferences", value: "profile", icon: <FaRegUser size={25} />, onClickFunction: () => setActiveScreen("profile")},
-        {name: "Host Settings", value: "host-settings", icon: <FaRegIdBadge size={25} />, onClickFunction: () => setActiveScreen("host-settings")},
-        {name: "Payment Methods", value: "payment-method", icon: <MdPayment size={25} />, onClickFunction: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "My Refunds", value: "refunds", icon: <IoCashOutline size={25} />, onClickFunction: () => router.push(`/m/refund-history?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={25} />, onClickFunction: () => router.push(`/m/settings/privacy-policy?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "Help & Support", value: "support", icon: <TbTools size={25} />, onClickFunction: () =>  router.push(`/m/settings/help-support?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "Invite Friends", value: "invite", icon: <IoMdHappy size={27} />, onClickFunction: () => router.push(`/m/settings/invite-friends?prev=${encodeURIComponent(currentPathUrl)}`)},
-        {name: "Connect With Us", value: "connect", icon: <PiAt size={25} />, onClickFunction: () => router.push(`/m/settings/connect-page?prev=${encodeURIComponent(currentPathUrl)}`)},
+        { name: "Profile & Preferences", value: "profile", icon: <FaRegUser size={20} />, onClickFunction: () => setActiveScreen("profile") },
+        { name: "Host Settings", value: "host-settings", icon: <FaRegIdBadge size={20} />, onClickFunction: () => setActiveScreen("host-settings") },
+        { name: "Payment Methods", value: "payment-method", icon: <MdPayment size={20} />, onClickFunction: () => router.push(`/m/settings/payment-method?prev=${encodeURIComponent(currentPathUrl)}`) },
+        { name: "My Refunds", value: "refunds", icon: <IoCashOutline size={20} />, onClickFunction: () => router.push(`/m/refund-history?prev=${encodeURIComponent(currentPathUrl)}`) },
+        { name: "Privacy Policy", value: "privacy-policy", icon: <IoDocumentTextOutline size={20} />, onClickFunction: () => router.push(`/m/settings/privacy-policy?prev=${encodeURIComponent(currentPathUrl)}`) },
+        { name: "Help & Support", value: "support", icon: <TbTools size={20} />, onClickFunction: () => router.push(`/m/settings/help-support?prev=${encodeURIComponent(currentPathUrl)}`) },
+        { name: "Invite Friends", value: "invite", icon: <IoMdHappy size={22} />, onClickFunction: () => router.push(`/m/settings/invite-friends?prev=${encodeURIComponent(currentPathUrl)}`) },
+        { name: "Connect With Us", value: "connect", icon: <PiAt size={20} />, onClickFunction: () => router.push(`/m/settings/connect-page?prev=${encodeURIComponent(currentPathUrl)}`) },
     ]
 
     const handleBackClick = () => {
-        if(activeScreen === "settings") {
+        if (activeScreen === "settings") {
             router.push(prev ?? "/?screen=profile");
         }
 
@@ -56,7 +56,7 @@ export const SettingContent = ({
     };
 
     const titleText = () => {
-        if(activeScreen === "profile") {
+        if (activeScreen === "profile") {
             return "Profile & Preferences";
         }
 
@@ -70,11 +70,11 @@ export const SettingContent = ({
                     <div className="flex-1 w-full px-6">
                         <div className="w-full flex flex-col pt-6">
                             <span
-                                className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
+                                className="w-full flex justify-between py-4 text-base items-center cursor-pointer"
                                 onClick={() => router.push(`/m/settings/edit-profile?prev=${encodeURIComponent(currentPathUrl)}`)}
                             >
                                 <p>Edit Profile</p>
-                                <FaChevronRight size={16} className="text-neutral-400" />
+                                <FaChevronRight size={14} className="text-neutral-400" />
                             </span>
                             <span
                                 className="w-full flex justify-between py-4 text-lg items-center cursor-pointer"
@@ -130,8 +130,8 @@ export const SettingContent = ({
                     <div className="flex-1 flex flex-col gap-4 px-4 pb-10">
                         <div className="w-full flex flex-row items-center pl-4 py-3 shadow-2xl rounded-lg cursor-pointer" onClick={() => router.push(`/m/event-create?prev=${encodeURIComponent(currentPathUrl)}`)}>
                             <span className="max-w-[60%] flex flex-col gap-1">
-                                <h4 className="font-bold text-lg">Become a Drifto Host</h4>
-                                <p className="text-neutral-600 leading-tight">Share what you love. Create moments that matter and get paid.</p>
+                                <h4 className="font-bold text-base">Become a Drifto Host</h4>
+                                <p className="text-neutral-600 leading-tight text-sm">Share what you love. Create moments that matter and get paid.</p>
                             </span>
                             <span className="w-[40%] h-32 flex flex-row items-center relative">
                                 <Image
@@ -150,9 +150,9 @@ export const SettingContent = ({
                                     className="w-full flex items-center gap-5 py-6 px-2 border-b-neutral-300 border-b-1 cursor-pointer"
                                     onClick={item.onClickFunction}
                                 >
-                            {item.icon}
-                                    <p className="text-lg">{item.name}</p>
-                        </span>
+                                    {item.icon}
+                                    <p className="text-base">{item.name}</p>
+                                </span>
                             ))}
                         </div>
                         <LogoutButton />
@@ -176,7 +176,7 @@ export const SettingContent = ({
             >
                 <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
-                        size={20}
+                        size={16}
                         onClick={handleBackClick}
                         className="cursor-pointer hover:text-neutral-700 transition-colors"
                         aria-label="Go back"

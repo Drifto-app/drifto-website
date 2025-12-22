@@ -179,7 +179,7 @@ export const FindAttendees = ({
 
                 {/* Search Bar */}
                 <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <Input
                         type="text"
                         placeholder="Search email, username or ticket reference"
@@ -267,7 +267,7 @@ export const FindAttendees = ({
                     onClick={() => setScannerOpen(true)}
                     className="flex items-center gap-2 px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition-colors"
                 >
-                    <QrCode className="w-5 h-5" />
+                    <QrCode className="w-4 h-4" />
                     Scan Ticket
                 </Button>
                 <QrScannerDialog
@@ -291,7 +291,7 @@ export const FindAttendees = ({
                     className="w-full max-w-sm sm:rounded-lg flex flex-col items-center justify-center"
                 >
                     <DialogHeader>
-                        <DialogTitle className="text-lg text-center">
+                        <DialogTitle className="text-base text-center">
                             Mark Ticket as Used
                         </DialogTitle>
                         <DialogDescription className="text-center">
@@ -307,7 +307,7 @@ export const FindAttendees = ({
                                 type="button"
                                 variant="outline"
                                 disabled={markingUsed}
-                                className="flex-1 text-lg py-6 border-neutral-400 text-neutral-500 hover:bg-neutral-300 font-semibold"
+                                className="flex-1 text-base py-6 border-neutral-400 text-neutral-500 hover:bg-neutral-300 font-semibold"
                             >
                                 Cancel
                             </Button>
@@ -316,7 +316,7 @@ export const FindAttendees = ({
                             type="button"
                             onClick={confirmMarkAsUsed}
                             disabled={markingUsed}
-                            className="flex-1 text-lg py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+                            className="flex-1 text-base py-6 bg-blue-600 hover:bg-blue-700 text-white font-semibold"
                         >
                             {markingUsed ? <LoaderSmall /> : "OK"}
                         </Button>

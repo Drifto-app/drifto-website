@@ -11,7 +11,7 @@ import {Loader, LoaderSmall} from "@/components/ui/loader";
 import {useEffect, useRef, useCallback, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import {IoSend} from "react-icons/io5";
+import { IoChatbubbleEllipsesOutline, IoSend } from 'react-icons/io5';
 import {showTopToast} from "@/components/toast/toast-util";
 import {PostCard} from "@/components/post/post-card";
 
@@ -369,11 +369,11 @@ export default function CommentManagePage(
                 </div>
             )}
 
-            {/* No comments message */}
             {!loading && !initialLoading && comments.length === 0 && (
-                <div className="w-full flex flex-col items-center justify-center py-8">
-                    <p className="text-gray-500">No comments found</p>
-                </div>
+              <div className="w-full flex flex-col items-center justify-center py-8">
+                  <IoChatbubbleEllipsesOutline size={40} className="text-blue-800"/>
+                  <p className="text-gray-500 font-semibold">No comments...yet</p>
+              </div>
             )}
 
             {error && comments.length > 0 && (

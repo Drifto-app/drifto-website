@@ -111,9 +111,9 @@ export const CreateEventContent = ({
   const [state, setState] = useState<string | undefined>(undefined);
   const [coordinates, setCoordinates] = useState<
     | {
-        latitude: number;
-        longitude: number;
-      }
+      latitude: number;
+      longitude: number;
+    }
     | undefined
   >(undefined);
   const [locationSecure, setLocationSecure] = useState<boolean>(false);
@@ -171,7 +171,7 @@ export const CreateEventContent = ({
   }, []);
 
   const handleCoverVideoChange = useCallback((newUrl: string | null) => {
-    if(!newUrl) {
+    if (!newUrl) {
       setCoverVideo(undefined);
       return;
     }
@@ -581,21 +581,19 @@ export const CreateEventContent = ({
                   className={`flex justify-between w-full items-center rounded-md border border-neutral-200`}
                 >
                   <span
-                    className={`w-[50%] text-center font-semibold cursor-pointer pl-4 py-3 border-b-2  ${
-                      isSelectedTicketPaid
-                        ? "text-black border-black"
-                        : "text-neutral-400 border-transparent"
-                    }`}
+                    className={`w-[50%] text-center font-semibold cursor-pointer pl-4 py-3 border-b-2  ${isSelectedTicketPaid
+                      ? "text-black border-black"
+                      : "text-neutral-400 border-transparent"
+                      }`}
                     onClick={() => setIsSelectedTicketPaid(true)}
                   >
                     Paid
                   </span>
                   <span
-                    className={`w-[50%] text-center font-semibold pr-4cursor-pointer py-3 border-b-2 ${
-                      !isSelectedTicketPaid
-                        ? "text-black border-black"
-                        : "text-neutral-400 border-transparent"
-                    }`}
+                    className={`w-[50%] text-center font-semibold pr-4cursor-pointer py-3 border-b-2 ${!isSelectedTicketPaid
+                      ? "text-black border-black"
+                      : "text-neutral-400 border-transparent"
+                      }`}
                     onClick={() => setIsSelectedTicketPaid(false)}
                   >
                     Free
@@ -878,10 +876,10 @@ export const CreateEventContent = ({
                   className="flex flex-col gap-2 items-center w-full rounded-md shadow-md py-5 px-4"
                 >
                   {item.icon}
-                  <h3 className="font-black text-2xl capitalize">
+                  <h3 className="font-black text-lg capitalize">
                     {item.title}
                   </h3>
-                  <p className="text-neutral-500 text-md text-center font-semibold leading-tight">
+                  <p className="text-neutral-500 text-sm text-center font-semibold leading-tight">
                     {item.text}
                   </p>
                 </div>

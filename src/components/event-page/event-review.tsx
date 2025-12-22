@@ -9,9 +9,10 @@ import {Loader, LoaderSmall} from "@/components/ui/loader";
 import {useEffect, useRef, useCallback, useState} from "react";
 import {Button} from "@/components/ui/button";
 import {Input} from "@/components/ui/input";
-import {IoSend} from "react-icons/io5";
+import { IoChatbubbleEllipsesOutline, IoSend } from 'react-icons/io5';
 import { showTopToast } from "../toast/toast-util";
 import { useAuthStore } from '@/store/auth-store';
+import { FaRegCommentDots } from 'react-icons/fa';
 
 interface SingleEventReviewsProps extends React.ComponentProps<"div">{
     event: {[key: string]: any};
@@ -283,7 +284,8 @@ export const SingleEventReviews = ({
             {/* No comments message */}
             {!loading && !initialLoading && comments.length === 0 && (
                 <div className="w-full flex flex-col items-center justify-center py-8">
-                    <p className="text-gray-500">No reviews found</p>
+                    <IoChatbubbleEllipsesOutline size={40} className="text-neutral-500"/>
+                    <p className="text-gray-500 font-semibold">No reviews found</p>
                 </div>
             )}
 

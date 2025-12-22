@@ -1,15 +1,15 @@
 "use client"
 
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
-import {ScreenProvider} from "@/components/screen/screen-provider";
-import {ComponentProps, useCallback, useEffect, useRef, useState} from "react";
-import {cn} from "@/lib/utils";
-import {FaArrowLeft} from "react-icons/fa";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoutes";
+import { ScreenProvider } from "@/components/screen/screen-provider";
+import { ComponentProps, useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
+import { FaArrowLeft } from "react-icons/fa";
 import * as React from "react";
-import {authApi} from "@/lib/axios";
-import {showTopToast} from "@/components/toast/toast-util";
-import {Loader} from "@/components/ui/loader";
+import { authApi } from "@/lib/axios";
+import { showTopToast } from "@/components/toast/toast-util";
+import { Loader } from "@/components/ui/loader";
 import { TransactionCard } from "./transaction-card";
 
 export const WalletTransactionsPageContent = () => {
@@ -35,7 +35,7 @@ export const WalletTransactionsContent = ({
     const router = useRouter();
 
     const [totalTransactions, setTotalTransactions] = useState<number>(0);
-    const [transactions, setTransactions] = useState<Array<{[key: string]: any}>>([]);
+    const [transactions, setTransactions] = useState<Array<{ [key: string]: any }>>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -117,7 +117,7 @@ export const WalletTransactionsContent = ({
                     !loadingRef.current &&
                     hasMoreRef.current &&
                     !error
-                )  loadTransactions();
+                ) loadTransactions();
             },
             {
                 root: scrollRootRef.current ?? null,
@@ -141,14 +141,14 @@ export const WalletTransactionsContent = ({
             <div className="w-full border-b border-b-neutral-300 flex flex-col gap-3 justify-center h-20 flex-shrink-0">
                 <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
-                        size={20}
+                        size={16}
                         onClick={handleBackClick}
                         className="cursor-pointer hover:text-neutral-700 transition-colors"
                         aria-label="Go back"
                         role="button"
                         tabIndex={0}
                     />
-                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+                    <p className="font-semibold text-neutral-950 text-sm w-full text-center capitalize truncate ml-4">
                         Wallet Transactions
                     </p>
                     <div className="w-5" /> {/* Spacer for centering */}
@@ -179,7 +179,7 @@ export const WalletTransactionsContent = ({
 
                 {loading && (
                     <div className="flex justify-center py-4">
-                        <Loader className="h-8 w-8"/>
+                        <Loader className="h-8 w-8" />
                     </div>
                 )}
 

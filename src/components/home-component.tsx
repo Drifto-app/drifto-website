@@ -48,7 +48,7 @@ export default function HomeContent() {
   const render = () => {
     switch (activeScreen) {
       case "plans":
-        return <PlanningDisplay />;
+        return <PlanningDisplay handleScreenChange={handleScreen} />;
       case "posts":
         return <PostDisplay />;
       case "updates":

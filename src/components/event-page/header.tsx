@@ -1,10 +1,10 @@
 import * as React from "react";
-import {cn} from "@/lib/utils";
-import {FaArrowLeft} from "react-icons/fa";
-import {useRouter} from "next/navigation";
+import { cn } from "@/lib/utils";
+import { FaArrowLeft } from "react-icons/fa";
+import { useRouter } from "next/navigation";
 
-interface SingleEventHeaderProps extends React.ComponentProps<"div">{
-    event: {[key: string]: any};
+interface SingleEventHeaderProps extends React.ComponentProps<"div"> {
+    event: { [key: string]: any };
     activeScreen?: string;
     setActiveScreen?: (activeScreen: string) => void;
     prev: string | null;
@@ -20,10 +20,10 @@ interface HeaderItem {
 }
 
 const headerItems: HeaderItem[] = [
-    {value: 'details', label: "Details" },
-    {value: 'map', label: "Map" },
-    {value: 'reviews', label: "Reviews" },
-    {value: 'related', label: "Related" },
+    { value: 'details', label: "Details" },
+    { value: 'map', label: "Map" },
+    { value: 'reviews', label: "Reviews" },
+    { value: 'related', label: "Related" },
 ]
 
 export const SingleEventHeader = ({
@@ -36,7 +36,7 @@ export const SingleEventHeader = ({
             // Use custom back navigation if provided
             onBackClick();
         } else if (isCoHostComponent) {
-            if(activeScreen !== "details") {
+            if (activeScreen !== "details") {
                 setActiveScreen?.(prev || 'details');
                 return
             }
@@ -55,7 +55,7 @@ export const SingleEventHeader = ({
             )} {...props}>
                 <div className="flex flex-row items-center px-8 py-6">
                     <FaArrowLeft
-                        size={20}
+                        size={16}
                         onClick={handleBackClick}
                         className="cursor-pointer hover:text-neutral-700 transition-colors"
                     />
@@ -74,7 +74,7 @@ export const SingleEventHeader = ({
         )} {...props}>
             <div className="flex flex-row items-center pt-8 px-8">
                 <FaArrowLeft
-                    size={20}
+                    size={16}
                     onClick={handleBackClick}
                     className="cursor-pointer hover:text-neutral-700 transition-colors"
                 />
@@ -94,7 +94,7 @@ export const SingleEventHeader = ({
                                     : "border-transparent text-neutral-700"
                             )}
                         >
-                            <span className="text-md mt-1 whitespace-nowrap">
+                            <span className="text-sm mt-1 whitespace-nowrap">
                                 {item.label}
                             </span>
                         </div>

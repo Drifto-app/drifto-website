@@ -1,8 +1,8 @@
 "use client"
 
-import {ComponentProps, useState} from "react";
-import {cn} from "@/lib/utils";
-import {FaArrowDown, FaArrowUp} from "react-icons/fa";
+import { ComponentProps, useState } from "react";
+import { cn } from "@/lib/utils";
+import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import {
     Drawer,
     DrawerClose,
@@ -13,10 +13,10 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 import * as React from "react";
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 interface TransactionCardProps extends ComponentProps<"div"> {
-    transactionContent: {[key: string]: any}
+    transactionContent: { [key: string]: any }
 }
 
 type StatusType = "PENDING" | "SUCCESSFUL" | "FAILED"
@@ -51,28 +51,28 @@ export const TransactionCard = ({
                     {...props}
                 >
                     <div className="flex gap-4 w-[50%] items-center">
-                <span className={cn(
-                    "h-12 w-12 rounded-full p-4 flex items-center justify-center text-white",
-                    isCredit ? "bg-green-700" : "bg-red-700"
-                )}>
-                    {
-                        isCredit ? <FaArrowUp size={24} /> : <FaArrowDown size={24} />
-                    }
-                </span>
+                        <span className={cn(
+                            "h-12 w-12 rounded-full p-4 flex items-center justify-center text-white",
+                            isCredit ? "bg-green-700" : "bg-red-700"
+                        )}>
+                            {
+                                isCredit ? <FaArrowUp size={20} /> : <FaArrowDown size={20} />
+                            }
+                        </span>
                         <span className="w-full">
-                    <p className="text-neutral-800 truncate">{transactionContent.description}</p>
-                    <p className="text-neutral-400">
-                        {isCredit
-                            ? new Date(transactionContent.paidAt || transactionContent.createdAt).toLocaleString()
-                            : transactionContent.paidAt ? new Date(transactionContent.paidAt).toLocaleString() : null
-                        }
-                    </p>
-                </span>
+                            <p className="text-neutral-800 truncate">{transactionContent.description}</p>
+                            <p className="text-neutral-400">
+                                {isCredit
+                                    ? new Date(transactionContent.paidAt || transactionContent.createdAt).toLocaleString()
+                                    : transactionContent.paidAt ? new Date(transactionContent.paidAt).toLocaleString() : null
+                                }
+                            </p>
+                        </span>
                     </div>
                     <div className="flex flex-col gap-2">
                         <p
                             className={cn(
-                                "font-semibold text-md",
+                                "font-semibold text-sm",
                                 isCredit ? "text-green-700" : "text-red-700"
                             )}
                         >
@@ -136,17 +136,17 @@ export const TransactionCard = ({
                         <span className="w-full flex justify-between">
                             <p className="w-[40%]">Paid At: </p>
                             <p className="text-right">
-                                 {isCredit
-                                     ? new Date(transactionContent.paidAt || transactionContent.createdAt).toLocaleString()
-                                     : transactionContent.paidAt ? new Date(transactionContent.paidAt).toLocaleString() : null
-                                 }
+                                {isCredit
+                                    ? new Date(transactionContent.paidAt || transactionContent.createdAt).toLocaleString()
+                                    : transactionContent.paidAt ? new Date(transactionContent.paidAt).toLocaleString() : null
+                                }
                             </p>
                         </span>
                     </div>
                 </div>
                 <DrawerFooter>
                     <DrawerClose asChild>
-                        <Button className="bg-blue-800 font-semibold py-6 text-lg">Close</Button>
+                        <Button className="bg-blue-800 font-semibold py-6 text-base">Close</Button>
                     </DrawerClose>
                 </DrawerFooter>
             </DrawerContent>

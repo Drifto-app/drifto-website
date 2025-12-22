@@ -130,7 +130,7 @@ export const UserContent = ({
                             </div>
                             <div className="w-full flex flex-col">
                                 <div className="flex gap-2 items-center">
-                                    <p className="text-black text-md font-bold truncate">{user.username}</p>
+                                    <p className="text-black text-sm font-bold truncate">{user.username}</p>
                                     <UserVerificationBadge user={user} isClickable={true} />
                                 </div>
                             </div>
@@ -139,8 +139,8 @@ export const UserContent = ({
                             <div className="w-full flex justify-between items-center px-6">
                                 {userStats.map((item, index) => (
                                     <span key={index} className="flex flex-col items-center justify-center gap-1">
-                                        <p className="text-neutral-400 text-md">{item.name}</p>
-                                        <p className="font-bold text-xl">{item.value}</p>
+                                        <p className="text-neutral-400 text-sm">{item.name}</p>
+                                        <p className="font-bold text-lg">{item.value}</p>
                                     </span>
                                 ))}
                             </div>
@@ -195,7 +195,7 @@ export const UserContent = ({
                                 <DialogTrigger asChild>
                                     <div className="w-full flex justify-between items-center py-2">
                                         <span className="font-bold">About</span>
-                                        <IoIosArrowForward size={20} />
+                                        <IoIosArrowForward size={16} />
                                     </div>
                                 </DialogTrigger>
 
@@ -204,7 +204,7 @@ export const UserContent = ({
                                         <DialogTitle className="text-left">About</DialogTitle>
                                     </DialogHeader>
                                     <div className="w-full flex flex-col gap-4 text-neutral-600">
-                                        <span className="font-medium text-md">
+                                        <span className="font-medium text-sm">
                                             {user.aboutText}
                                         </span>
                                         <div className="w-full flex flex-col gap-3">
@@ -236,14 +236,14 @@ export const UserContent = ({
                                         : `/m/user-events?id=${user?.id}&prev=${encodeURIComponent(`${pathname}?${searchParams}`)}`
                                 )}>
                                     <div className="h-10 flex items-center justify-center">
-                                        <PiFireSimpleBold size={40} />
+                                        <PiFireSimpleBold size={32} />
                                     </div>
                                     <span className="font-semibold">Experiences</span>
                                 </div>
 
                                 <div className="flex flex-col gap-3 border border-neutral-300 px-4 py-5 rounded-sm items-start" onClick={() => setActiveScreen("posts")}>
                                     <div className="h-10 flex items-center justify-center">
-                                        <FaHashtag size={30} />
+                                        <FaHashtag size={24} />
                                     </div>
                                     <span className="font-semibold">Posts</span>
                                 </div>
@@ -266,11 +266,11 @@ export const UserContent = ({
                 <div className={"w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center"}>
                     <div className="flex flex-row items-center px-8">
                         <FaArrowLeft
-                            size={20}
+                            size={16}
                             onClick={handleBackClick}
                             className="cursor-pointer hover:text-neutral-700 transition-colors"
                         />
-                        <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+                        <p className="font-semibold text-neutral-950 text-sm w-full text-center capitalize truncate ml-4">
                             {user.username}
                         </p>
                     </div>

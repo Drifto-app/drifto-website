@@ -74,7 +74,7 @@ export default function Page() {
               onClick={() => {
                 router.push(`/m/refund/${id}?prev=${encodeURIComponent(`/m/bookings/${id}`)}`);
               }}
-              className="outline-none border-none bg-white text-blue-700 text-base font-md"
+              className="outline-none border-none bg-white text-blue-700 text-sm font-md"
             >
               Request a refund
             </button>
@@ -98,11 +98,11 @@ function DetailsHeader({ title }: headerProp) {
     >
       <div className="flex flex-row items-center px-8">
         <FaArrowLeft
-          size={20}
+          size={16}
           onClick={() => router.push("/?screen=plans")}
           className="cursor-pointer hover:text-neutral-700 transition-colors"
         />
-        <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+        <p className="font-semibold text-neutral-950 text-sm w-full text-center capitalize truncate ml-4">
           {title}
         </p>
       </div>
@@ -179,11 +179,11 @@ function TicketCard({
   return (
     <div>
       <div className="flex justify-end gap-3 mb-2">
-        <div className=" text-blue-600 px-3 py-2 flex items-center justify-center rounded-full border border-black">
+        <div className=" text-blue-600 px-3  flex items-center justify-center rounded-full border border-black text-xs">
           <span>{used ? "Used" : "Not Used"}</span>
         </div>
         <button
-          className=" p-2 border border-black rounded-full"
+          className=" px-2 py-1 border border-black rounded-full"
           onClick={() =>
             router.push(
               `/m/events/${eventId}?prev=${encodeURIComponent(
@@ -192,14 +192,14 @@ function TicketCard({
             )
           }
         >
-          <Inbox />
+          <Inbox size={18} />
         </button>
         <button
           className="p-2 border border-black rounded-full flex items-center justify-center"
           onClick={handleDownload}
           disabled={downloading}
         >
-          {downloading ? <Loader2 className="animate-spin" /> : <Download />}
+          {downloading ? <Loader2 className="animate-spin" /> : <Download size={18} />}
         </button>
       </div>
 
@@ -214,27 +214,27 @@ function TicketCard({
           src={titleImg?.toString()}
         />
         <div className="p-4">
-          <h4 className="text-2xl font-semibold first-letter:capitalize">
+          <h4 className="text-lg font-semibold first-letter:capitalize">
             {title}
           </h4>
           <div className="grid mt-4 grid-cols-2 gap-4">
             <div>
               <h5>Name</h5>
-              <p className="break-all font-semibold text-lg">{name}</p>
+              <p className="break-all font-semibold text-sm">{name}</p>
             </div>
             <div>
               <h5>Event Date</h5>
-              <p className="break-all font-semibold text-lg">
+              <p className="break-all font-semibold text-sm">
                 {formatTimestamp(date?.toString())}
               </p>
             </div>
             <div>
               <h5>Ticket Name</h5>
-              <p className="break-all font-semibold text-lg">{ticketName}</p>
+              <p className="break-all font-semibold text-sm">{ticketName}</p>
             </div>
             <div>
               <h5>Reference</h5>
-              <p className="break-all font-semibold text-lg">
+              <p className="break-all font-semibold text-sm">
                 {ticketReference}
               </p>
             </div>

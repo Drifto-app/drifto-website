@@ -1,25 +1,25 @@
 "use client"
 
-import {ComponentProps, useCallback, useEffect, useRef, useState} from "react";
-import {cn} from "@/lib/utils";
+import { ComponentProps, useCallback, useEffect, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import * as React from "react";
-import {FiSettings} from "react-icons/fi";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {authApi} from "@/lib/axios";
-import {showTopToast} from "@/components/toast/toast-util";
-import {Loader} from "@/components/ui/loader";
-import {FaPlus} from "react-icons/fa";
-import {PostCard} from "@/components/post/post-card";
-import {Button} from "@/components/ui/button";
+import { FiSettings } from "react-icons/fi";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { authApi } from "@/lib/axios";
+import { showTopToast } from "@/components/toast/toast-util";
+import { Loader } from "@/components/ui/loader";
+import { FaPlus } from "react-icons/fa";
+import { PostCard } from "@/components/post/post-card";
+import { Button } from "@/components/ui/button";
 
-interface PostDisplayProps extends ComponentProps<"div"> {}
+interface PostDisplayProps extends ComponentProps<"div"> { }
 
-export const PostDisplay = ({className, ...props}: PostDisplayProps) => {
+export const PostDisplay = ({ className, ...props }: PostDisplayProps) => {
     console.log('post display render');
 
     const router = useRouter();
 
-    const [posts, setPosts] = useState<Array<{[key: string]: any}>>([]);
+    const [posts, setPosts] = useState<Array<{ [key: string]: any }>>([]);
     const [hasMore, setHasMore] = useState(true);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -48,7 +48,7 @@ export const PostDisplay = ({className, ...props}: PostDisplayProps) => {
 
                 const response = await authApi.get(`/feed/post`, { params });
 
-                const newPosts = response.data.data.data as Array<{[key: string]: any}>;
+                const newPosts = response.data.data.data as Array<{ [key: string]: any }>;
 
                 if (reset) {
                     setPosts(newPosts);
@@ -132,12 +132,12 @@ export const PostDisplay = ({className, ...props}: PostDisplayProps) => {
                 className
             )} {...props}>
                 <div className="flex flex-row items-center justify-between px-4">
-                    <span className="text-2xl font-bold">Posts</span>
+                    <span className="text-xl font-bold">Posts</span>
                     <button
                         className="bg-transparent rounded-none p-0 shadow-none"
                         onClick={() => router.push(`/m/settings?prev=${encodeURIComponent("/?screen=posts")}`)}
                     >
-                        <FiSettings size={20} className="text-black"/>
+                        <FiSettings size={20} className="text-black" />
                     </button>
                 </div>
             </div>

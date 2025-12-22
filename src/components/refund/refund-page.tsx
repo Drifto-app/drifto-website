@@ -1,14 +1,14 @@
 "use client";
 import { authApi } from "@/lib/axios";
 import { AlertCircle, Loader2 } from "lucide-react";
-import {useParams, usePathname, useRouter, useSearchParams} from "next/navigation";
+import { useParams, usePathname, useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect, useState, useCallback } from "react";
 import { FaArrowLeft } from "react-icons/fa";
-import {ProtectedRoute} from "@/components/auth/ProtectedRoutes";
-import {ScreenProvider} from "@/components/screen/screen-provider";
-import {UserPaymentInfo} from "@/components/wallet/user-payment-infos";
-import {Loader} from "@/components/ui/loader";
-import {showTopToast} from "@/components/toast/toast-util";
+import { ProtectedRoute } from "@/components/auth/ProtectedRoutes";
+import { ScreenProvider } from "@/components/screen/screen-provider";
+import { UserPaymentInfo } from "@/components/wallet/user-payment-infos";
+import { Loader } from "@/components/ui/loader";
+import { showTopToast } from "@/components/toast/toast-util";
 
 // Types
 interface Ticket {
@@ -117,13 +117,13 @@ export default function RefundPageComponent() {
     const handleConfirmRefund = useCallback(() => {
         if (!selectedTicket) return;
 
-        if(selectedTicket.paid && !paymentInfo) return;
+        if (selectedTicket.paid && !paymentInfo) return;
 
         const refundData: RefundRequest = {
             userTicketReference: selectedTicket.ticketReference,
         };
 
-        if(selectedTicket.paid) {
+        if (selectedTicket.paid) {
             refundData.accountNumber = paymentInfo!.accountNumber || "";
             refundData.bankCode = paymentInfo!.bankCode || "";
             refundData.bankName = paymentInfo!.bankName || "";
@@ -150,10 +150,10 @@ export default function RefundPageComponent() {
             <main className="p-4 pb-24">
                 {/* Instructions */}
                 <div className="mb-8">
-                    <h1 className="text-lg font-semibold mb-2">
+                    <h1 className="text-base font-semibold mb-2">
                         Select the ticket you want a refund for
                     </h1>
-                    <p className="text-base text-gray-600">
+                    <p className="text-sm text-gray-600">
                         Select the ticket you want a refund for. You can select only one
                         ticket at a time.
                     </p>
@@ -185,7 +185,7 @@ export default function RefundPageComponent() {
                 {/* Bank Selection Section */}
                 {shouldShowBankSelection && (
                     <section>
-                        <h2 className="text-xl font-bold mb-4">Account</h2>
+                        <h2 className="text-lg font-bold mb-4">Account</h2>
                         <UserPaymentInfo
                             detailsType="BANK_ACCOUNT_DETAILS"
                             maxHeight="500px"
@@ -211,7 +211,7 @@ export default function RefundPageComponent() {
                 <button
                     disabled={isConfirmDisabled}
                     onClick={handleConfirmRefund}
-                    className="w-10/12 flex items-center justify-center gap-2 p-3 rounded-md disabled:bg-neutral-600 disabled:cursor-not-allowed text-white bg-blue-800 hover:bg-blue-800 font-bold text-lg transition-colors"
+                    className="w-10/12 flex items-center justify-center gap-2 p-3 rounded-md disabled:bg-neutral-600 disabled:cursor-not-allowed text-white bg-blue-800 hover:bg-blue-800 font-bold text-base transition-colors"
                 >
                     {loading.refund ? (
                         <>
@@ -235,10 +235,10 @@ interface TicketListProps {
 }
 
 const TicketList: React.FC<TicketListProps> = ({
-                                                   tickets,
-                                                   selectedTicket,
-                                                   onTicketSelect,
-                                               }) => {
+    tickets,
+    selectedTicket,
+    onTicketSelect,
+}) => {
     if (tickets.length === 0) {
         return (
             <div className="text-center py-8 text-gray-500">
@@ -255,11 +255,10 @@ const TicketList: React.FC<TicketListProps> = ({
                     <div
                         key={ticket.id}
                         onClick={() => onTicketSelect(ticket)}
-                        className={`p-3 text-base font-normal rounded-md border-2 cursor-pointer transition-all hover:shadow-md ${
-                            isSelected
+                        className={`p-3 text-base font-normal rounded-md border-2 cursor-pointer transition-all hover:shadow-md ${isSelected
                                 ? "text-blue-700 border-blue-700 bg-blue-50"
                                 : "border-gray-300 hover:border-gray-400"
-                        }`}
+                            }`}
                     >
                         <span className="font-medium">{ticket.ticketName}</span>
                         {!ticket.paid && (
@@ -293,10 +292,10 @@ interface ErrorMessageProps {
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({
-                                                       message,
-                                                       onRetry,
-                                                       onDismiss,
-                                                   }) => (
+    message,
+    onRetry,
+    onDismiss,
+}) => (
     <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
         <div className="flex items-start">
             <AlertCircle className="text-red-500 flex-shrink-0 mt-0.5" size={20} />

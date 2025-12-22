@@ -1,23 +1,23 @@
 'use strict'
 
 import * as React from "react";
-import {cn, passwordRegex} from "@/lib/utils";
-import {toast} from "react-toastify";
-import {Button} from "@/components/ui/button";
-import {Label} from "@/components/ui/label";
-import {Input} from "@/components/ui/input";
-import {emailRegex} from "@/lib/utils";
-import {api} from "@/lib/axios";
-import {LoaderSmall} from "@/components/ui/loader";
+import { cn, passwordRegex } from "@/lib/utils";
+import { toast } from "react-toastify";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { emailRegex } from "@/lib/utils";
+import { api } from "@/lib/axios";
+import { LoaderSmall } from "@/components/ui/loader";
 import {
     InputOTP,
     InputOTPGroup,
     InputOTPSlot,
 } from "@/components/ui/input-otp"
-import {REGEXP_ONLY_DIGITS} from "input-otp";
-import {useEffect, useState} from "react";
-import {FaEye, FaEyeSlash} from "react-icons/fa";
-import {showTopToast} from "@/components/toast/toast-util";
+import { REGEXP_ONLY_DIGITS } from "input-otp";
+import { useEffect, useState } from "react";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { showTopToast } from "@/components/toast/toast-util";
 
 interface ForgotPasswordProps extends React.ComponentProps<"form"> {
     loginPrincipal: string;
@@ -77,11 +77,11 @@ export const ForgotPassword = ({
 
         try {
             let response = null;
-            if(emailRegex.test(principal)) {
+            if (emailRegex.test(principal)) {
                 response = await api.post("/auth/forgotPassword", {
                     email: principal,
                 });
-            }else {
+            } else {
                 response = await api.post("/auth/forgotPassword", {
                     username: principal,
                 });
@@ -101,12 +101,12 @@ export const ForgotPassword = ({
 
         try {
             let response = null
-            if(emailRegex.test(principal)) {
+            if (emailRegex.test(principal)) {
                 response = await api.post("/auth/forgotPassword", {
                     email: principal,
                 });
-            }else {
-               response = await api.post("/auth/forgotPassword", {
+            } else {
+                response = await api.post("/auth/forgotPassword", {
                     username: principal,
                 });
             }
@@ -129,11 +129,11 @@ export const ForgotPassword = ({
 
         try {
             let response = null;
-            if(emailRegex.test(principal)) {
+            if (emailRegex.test(principal)) {
                 response = await api.post("/auth/verify/forgotPassword", {
                     email: principal,
                 });
-            }else {
+            } else {
                 response = await api.post("/auth/verify/forgotPassword", {
                     username: principal,
                     token: otpValue,
@@ -168,13 +168,13 @@ export const ForgotPassword = ({
 
         try {
             let response = null;
-            if(emailRegex.test(principal)) {
+            if (emailRegex.test(principal)) {
                 response = await api.post("/auth/resetPassword", {
                     email: principal,
                     newPassword: password,
                     confirmPassword: confirmPassword,
                 });
-            }else {
+            } else {
                 response = await api.post("/auth/resetPassword", {
                     username: principal,
                     newPassword: password,
@@ -192,12 +192,12 @@ export const ForgotPassword = ({
         }
     }
 
-    if(isVerifyForgotPassword) {
+    if (isVerifyForgotPassword) {
         return (
             <form className={cn("flex flex-col gap-8", className)} onSubmit={handleVerifySubmit} {...props}>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-extrabold">Reset Password</h1>
-                    <p className="text-muted-foreground text-base text-balance">
+                    <h1 className="text-2xl font-extrabold">Reset Password</h1>
+                    <p className="text-muted-foreground text-sm text-balance">
                         Enter your OTP code here.
                     </p>
                 </div>
@@ -237,7 +237,7 @@ export const ForgotPassword = ({
                     className="w-full"
                     disabled={isLoading}
                 >
-                    {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                    {!isLoading ? "Submit" : <LoaderSmall className="" />}
                 </Button>
                 <div className="flex flex-row gap-2 justify-center text-sm">
                     <p className="text-neutral-500">OTP code not received?</p>
@@ -251,12 +251,12 @@ export const ForgotPassword = ({
         )
     }
 
-    if(isResetPassword){
+    if (isResetPassword) {
         return (
             <form className={cn("flex flex-col gap-8", className)} onSubmit={handleResetPasswordSubmit} {...props}>
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-3xl font-extrabold">Reset Password</h1>
-                    <p className="text-muted-foreground text-base text-balance">
+                    <h1 className="text-2xl font-extrabold">Reset Password</h1>
+                    <p className="text-muted-foreground text-sm text-balance">
                         Enter your new password here.
                     </p>
                 </div>
@@ -269,10 +269,10 @@ export const ForgotPassword = ({
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            className="w-full border-none shadow-none"/>
+                            className="w-full border-none shadow-none" />
                         <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                             {isPasswordShow
-                                ?<FaEyeSlash />
+                                ? <FaEyeSlash />
                                 : <FaEye />}
                         </div>
                     </div>
@@ -284,10 +284,10 @@ export const ForgotPassword = ({
                             value={confirmPassword}
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
-                            className="w-full border-none shadow-none"/>
+                            className="w-full border-none shadow-none" />
                         <div className="px-2 cursor-pointer" onClick={handleShowPassword}>
                             {isPasswordShow
-                                ?<FaEyeSlash />
+                                ? <FaEyeSlash />
                                 : <FaEye />}
                         </div>
                     </div>
@@ -315,7 +315,7 @@ export const ForgotPassword = ({
                     className="w-full"
                     disabled={isLoading || !passwordsMatch || !isPasswordValid || !password || !confirmPassword}
                 >
-                    {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                    {!isLoading ? "Submit" : <LoaderSmall className="" />}
                 </Button>
             </form>
         )
@@ -324,8 +324,8 @@ export const ForgotPassword = ({
     return (
         <form className={cn("flex flex-col gap-6", className)} onSubmit={handleForgotSubmit} {...props}>
             <div className="flex flex-col gap-2">
-                <h1 className="text-3xl font-extrabold">Reset Password</h1>
-                <p className="text-muted-foreground text-base text-balance">
+                <h1 className="text-2xl font-extrabold">Reset Password</h1>
+                <p className="text-muted-foreground text-sm text-balance">
                     Enter your email or username to receive OTP
                 </p>
             </div>
@@ -346,7 +346,7 @@ export const ForgotPassword = ({
                 className="w-full"
                 disabled={isLoading}
             >
-                {!isLoading ? "Submit" : <LoaderSmall className=""/>}
+                {!isLoading ? "Submit" : <LoaderSmall className="" />}
             </Button>
         </form>
     )

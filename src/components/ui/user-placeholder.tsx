@@ -48,7 +48,7 @@ function UserVerificationBadge({ user, isClickable = false }: { user: { [key: st
             return (
                 <Drawer>
                     <DrawerTrigger asChild>
-                        <MdVerified size={18} className={cn(
+                        <MdVerified size={15} className={cn(
                             verificationStyle
                         )} />
                     </DrawerTrigger>
@@ -59,7 +59,7 @@ function UserVerificationBadge({ user, isClickable = false }: { user: { [key: st
                                 <DrawerTitle>Verification Info</DrawerTitle>
                             </DrawerHeader>
                             <div className="flex items-center gap-2">
-                                <IoIosInformationCircle size={25} />
+                                <IoIosInformationCircle size={20} />
                                 <span className="font-bold">
                                     {description}
                                 </span>
@@ -71,7 +71,7 @@ function UserVerificationBadge({ user, isClickable = false }: { user: { [key: st
         }
 
         return (
-            <MdVerified size={18} className={cn(
+            <MdVerified size={15} className={cn(
                 verificationStyle
             )} />
         )
@@ -112,7 +112,7 @@ function UserEventSinglePlaceholder({ user, isHost, removeClick, prev, className
                 className
             )} {...props}>
                 <div className="flex flex-row gap-4 cursor-pointer" onClick={handleUserClick}>
-                    <div className="w-12 h-12 flex flex-row items-center">
+                    <div className="w-10 h-10 flex flex-row items-center">
                         <AspectRatio ratio={1}>
                             <Image
                                 src={user.profileImageUrl || defaultImage}
@@ -123,7 +123,7 @@ function UserEventSinglePlaceholder({ user, isHost, removeClick, prev, className
                     </div>
                     <div>
                         <div className="flex flex-row gap-1 items-center">
-                            <p className="font-semibold text-md">{user.username}</p>
+                            <p className="font-semibold text-sm">{user.username}</p>
                             <UserVerificationBadge user={user} />
                         </div>
                         <p className="text-sm font-semibold text-neutral-400">{isHost ? "Main Host" : "Co-Host"}</p>
@@ -136,7 +136,7 @@ function UserEventSinglePlaceholder({ user, isHost, removeClick, prev, className
                         disabled={loading}
                     >
                         {
-                            loading ? <LoaderSmall /> : <GoDash size={25} className="text-red-600" />
+                            loading ? <LoaderSmall /> : <GoDash size={20} className="text-red-600" />
                         }
                     </button>
                 }
@@ -149,7 +149,7 @@ function UserEventSinglePlaceholder({ user, isHost, removeClick, prev, className
             "flex flex-row gap-4 cursor-pointer",
             className
         )} {...props} onClick={handleUserClick}>
-            <div className="w-12 h-12 flex flex-row items-center">
+            <div className="w-10 h-10 flex flex-row items-center">
                 <AspectRatio ratio={1}>
                     <Image
                         src={user.profileImageUrl || defaultImage}
@@ -160,7 +160,7 @@ function UserEventSinglePlaceholder({ user, isHost, removeClick, prev, className
             </div>
             <div>
                 <div className="flex flex-row gap-1 items-center">
-                    <p className="font-semibold text-md">{user.username}</p>
+                    <p className="font-semibold text-sm">{user.username}</p>
                     <UserVerificationBadge user={user} />
                 </div>
                 <p className="text-sm font-semibold text-neutral-400">{isHost ? "Main Host" : "Co-Host"}</p>
@@ -181,7 +181,7 @@ function UserSinglePlaceholder({ user, prev, className, ...props }: UserPlacehol
             {...props}
             onClick={() => router.push(`/m/user/${user.id}?prev=${encodeURIComponent(prev || "/")}`)}
         >
-            <div className="w-8 h-8 flex flex-row items-center">
+            <div className="w-7 h-7 flex flex-row items-center">
                 <AspectRatio ratio={1}>
                     <Image
                         src={user.profileImageUrl || defaultImage}
@@ -191,7 +191,7 @@ function UserSinglePlaceholder({ user, prev, className, ...props }: UserPlacehol
                 </AspectRatio>
             </div>
             <div className="flex flex-row gap-1 items-center">
-                <p className="font-semibold text-md">{user.username}</p>
+                <p className="font-semibold text-sm">{user.username}</p>
                 <UserVerificationBadge user={user} />
             </div>
         </div>

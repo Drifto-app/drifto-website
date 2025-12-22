@@ -21,12 +21,12 @@ interface EventCardProps extends React.ComponentProps<"div"> {
 }
 
 export const EventCard = ({
-                            event,
-                            currentPathUrl,
-                            isAuthenticated,
-                            className,
-                            ...props
-                          }: EventCardProps) => {
+  event,
+  currentPathUrl,
+  isAuthenticated,
+  className,
+  ...props
+}: EventCardProps) => {
   const router = useRouter();
 
   const [price, setPrice] = useState<string>("");
@@ -196,9 +196,9 @@ export const EventCard = ({
                 onClick={toggleMute}
               >
                 {isMuted ? (
-                  <HiVolumeOff size={20} />
+                  <HiVolumeOff size={16} />
                 ) : (
-                  <HiVolumeUp size={20} />
+                  <HiVolumeUp size={16} />
                 )}
               </button>
             </div>
@@ -215,33 +215,33 @@ export const EventCard = ({
             >
               {isLiked ? (
                 <FaHeart
-                  size={25}
+                  size={20}
                   className="text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
                   style={{
                     animation: 'heartBeat 0.2s ease-in-out'
                   }}
                 />
               ) : (
-                <IoMdHeartEmpty size={25} />
+                <IoMdHeartEmpty size={20} />
               )}
             </button>
           </div>}
         </div>
 
-        <h3 className="mt-2 font-semibold text-xl capitalize">{event.title}</h3>
+        <h3 className="mt-2 font-semibold text-lg capitalize">{event.title}</h3>
 
         <p className="text-sm text-gray-500 flex flex-row gap-2 items-center">
           {formatted} at
           <span className="capitalize font-semibold">{event.city}</span>
           <span className="flex flex-row gap-1 items-center">
-            <IoTicket size={15} />
+            <IoTicket size={12} />
             {event.numberOfPurchasedTickets}
           </span>
         </p>
       </div>
 
       {price && (
-        <div className="flex items-center text-xl font-bold w-full justify-end mt-2 text-neutral-500">
+        <div className="flex items-center text-md font-bold w-full justify-end mt-2 text-neutral-500">
           {price === "Free" ? price : "₦ " + price}
         </div>
       )}

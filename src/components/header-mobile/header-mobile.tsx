@@ -3,7 +3,7 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 import { IoSearchSharp } from "react-icons/io5";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/auth-store';
@@ -15,60 +15,28 @@ interface HeaderMobileProps extends React.ComponentProps<"div"> {
 }
 
 const FOLLOW_UP_LINES = [
-    "To unforgettable memories.",
-    "To cozy corners and quiet company.",
-    "To moments that last forever.",
-    "To finding your place in the moment.",
-    "To a street food crawl.",
-    "To your next new crew.",
-    "To viral-worthy moments.",
-    "To an unforgettable vibe.",
-    "To paint and sip magic.",
-    "To the rhythm of the roam.",
-    "To beats under the stars.",
-    "To hidden city gems.",
-    "To making everywhere feel alive.",
-    "To your spontaneous side.",
-    "To nights you'll never forget.",
-    "To sunrise hikes and new friends.",
-    "To flavors you've never tasted.",
-    "To your next wild story.",
-    "To dancing without limits.",
-    "To showing up loud, bold, and you.",
-    "To secret spots and good vibes.",
-    "To memories you didnt plan.",
-    "To laughter in new places.",
-    "To journeys without maps.",
-    "To the thrill of now.",
-    "To the stories that only happen once.",
-    "To strangers who become friends.",
-    "To rooftop sunsets and rooftop talks.",
-    "To neon lights and midnight walks.",
-    "To the spark of something unexpected.",
-    "To the freedom of just showing up.",
-    "To the places you didnt know you needed.",
-    "To epic group selfies and unfiltered fun.",
-    "To the rhythm of the city.",
-    "To curiosity leading the way.",
-    'To that "why not?" energy.',
-    "To the night that turned into a legend.",
-    "To soul-refreshing getaways.",
-    "To dancing in the rain.",
-    "To backyard bonfires and deep convos.",
-    "To the magic between the plans.",
-    "To exploring like a local.",
-    "To vibes that feel like home.",
-    "To that one unforgettable moment.",
-    "To the spark that started with a yes.",
+    'Experiences',
+    'Events',
+    'People',
+    'Places',
+    'Trips',
+    'Adventures',
+    'Food & Drink',
+    'Wellness',
+    'Outdoors',
+    'Nightlife',
+    'Workshops',
+    'Meetups',
+    'Communities',
 ];
 
 export const HeaderMobile = ({
-                                 activeScreen,
-                                 className,
-                                 location,
-                                 setLocation,
-                                 ...props
-                             }: HeaderMobileProps) => {
+    activeScreen,
+    className,
+    location,
+    setLocation,
+    ...props
+}: HeaderMobileProps) => {
     const router = useRouter();
 
     const searchParams = useSearchParams();
@@ -104,17 +72,17 @@ export const HeaderMobile = ({
             {...props}
         >
             <div className={cn(
-              "w-full flex items-center",
-              isAuthenticated ? "justify-center" : "justify-between px-6 pb-6"
+                "w-full flex items-center",
+                isAuthenticated ? "justify-center" : "justify-between px-6 pb-6"
             )}>
                 <div
-                  className={cn(
-                    "rounded-full shadow-none border-none text-neutral-700 text-center font-black capitalize",
-                    isAuthenticated ? "w-90 mb-3" : ""
-                  )}
-                  onClick={handleLocationClick}
+                    className={cn(
+                        "rounded-full shadow-none border-none text-neutral-700 text-center font-black capitalize text-sm",
+                        isAuthenticated ? "w-90 mb-3" : ""
+                    )}
+                    onClick={handleLocationClick}
                 >
-                    {location || "No location"}
+                    {location || "Choose your location"}
                 </div>
 
                 {!isAuthenticated &&
@@ -129,19 +97,18 @@ export const HeaderMobile = ({
             </div>
 
             <div
-                className="w-9/10 max-w-xl flex flex-row items-center border rounded-full px-4 py-3 shadow-xl"
+                className="w-9/10 max-w-xl flex flex-row items-center border rounded-full px-4 py-4 shadow-xl"
                 onClick={handleSearchClick}
             >
-                <IoSearchSharp size={25} />
-                <div className="flex flex-col justify-center pl-4 h-full w-full">
-                    <span className="text-black font-black text-lg">Search here</span>
+                <IoSearchSharp size={20} />
+                <div className="flex flex-col justify-center pl-4 h-full w-full mr-8">
                     <div className="h-5 overflow-hidden">
-              <span
-                  key={lineIndex}
-                  className="block text-sm text-neutral-600 slide-up-animation truncate"
-              >
-                {FOLLOW_UP_LINES[lineIndex]}
-              </span>
+                        <span
+                            key={lineIndex}
+                            className="block text-center text-sm font-semibold text-neutral-600 slide-up-animation truncate"
+                        >
+                            {FOLLOW_UP_LINES[lineIndex]}
+                        </span>
                     </div>
                 </div>
             </div>

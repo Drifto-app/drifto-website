@@ -25,11 +25,11 @@ interface NavItem {
 }
 
 const baseNavItems: NavItem[] = [
-    { value: "events", icon: <PiFireSimpleBold size="25" />, label: "Events" },
-    { value: "plans", icon: <BiCalendarAlt size="25" />, label: "Plans" },
-    { value: "posts", icon: <FaHashtag size="25" />, label: "Posts" },
-    { value: "updates", icon: <LuInbox size="25" />, label: "Updates" },
-    { value: "profile", icon: <FaRegUser size="25" />, label: "Profile" }, // example badge
+    { value: "events", icon: <PiFireSimpleBold size={23} />, label: "Events" },
+    { value: "plans", icon: <BiCalendarAlt size={23} />, label: "Plans" },
+    { value: "posts", icon: <FaHashtag size={23} />, label: "Posts" },
+    { value: "updates", icon: <LuInbox size={23} />, label: "Updates" },
+    { value: "profile", icon: <FaRegUser size={23} />, label: "Profile" }, // example badge
 ];
 
 export const BottomNavbar = ({

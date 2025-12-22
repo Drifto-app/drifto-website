@@ -7,11 +7,17 @@ import {showTopToast} from "@/components/toast/toast-util";
 import {Loader} from "@/components/ui/loader";
 import * as React from "react";
 import {EventFavouriteCard} from "@/components/profile-display/event-favourite-card";
+import { PiFireSimpleBold } from 'react-icons/pi';
+import { CiHeart } from 'react-icons/ci';
+import { FaRegHeart } from 'react-icons/fa';
+import { Button } from '@/components/ui/button';
 
-interface UserEventFavouritesProps extends ComponentProps<"div"> {}
+interface UserEventFavouritesProps extends ComponentProps<"div"> {
+    handleScreenChange: (value: string) => void;
+}
 
 export const UserEventFavourites = ({
-    className, ...props
+    handleScreenChange, className, ...props
 }: UserEventFavouritesProps) => {
 
     const [events, setEvents] = useState<Array<{[key: string]: any}>>([]);
@@ -135,6 +141,26 @@ export const UserEventFavourites = ({
                 <div className="flex justify-center py-4">
                     <Loader className="h-8 w-8"/>
                 </div>
+            )}
+
+            {!loading && events.length === 0 && (
+              <div className="flex flex-col items-center gap-4 text-center max-w-md px-4">
+                  <FaRegHeart size={40} className="text-blue-800"/>
+                 <span className="flex flex-col gap-2">
+                      <p className="text-neutral-800 text-sm font-semibold">
+                        No liked event...yet!
+                      </p>
+                      <p className="text-neutral-500 text-xs">
+                          Explore drifto for exciting events.
+                      </p>
+                 </span>
+                  <Button
+                    onClick={() => handleScreenChange("events")}
+                    className="rounded-full py-5 px-5"
+                  >
+                      Find events
+                  </Button>
+              </div>
             )}
 
         </div>

@@ -10,6 +10,8 @@ import {Button} from "@/components/ui/button";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
 import {Tabs} from "@/components/event-display/tabs";
 import { useAuthStore } from '@/store/auth-store';
+import { BiCalendarAlt } from 'react-icons/bi';
+import { PiFireSimpleBold } from 'react-icons/pi';
 
 interface EventDisplayProps extends ComponentProps<"div"> {
     location: string | null;
@@ -248,7 +250,7 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
                         onClick={() => loadEvents(false)}
                         size="sm"
                         variant="outline"
-                        className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                        className="border-orange-300 text-orange-700 text-sm hover:bg-orange-50"
                     >
                         Try Again
                     </Button>
@@ -257,17 +259,15 @@ export const EventDisplay = forwardRef<EventDisplayRef, EventDisplayProps>(({
 
             {/* End of content indicator */}
             {!hasMore && events.length > 0 && (
-                <p className="pt-4 pb-15 text-gray-500">You have reached the end!</p>
+                <p className="pt-4 pb-15 text-gray-500 text-sm">You have reached the end!</p>
             )}
 
             {/* No events message */}
             {!loading && !initialLoading && events.length === 0 && !error && (
-                <div className="w-full flex flex-col items-center justify-center py-8">
-                    <div className="text-center max-w-md px-4">
-                        <h3 className="text-lg font-semibold text-neutral-700 mb-2">
-                            No events found
-                        </h3>
-                        <p className="text-neutral-500 mb-4">
+                <div className="w-full flex flex-col items-center justify-center pt-15">
+                    <div className="flex flex-col items-center gap-3 text-center max-w-md px-4">
+                        <PiFireSimpleBold size={40} className="text-blue-800"/>
+                        <p className="text-neutral-500 mb-4 text-sm">
                             {activeEventItem
                                 ? `No events found for ${activeEventItem.toUpperCase() || 'this category'}`
                                 : location

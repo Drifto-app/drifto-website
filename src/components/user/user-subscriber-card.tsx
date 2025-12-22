@@ -71,7 +71,7 @@ export const UserSubscriberCard = ({
                     </AspectRatio>
                 </div>
                 <div className="flex flex-row gap-1 items-center">
-                    <p className="font-semibold text-md">{user.username}</p>
+                    <p className="font-semibold text-sm">{user.username}</p>
                     <UserVerificationBadge user={user} />
                 </div>
             </div>

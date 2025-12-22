@@ -1,28 +1,28 @@
 "use client"
 
 import * as React from "react";
-import {cn} from "@/lib/utils";
-import {usePathname, useRouter, useSearchParams} from "next/navigation";
-import {FaArrowLeft} from "react-icons/fa";
-import {FiBell, FiPhone} from "react-icons/fi";
-import {IoCardOutline} from "react-icons/io5";
-import {TbArrowsLeftRight} from "react-icons/tb";
-import {AiOutlineQrcode} from "react-icons/ai";
-import {BsBank, BsGrid3X3Gap} from "react-icons/bs";
+import { cn } from "@/lib/utils";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { FaArrowLeft } from "react-icons/fa";
+import { FiBell, FiPhone } from "react-icons/fi";
+import { IoCardOutline } from "react-icons/io5";
+import { TbArrowsLeftRight } from "react-icons/tb";
+import { AiOutlineQrcode } from "react-icons/ai";
+import { BsBank, BsGrid3X3Gap } from "react-icons/bs";
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import {PayButton} from "@/components/payment/pay-button";
-import {useAuthStore} from "@/store/auth-store";
-import {OrderSuccessDetails} from "@/components/order/order-sucess";
-import {showTopToast} from "@/components/toast/toast-util";
+import { PayButton } from "@/components/payment/pay-button";
+import { useAuthStore } from "@/store/auth-store";
+import { OrderSuccessDetails } from "@/components/order/order-sucess";
+import { showTopToast } from "@/components/toast/toast-util";
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { authApi } from '@/lib/axios';
 import { LoaderSmall } from '@/components/ui/loader';
 
 interface PaymentContentProps extends React.ComponentProps<"div"> {
-    order: {[key: string]: any};
-    orderContent: {[key: string]: any};
-    setOrderContent: (content: {[key: string]: any}) => void;
+    order: { [key: string]: any };
+    orderContent: { [key: string]: any };
+    setOrderContent: (content: { [key: string]: any }) => void;
     prev: string | null;
 }
 
@@ -34,10 +34,10 @@ interface PaymentOptions {
 }
 
 const paymentsOptions: PaymentOptions[] = [
-    {title: "Pay with Card", icon: <IoCardOutline size={30} className="text-blue-800" />, value: "card", header: "Card Payment"},
-    {title: "Pay with Bank Transfer", icon: <TbArrowsLeftRight size={30} className="text-blue-800" />, value: "bank_transfer", header: "Bank Transfer Payment"},
-    {title: "Pay with USSD", icon: <FiPhone size={30} className="text-blue-800" />, value: "ussd", header: "USSD Payment"},
-    {title: "Pay with Bank", icon: <BsBank size={30} className="text-blue-800" />, value: "bank", header: "Bank Account Payment"},
+    { title: "Pay with Card", icon: <IoCardOutline size={24} className="text-blue-800" />, value: "card", header: "Card Payment" },
+    { title: "Pay with Bank Transfer", icon: <TbArrowsLeftRight size={24} className="text-blue-800" />, value: "bank_transfer", header: "Bank Transfer Payment" },
+    { title: "Pay with USSD", icon: <FiPhone size={24} className="text-blue-800" />, value: "ussd", header: "USSD Payment" },
+    { title: "Pay with Bank", icon: <BsBank size={24} className="text-blue-800" />, value: "bank", header: "Bank Account Payment" },
 ]
 
 export const PaymentContent = ({
@@ -45,7 +45,7 @@ export const PaymentContent = ({
 }: PaymentContentProps) => {
     const router = useRouter();
 
-    const {user} = useAuthStore()
+    const { user } = useAuthStore()
 
     const [activeScreen, setActiveScreen] = useState<string>("payment");
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
@@ -66,7 +66,7 @@ export const PaymentContent = ({
             : optionByValue[activeScreen]?.header ?? "Payment Method";
 
     const handleBackClick = () => {
-        if(activeScreen !== "payment") {
+        if (activeScreen !== "payment") {
             setActiveScreen("payment");
         } else {
             router.push(prev != null ? prev : "/");
@@ -74,14 +74,14 @@ export const PaymentContent = ({
     }
 
     const handleReferralChange = (code: string) => {
-        if(!code.trim()) {
+        if (!code.trim()) {
             setReferralError(null);
         }
 
         setReferralCode(code.toUpperCase())
     }
 
-    const handleOrderUpdate = useCallback( async (code: string) => {
+    const handleOrderUpdate = useCallback(async (code: string) => {
         setReferralLoading(true);
 
         const param = {
@@ -114,7 +114,7 @@ export const PaymentContent = ({
         return () => clearTimeout(t);
     }, [referralCode]);
 
-    if(isSuccess) {
+    if (isSuccess) {
         return (
             <OrderSuccessDetails />
         )
@@ -143,14 +143,14 @@ export const PaymentContent = ({
             case "card":
                 return (
                     <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
-                       <div className="w-full mt-15 flex flex-col">
-                           <h2 className="font-bold text-xl">Proceed with Card payment</h2>
-                           <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
-                           <div className="w-full flex justify-between text-xl font-semibold mt-20">
-                               <p>Total:</p>
-                               <p>₦ {orderContent.totalPrice}</p>
-                           </div>
-                       </div>
+                        <div className="w-full mt-15 flex flex-col">
+                            <h2 className="font-bold text-lg">Proceed with Card payment</h2>
+                            <p className="text-neutral-400 text-sm font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-lg font-semibold mt-20">
+                                <p>Total:</p>
+                                <p>₦ {orderContent.totalPrice}</p>
+                            </div>
+                        </div>
                         {renderPayButton("Pay with Card", "card")}
                     </div>
                 )
@@ -158,9 +158,9 @@ export const PaymentContent = ({
                 return (
                     <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
                         <div className="w-full mt-15 flex flex-col">
-                            <h2 className="font-bold text-xl">Proceed with Bank Transfer payment</h2>
-                            <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
-                            <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                            <h2 className="font-bold text-lg">Proceed with Bank Transfer payment</h2>
+                            <p className="text-neutral-400 text-sm font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-lg font-semibold mt-20">
                                 <p>Total:</p>
                                 <p>₦ {orderContent.totalPrice}</p>
                             </div>
@@ -172,9 +172,9 @@ export const PaymentContent = ({
                 return (
                     <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
                         <div className="w-full mt-15 flex flex-col">
-                            <h2 className="font-bold text-xl">Proceed with USSD payment</h2>
-                            <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
-                            <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                            <h2 className="font-bold text-lg">Proceed with USSD payment</h2>
+                            <p className="text-neutral-400 text-sm font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-lg font-semibold mt-20">
                                 <p>Total:</p>
                                 <p>₦ {orderContent.totalPrice}</p>
                             </div>
@@ -186,9 +186,9 @@ export const PaymentContent = ({
                 return (
                     <div className="w-full flex flex-1 flex-col justify-between gap-4 px-4 py-4">
                         <div className="w-full mt-15 flex flex-col">
-                            <h2 className="font-bold text-xl">Proceed with Bank Account payment</h2>
-                            <p className="text-neutral-400 text-md font-semibold">Reselect another payment method if needed.</p>
-                            <div className="w-full flex justify-between text-xl font-semibold mt-20">
+                            <h2 className="font-bold text-lg">Proceed with Bank Account payment</h2>
+                            <p className="text-neutral-400 text-sm font-semibold">Reselect another payment method if needed.</p>
+                            <div className="w-full flex justify-between text-lg font-semibold mt-20">
                                 <p>Total:</p>
                                 <p>₦ {orderContent.totalPrice}</p>
                             </div>
@@ -204,30 +204,30 @@ export const PaymentContent = ({
                         {/*    <p className="text-neutral-500 font-medium text-lg">Want to pay differently? Just reselect ticket first</p>*/}
                         {/*</div>*/}
                         <div className="w-full flex flex-col items-center px-4 py-4 gap-4 border-neutral-300 border-1 rounded-md">
-                            <h3 className="w-full text-left font-bold text-xl">
+                            <h3 className="w-full text-left font-bold text-lg">
                                 Order Summary
                             </h3>
-                            {orderContent.orderItems.map((item: {[key: string]: any}) => (
-                                <p key={item.ticketId} className="w-full capitalize text-neutral-500 text-lg">
+                            {orderContent.orderItems.map((item: { [key: string]: any }) => (
+                                <p key={item.ticketId} className="w-full capitalize text-neutral-500 text-base">
                                     {item.ticketName} - Quantity: {item.amount}
                                 </p>
                             ))}
-                            <div className="w-full flex justify-between text-xl font-bold border-t-1 border-neutral-200 pt-4">
+                            <div className="w-full flex justify-between text-lg font-bold border-t-1 border-neutral-200 pt-4">
                                 <p>Total:</p>
                                 <p>₦ {orderContent.totalPrice}</p>
                             </div>
                         </div>
                         <div className={cn(
-                          "w-full flex items-center px-4 my-4 border-neutral-300 border-1 rounded-md",
-                          referralError ? "border-red-500" : "focus-within:border-blue-600"
+                            "w-full flex items-center px-4 my-4 border-neutral-300 border-1 rounded-md",
+                            referralError ? "border-red-500" : "focus-within:border-blue-600"
                         )}>
-                            <BsGrid3X3Gap size={25} className="text-neutral-400" />
+                            <BsGrid3X3Gap size={20} className="text-neutral-400" />
                             <Input
-                              placeholder="Referral code (Optional)"
-                              className="w-full py-7 text-lg border-none"
-                              value={referralCode}
-                              onChange={(e) => handleReferralChange(e.target.value)}
-                              disabled={referralLoading}
+                                placeholder="Referral code (Optional)"
+                                className="w-full py-7 text-base border-none"
+                                value={referralCode}
+                                onChange={(e) => handleReferralChange(e.target.value)}
+                                disabled={referralLoading}
                             />
                             {referralLoading ? <LoaderSmall /> : null}
                         </div>
@@ -240,7 +240,7 @@ export const PaymentContent = ({
                                 }}
                             >
                                 {item.icon}
-                                <span className="text-md font-semibold">{item.title}</span>
+                                <span className="text-sm font-semibold">{item.title}</span>
                             </div>
                         ))}
                     </div>
@@ -262,11 +262,11 @@ export const PaymentContent = ({
             )} {...props}>
                 <div className="flex flex-row items-center px-8">
                     <FaArrowLeft
-                        size={20}
+                        size={16}
                         onClick={handleBackClick}
                         className="cursor-pointer hover:text-neutral-700 transition-colors"
                     />
-                    <p className="font-semibold text-neutral-950 text-md w-full text-center capitalize truncate ml-4">
+                    <p className="font-semibold text-neutral-950 text-sm w-full text-center capitalize truncate ml-4">
                         {title}
                     </p>
                 </div>

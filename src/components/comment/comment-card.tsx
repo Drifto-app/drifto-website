@@ -22,21 +22,22 @@ import {
 } from "@/components/ui/drawer";
 import { SlOptionsVertical } from "react-icons/sl";
 import { MdDeleteOutline } from "react-icons/md";
-import {ComponentProps, FC, memo, useCallback, useMemo, useState} from "react";
+import { ComponentProps, FC, memo, useCallback, useMemo, useState } from "react";
 import { useAuthStore } from '@/store/auth-store';
+import { ReportDrawer } from "@/components/report/report-drawer";
 
 type AnyRecord = Record<string, any>;
 
 
 interface CommentCardProps extends ComponentProps<"div"> {
-    comment: {[key: string]: any};
+    comment: { [key: string]: any };
     currentPathUrl: string;
     disabled?: boolean;
     onDelete?: (commentId: string) => void;
     isForUser?: boolean;
 }
 
-export const CommentCard  =({
+export const CommentCard = ({
     comment, currentPathUrl, onDelete, disabled = false, isForUser, className, ...props
 }: CommentCardProps) => {
     const router = useRouter();
@@ -52,6 +53,7 @@ export const CommentCard  =({
     const [isLiked, setIsLiked] = useState<boolean>(comment.isLikedByUser);
     const [isLikedLoading, setIsLikedLoading] = useState(false);
     const [totalReactions, setTotalReactions] = useState<number>(comment.totalLikes);
+    const [isReportDrawerOpen, setIsReportDrawerOpen] = useState(false);
 
 
     const closeDrawer = useCallback(() => setDrawerOpen(false), []);
@@ -109,7 +111,7 @@ export const CommentCard  =({
         <>
             <div
                 className={cn(
-                    "flex flex-col gap-3 py-6 px-8 border border-neutral-200 rounded-lg bg-white",
+                    "flex flex-col gap-2 py-5 px-6 border border-neutral-200 rounded-lg bg-white",
                     className
                 )}
                 {...props}
@@ -122,49 +124,49 @@ export const CommentCard  =({
                     />
 
                     <span className="inline-flex items-center justify-center">
-                    <p className="text-sm text-neutral-500">{new Date(comment.createdAt).toLocaleDateString()}</p>
-                    <button
-                        type="button"
-                        aria-label="More options"
-                        className={cn("bg-none pl-5 transition-opacity", isDisabled && "pointer-events-none opacity-50")}
-                        disabled={disabled}
-                        onClick={() => setDrawerOpen(true)}
-                    >
+                        <p className="text-sm text-neutral-500">{new Date(comment.createdAt).toLocaleDateString()}</p>
+                        <button
+                            type="button"
+                            aria-label="More options"
+                            className={cn("bg-none pl-5 transition-opacity", isDisabled && "pointer-events-none opacity-50")}
+                            disabled={disabled}
+                            onClick={() => setDrawerOpen(true)}
+                        >
                             <SlOptionsVertical className="text-neutral-500" />
-                    </button>
+                        </button>
 
-                </span>
+                    </span>
                 </div>
 
                 {/* comment text */}
-                <p className="text-neutral-800 text-lg mt-3 mb-5">{comment.comment}</p>
+                <p className="text-neutral-800 text-sm mt-3 mb-5">{comment.comment}</p>
 
                 {/* actions */}
                 <div className="flex items-center justify-between gap-6 text-neutral-400 font-bold">
                     {/* Likes */}
                     {isAuthenticated &&
-                      <div className="flex items-center gap-2">
-                          <span className="text-md">{totalReactions}</span>
-                          <button
-                            type="button"
-                            onClick={handleReaction}
-                            disabled={isLikedLoading || isDisabled}
-                            aria-pressed={isLiked}
-                            aria-busy={isLikedLoading}
-                            className={cn("font-inherit transition-opacity", (isLikedLoading || isDisabled) && "opacity-50")}
-                          >
-                              {isLiked ? (
-                                <FaHeart
-                                  className="w-6 h-6 text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
-                                  style={{
-                                      animation: 'heartBeat 0.2s ease-in-out'
-                                  }}
-                                />
-                              ) : (
-                                <FaRegHeart className="w-6 h-6" />
-                              )}
-                          </button>
-                      </div>
+                        <div className="flex items-center gap-2">
+                            <span className="text-sm">{totalReactions}</span>
+                            <button
+                                type="button"
+                                onClick={handleReaction}
+                                disabled={isLikedLoading || isDisabled}
+                                aria-pressed={isLiked}
+                                aria-busy={isLikedLoading}
+                                className={cn("font-inherit transition-opacity", (isLikedLoading || isDisabled) && "opacity-50")}
+                            >
+                                {isLiked ? (
+                                    <FaHeart
+                                        className="w-5 h-5 text-red-500 animate-[heartBeat_0.3s_ease-in-out]"
+                                        style={{
+                                            animation: 'heartBeat 0.2s ease-in-out'
+                                        }}
+                                    />
+                                ) : (
+                                    <FaRegHeart className="w-5 h-5" />
+                                )}
+                            </button>
+                        </div>
                     }
 
                     {/* Replies */}
@@ -174,8 +176,8 @@ export const CommentCard  =({
                         className={cn("flex items-center gap-2", isDisabled && "opacity-50 cursor-not-allowed")}
                         aria-disabled={isDisabled || undefined}
                     >
-                        <span className="text-md">{comment.totalComments}</span>
-                        <FaRegComment className="w-6 h-6" />
+                        <span className="text-sm">{comment.totalComments}</span>
+                        <FaRegComment className="w-5 h-5" />
                     </button>
 
                     {/* Share / send (wire up later) */}
@@ -189,7 +191,7 @@ export const CommentCard  =({
                             showTopToast("info", "Share coming soon.");
                         }}
                     >
-                        <AiOutlineSend className="w-6 h-6" />
+                        <AiOutlineSend className="w-5 h-5" />
                     </button>
                 </div>
             </div>
@@ -213,9 +215,9 @@ export const CommentCard  =({
                                 disabled={isDeleteLoading}
                                 aria-busy={isDeleteLoading}
                             >
-                                <MdDeleteOutline size={20} />
+                                <MdDeleteOutline size={16} />
                                 <span className="font-semibold">
-                                  {isDeleteLoading ? "Deleting..." : "Delete"}
+                                    {isDeleteLoading ? "Deleting..." : "Delete"}
                                 </span>
                             </button>
                         ) : (
@@ -224,7 +226,7 @@ export const CommentCard  =({
                                 className="flex gap-2 items-center py-4"
                                 onClick={() => {
                                     closeDrawer();
-                                    // showTopToast("info", "Thanks for the report.");
+                                    setIsReportDrawerOpen(true);
                                 }}
                             >
                                 <FaFlag />
@@ -234,6 +236,13 @@ export const CommentCard  =({
                     </div>
                 </DrawerContent>
             </Drawer>
+
+            <ReportDrawer
+                isOpen={isReportDrawerOpen}
+                onClose={() => setIsReportDrawerOpen(false)}
+                entityType="COMMENT"
+                commentId={comment.id}
+            />
         </>
     )
 };

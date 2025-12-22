@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
-import {FaPlus} from "react-icons/fa";
-import {LuMinus} from "react-icons/lu";
+import { FaPlus } from "react-icons/fa";
+import { LuMinus } from "react-icons/lu";
 
 interface OrderItemProps extends React.ComponentProps<"div"> {
     ticket: { [key: string]: any };
@@ -14,11 +14,11 @@ interface OrderItemProps extends React.ComponentProps<"div"> {
 }
 
 export const OrderItem = ({
-                              ticket,
-                              onChangeChange,
-                              className,
-                              ...props
-                          }: OrderItemProps) => {
+    ticket,
+    onChangeChange,
+    className,
+    ...props
+}: OrderItemProps) => {
     const [value, setValue] = useState(0);
 
     const max = Math.max(
@@ -39,13 +39,13 @@ export const OrderItem = ({
     return (
         <div className={cn("flex flex-col items-center gap-6 px-4 py-4 border-b-neutral-400 border-1 w-full rounded-md", className)} {...props}>
             <div className="w-full flex flex-col gap-2">
-                <h1 className="w-full text-left text-xl font-bold">
+                <h1 className="w-full text-left text-md font-bold">
                     {ticket.title}
                 </h1>
-                <p className="w-full text-left text-gray-700 text-lg">
+                <p className="w-full text-left text-gray-700 text-sm">
                     {ticket.price ? `₦ ${ticket.price}` : "Free"}
                 </p>
-                <p className="w-full text-left text-gray-400 text-lg">
+                <p className="w-full text-left text-gray-400 text-sm">
                     {ticket.description || "No description available"}
                 </p>
             </div>
@@ -57,12 +57,12 @@ export const OrderItem = ({
                     onClick={() => onClick(-1)}
                     disabled={value <= 0}
                 >
-                    <LuMinus size={32} />
+                    <LuMinus size={24} />
                     <span className="sr-only">Decrease</span>
                 </Button>
 
                 <div className="flex-1 text-center">
-                    <div className="text-2xl font-bold tracking-tighter">{value}</div>
+                    <div className="text-xl font-bold tracking-tighter">{value}</div>
                 </div>
 
                 <Button
@@ -72,7 +72,7 @@ export const OrderItem = ({
                     onClick={() => onClick(1)}
                     disabled={value >= max}
                 >
-                    <FaPlus size={32} />
+                    <FaPlus size={24} />
                     <span className="sr-only">Increase</span>
                 </Button>
             </div>

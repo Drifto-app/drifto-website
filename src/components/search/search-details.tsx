@@ -74,7 +74,7 @@ export const SearchDetails = ({ prev, className, ...props }: SearchDetailsProps)
                 </div>
 
                 <div className="flex flex-row items-center px-4 gap-3">
-                    <div className="w-full flex items-center rounded-full border-1 border-neutral-400 px-4 h-14">
+                    <div className="w-full flex items-center rounded-full border-1 border-neutral-400 px-4 h-12">
                         <div className="flex items-center w-full h-full">
                             <IoSearchSharp size={30} className="text-neutral-400" />
                             <Input
@@ -82,7 +82,7 @@ export const SearchDetails = ({ prev, className, ...props }: SearchDetailsProps)
                                 type="search"
                                 inputMode="search"
                                 enterKeyHint="search"
-                                className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-semibold text-lg"
+                                className="w-full h-full outline-none border-none shadow-none placeholder:text-neutral-400 placeholder:font-semibold text-base"
                                 placeholder="Search"
                                 aria-label="Search"
                                 value={searchText}
@@ -96,7 +96,7 @@ export const SearchDetails = ({ prev, className, ...props }: SearchDetailsProps)
                             </div>
                         )}
                     </div>
-                    <div className="rounded-full p-3 border-1 border-neutral-400" onClick={() => setActiveScreen("advance-search")}>
+                    <div className="rounded-full p-2 border-1 border-neutral-400" onClick={() => setActiveScreen("advance-search")}>
                         <IoOptionsOutline size={25} className="text-neutral-700" />
                     </div>
                 </div>

@@ -58,9 +58,11 @@ function UserVerificationBadge({ user, isClickable = false }: { user: { [key: st
                             <DrawerHeader>
                                 <DrawerTitle>Verification Info</DrawerTitle>
                             </DrawerHeader>
-                            <div className="flex items-center gap-2">
-                                <IoIosInformationCircle size={20} />
-                                <span className="font-bold">
+                            <div className="flex items-center gap-4">
+                                <MdVerified size={25} className={cn(
+                                  verificationStyle
+                                )} />
+                                <span className="font-bold leading-tight">
                                     {description}
                                 </span>
                             </div>

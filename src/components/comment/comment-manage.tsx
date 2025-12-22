@@ -14,6 +14,7 @@ import {Input} from "@/components/ui/input";
 import { IoChatbubbleEllipsesOutline, IoSend } from 'react-icons/io5';
 import {showTopToast} from "@/components/toast/toast-util";
 import {PostCard} from "@/components/post/post-card";
+import { BiSolidError } from 'react-icons/bi';
 
 interface CommentManageProps extends React.ComponentProps<"div">{
     entityId: string;
@@ -219,60 +220,6 @@ export default function CommentManagePage(
         }
     }
 
-    // Loading state for initial load
-    if (initialLoading) {
-        return (
-            <div className={cn(
-                "w-full flex flex-col items-center justify-center",
-                className
-            )} {...props}>
-                <div className="w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center">
-                    <div className="flex flex-row items-center px-8">
-                        <FaArrowLeft
-                            size={20}
-                            onClick={handleBackClick}
-                            className="cursor-pointer hover:text-neutral-700 transition-colors"
-                        />
-                        <p className="font-semibold text-neutral-950 text-xl w-full text-center capitalize truncate ml-4">
-                            {title}
-                        </p>
-                    </div>
-                </div>
-                <div className="w-full h-screen flex flex-col items-center justify-center">
-                    <Loader className="h-10 w-10"/>
-                </div>
-            </div>
-        );
-    }
-
-    // Error state
-    if (error && comments.length === 0) {
-        return (
-            <div className={cn(
-                "w-full flex flex-col items-center justify-center",
-                className
-            )} {...props}>
-                <div className={cn(
-                    "w-full border-b-1 border-b-neutral-300 flex flex-col gap-3 h-20 justify-center",
-                    className
-                )} {...props}>
-                    <div className="flex flex-row items-center px-8">
-                        <FaArrowLeft
-                            size={20}
-                            onClick={handleBackClick}
-                            className="cursor-pointer hover:text-neutral-700 transition-colors"
-                        />
-                        <p className="font-semibold text-neutral-950 text-xl w-full text-center capitalize truncate ml-4">
-                            {<title></title>}
-                        </p>
-                    </div>
-                </div>
-                <div className="w-full h-screen flex flex-col items-center justify-center">
-                    <h2>Unable to load comments</h2>
-                </div>
-            </div>
-        );
-    }
 
     const renderMainEntity = () => {
         switch (type) {
@@ -293,7 +240,7 @@ export default function CommentManagePage(
 
     return (
         <div className={cn(
-            "w-full flex flex-col items-center justify-center pb-20",
+            "w-full flex flex-col pb-20",
             className
         )} {...props}>
             <div className={cn(
@@ -311,86 +258,99 @@ export default function CommentManagePage(
                     </p>
                 </div>
             </div>
-            <div className="w-full flex flex-col gap-4 px-4">
-                <h1 className="text-md font-semibold text-neutral-800 pt-4">
-                    {title} ({numOfComments})
-                </h1>
-            </div>
-            {
-                renderMainEntity()
-            }
-            <div className="w-full flex flex-col gap-6 px-4 py-4">
-                {comments.map((c) => (
-                    <CommentCard
-                        key={c.id}
-                        comment={c}
-                        currentPathUrl={currentPathUrl}
-                        isForUser={c.mine}
-                        onDelete={(commentId: string) => setComments(comments => comments.filter((c) => c.id !== commentId))}
-                    />
-                ))}
-            </div>
+            {initialLoading
+              ? (<div className="w-full h-screen flex flex-col items-center justify-center">
+                  <Loader className="h-10 w-10"/>
+              </div>)
+              : error && comments.length === 0
+                ? ( <div className="w-full h-screen flex flex-col gap-3 items-center justify-center">
+                    <BiSolidError size={40} className="text-red-600"/>
+                    <h2>Unable to load comments</h2>
+                </div>)
+                : (
+                  <div>
+                      <div className="w-full flex flex-col gap-4 px-4">
+                          <h1 className="text-md font-semibold text-neutral-800 pt-4">
+                              {title} ({numOfComments})
+                          </h1>
+                      </div>
+                      {
+                          renderMainEntity()
+                      }
+                      <div className="w-full flex flex-col gap-6 px-4 py-4">
+                          {comments.map((c) => (
+                            <CommentCard
+                              key={c.id}
+                              comment={c}
+                              currentPathUrl={currentPathUrl}
+                              isForUser={c.isMine}
+                              onDelete={(commentId: string) => setComments(comments => comments.filter((c) => c.id !== commentId))}
+                            />
+                          ))}
+                      </div>
 
-            <form
-                onSubmit={handleCommentSubmit}
-                className="fixed inset-x-0 z-60 border-t bg-white border-neutral-200 safe-area-inset-bottom flex flex-row"
-                style={{
-                    bottom: keyboardOffset,
-                    transition: "bottom 0.2s ease",
-                }}
-            >
-                <Input
-                    ref={inputRef}
-                    type="text"
-                    name="comments"
-                    className="min-h-16 outline-none w-full px-6 border-none"
-                    placeholder="Add a comment…"
-                    value={comment}
-                    onChange={(e) => setComment(e.target.value)}
-                />
-                <div className="flex items-center py-0 px-3">
-                    <button className={cn(
-                        "p-3 rounded-full",
-                        comment.length === 0 ? "bg-neutral-300" : "bg-blue-700"
-                    )} type="submit" disabled={comment.length === 0 || submitCommentLoading}>
-                        {
-                            !submitCommentLoading
-                                ? <IoSend size={20} className="text-white" />
-                                : <LoaderSmall />
-                        }
-                    </button>
-                </div>
-            </form>
+                      <form
+                        onSubmit={handleCommentSubmit}
+                        className="fixed inset-x-0 z-60 border-t bg-white border-neutral-200 safe-area-inset-bottom flex flex-row"
+                        style={{
+                            bottom: keyboardOffset,
+                            transition: "bottom 0.2s ease",
+                        }}
+                      >
+                          <Input
+                            ref={inputRef}
+                            type="text"
+                            name="comments"
+                            className="min-h-16 outline-none w-full px-6 border-none placeholder:text-sm"
+                            placeholder="Add a comment…"
+                            value={comment}
+                            onChange={(e) => setComment(e.target.value)}
+                          />
+                          <div className="flex items-center py-0 px-3">
+                              <button className={cn(
+                                "p-3 rounded-full",
+                                comment.length === 0 ? "bg-neutral-300" : "bg-blue-700"
+                              )} type="submit" disabled={comment.length === 0 || submitCommentLoading}>
+                                  {
+                                      !submitCommentLoading
+                                        ? <IoSend size={20} className="text-white" />
+                                        : <LoaderSmall />
+                                  }
+                              </button>
+                          </div>
+                      </form>
 
-            {/* Loading indicator for pagination */}
-            {loading && !initialLoading && (
-                <div className="flex justify-center py-4">
-                    <Loader className="h-8 w-8"/>
-                </div>
-            )}
+                      {/* Loading indicator for pagination */}
+                      {loading && !initialLoading && (
+                        <div className="flex justify-center py-4">
+                            <Loader className="h-8 w-8"/>
+                        </div>
+                      )}
 
-            {!loading && !initialLoading && comments.length === 0 && (
-              <div className="w-full flex flex-col items-center justify-center py-8">
-                  <IoChatbubbleEllipsesOutline size={40} className="text-blue-800"/>
-                  <p className="text-gray-500 font-semibold">No comments...yet</p>
-              </div>
-            )}
+                      {!loading && !initialLoading && comments.length === 0 && (
+                        <div className="w-full flex flex-col items-center justify-center py-8">
+                            <IoChatbubbleEllipsesOutline size={40} className="text-blue-800"/>
+                            <p className="text-gray-500 font-semibold">No comments...yet</p>
+                        </div>
+                      )}
 
-            {error && comments.length > 0 && (
-                <div className="flex flex-col items-center justify-center py-4 pt-4 pb-15 w-full">
-                    <p className="text-orange-700 text-sm mb-2">
-                        Failed to load more comments
-                    </p>
-                    <Button
-                        onClick={() => loadComments(false)}
-                        size="sm"
-                        variant="outline"
-                        className="border-orange-300 text-orange-700 hover:bg-orange-50"
-                    >
-                        Try Again
-                    </Button>
-                </div>
-            )}
+                      {error && comments.length > 0 && (
+                        <div className="flex flex-col items-center justify-center py-4 pt-4 pb-15 w-full">
+                            <p className="text-orange-700 text-sm mb-2">
+                                Failed to load more comments
+                            </p>
+                            <Button
+                              onClick={() => loadComments(false)}
+                              size="sm"
+                              variant="outline"
+                              className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                            >
+                                Try Again
+                            </Button>
+                        </div>
+                      )}
+                  </div>
+                )}
         </div>
     )
 }

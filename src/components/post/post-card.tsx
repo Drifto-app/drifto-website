@@ -100,7 +100,17 @@ export const PostCard = ({
                     <div className="flex items-center justify-between">
                         <UserSinglePlaceholder user={postContent.userPlaceHolder} prev={prevUrl} />
                         <span className="inline-flex items-center justify-center">
-                            <p className="text-sm text-neutral-500">
+                            <p
+                                className="text-sm text-neutral-500 cursor-pointer"
+                                onClick={() => {
+                                    if (!disabled) {
+                                        router.push(
+                                            `/m/post/${postContent.id}` +
+                                            `?prev=${encodeURIComponent(prevUrl)}`
+                                        )
+                                    }
+                                }}
+                            >
                                 {new Date(postContent.createdAt).toLocaleDateString()}
                             </p>
                             {disabled || <Drawer open={drawerOpen} onOpenChange={setDrawerOpen}>
@@ -147,12 +157,22 @@ export const PostCard = ({
                             </Drawer>}
                         </span>
                     </div>
-                    <div className="w-full flex flex-col gap-2">
+                    <div
+                        className="w-full flex flex-col gap-2 cursor-pointer"
+                        onClick={() => {
+                            if (!disabled) {
+                                router.push(
+                                    `/m/post/${postContent.id}` +
+                                    `?prev=${encodeURIComponent(prevUrl)}`
+                                )
+                            }
+                        }}
+                    >
                         <span className="flex flex-col gap-2">
                             <p className="text-sm text-neutral-800">
                                 {postContent.content}
                             </p>
-                            <span className="flex flex-wrap gap-1 text-blue-600">
+                            <span className="flex flex-wrap gap-1 text-blue-600" onClick={(e) => e.stopPropagation()}>
                                 {postContent.taggedUsers.map((tagUser: { [key: string]: any }) => (
                                     <a
                                         key={tagUser.id}
@@ -163,7 +183,7 @@ export const PostCard = ({
                                     </a>
                                 ))}
                             </span>
-                            <span className="flex flex-wrap gap-1 text-blue-600">
+                            <span className="flex flex-wrap gap-1 text-blue-600" onClick={(e) => e.stopPropagation()}>
                                 {postContent.taggedEvents.map((tagEvent: { [key: string]: any }) => (
                                     <a
                                         key={tagEvent.eventId}
@@ -174,7 +194,7 @@ export const PostCard = ({
                                     </a>
                                 ))}
                             </span>
-                            <span className="w-full">
+                            <span className="w-full" onClick={(e) => e.stopPropagation()}>
                                 {postContent.mediaFiles && postContent.mediaFiles.length > 0 && (
                                     <MediaCarousel
                                         mediaFiles={postContent.mediaFiles}
@@ -189,7 +209,7 @@ export const PostCard = ({
                             <span className="text-sm">{totalReactions}</span>
                             <button
                                 onClick={handleReaction}
-                                disabled={isLikedLoading || disabled}
+                                disabled={isLikedLoading}
                                 className="font-inherit"
                             >
                                 {isLiked ? (
@@ -208,9 +228,8 @@ export const PostCard = ({
                         <div className="flex items-center gap-2" onClick={() => {
                             if (!disabled) {
                                 router.push(
-                                    `/m/comment/${postContent.id}` +
-                                    `?prev=${encodeURIComponent(prevUrl)}` +
-                                    `&type=POST`
+                                    `/m/post/${postContent.id}` +
+                                    `?prev=${encodeURIComponent(prevUrl)}`
                                 )
                             }
                         }}>
@@ -218,7 +237,17 @@ export const PostCard = ({
                             <FaRegComment className="w-5 h-5" />
                         </div>
 
-                        <AiOutlineSend className="w-5 h-5 cursor-pointer" />
+                        <AiOutlineSend
+                            className="w-5 h-5 cursor-pointer"
+                            onClick={() => {
+                                if (!disabled) {
+                                    router.push(
+                                        `/m/post/${postContent.id}` +
+                                        `?prev=${encodeURIComponent(prevUrl)}`
+                                    )
+                                }
+                            }}
+                        />
                     </div>
                 </div>
             </div>

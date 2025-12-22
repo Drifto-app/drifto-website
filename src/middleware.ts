@@ -15,5 +15,9 @@ export function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL(`/m${pathname}`, request.url));
     }
 
+    if ((pathname === "/post" || pathname.startsWith("/post/")) && !pathname.startsWith("/m/post")) {
+        return NextResponse.redirect(new URL(`/m${pathname}`, request.url));
+    }
+
     return NextResponse.next();
 }

@@ -148,7 +148,7 @@ const PrivacyPolicyComp = () => {
                             <p className="mb-3">We implement industry-standard measures such as:</p>
                             <ul className="list-disc pl-6 space-y-2">
                                 <li>SSL encryption for transactions.</li>
-                                <li>End-to-end encryption for chats.</li>
+                                {/* <li>End-to-end encryption for chats.</li> */}
                                 <li>Tokenization for stored payment methods.</li>
                             </ul>
                         </section>

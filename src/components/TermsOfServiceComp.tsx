@@ -100,7 +100,7 @@ const TermsOfServiceComp = () => {
                         <section>
                             <h2 className="text-2xl font-bold text-black mb-4">2. Eligibility</h2>
                             <ul className="list-disc pl-6 space-y-2">
-                                <li>Users must create an account to book or host experiences.</li>
+                                <li>Users must be at leat 13 years old to create an account to book or host experiences.</li>
                                 <li>There is no strict age limit, but hosts may set age requirements for their events.</li>
                                 <li>Hosts must provide a valid phone number for communication and safety verification.</li>
                             </ul>

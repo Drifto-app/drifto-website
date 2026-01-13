@@ -53,6 +53,7 @@ export const Footer = () => {
               <li><a href="mailto:contact@drifto.app" className="hover:text-white transition-colors">Contact Us</a></li>
               <li><a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a></li>
               <li><a href="/terms-service" className="hover:text-white transition-colors">Terms of Service</a></li>
+              <li><a href="/eula" className="hover:text-white transition-colors">EULA</a></li>
             </ul>
           </div>
         </div>

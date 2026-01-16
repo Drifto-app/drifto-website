@@ -100,12 +100,39 @@ export default function Navbar() {
             F.A.Q
           </Link>
 
-          <div className="flex gap-4 pt-2">
-            <img src="/assets/icons/apple_icon.svg" className="h-7" />
-            <img src="/assets/icons/google_playstore.svg" className="h-7" />
+          <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+            <Link
+              to=""
+              className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
+            >
+              <img
+                src="/assets/icons/google_playstore.svg"
+                className="h-8 w-8"
+                alt="Google Play"
+              />
+              <div className="flex flex-col leading-tight">
+                <span className="text-xs text-gray-300">Get it on</span>
+                <span className="text-lg font-semibold">Google Play</span>
+              </div>
+            </Link>
+
+            <Link
+              to=""
+              className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
+            >
+              <img
+                src="/assets/icons/apple_logo_white.png"
+                className="w-6"
+                alt="App Store"
+              />
+              <div className="flex flex-col leading-tight">
+                <span className="text-xs text-gray-300">Download on the</span>
+                <span className="text-lg font-semibold">App Store</span>
+              </div>
+            </Link>
           </div>
 
-          <button className="mt-2 rounded-lg bg-black py-3 text-white">
+          <button className="mt-2 rounded-lg bg-blue-500 font-bold text-2xl py-3 text-white">
             Get Started
           </button>
         </div>

@@ -111,13 +111,13 @@ const FAQ = () => {
       >
         {/* Header */}
         <motion.div variants={fadeUp} className="text-center mb-16">
-          <h2 className="text-5xl md:text-6xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-6xl font-extrabold text-gray-900 mb-4">
             Frequently Asked <span className="text-blue-500">Questions</span>
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-base text-gray-600">
             Quick answers to questions you may have about drifto.
           </p>
-          <p className="text-xl text-gray-600">
+          <p className="text-base text-gray-600">
             Can't find answers here?{" "}
             <a
               href="#"
@@ -142,7 +142,7 @@ const FAQ = () => {
                 onClick={() => toggleAccordion(index)}
                 className="w-full px-8 py-6 flex items-center justify-between text-left hover:bg-gray-100 transition-colors duration-200"
               >
-                <h3 className="text-2xl font-bold text-gray-900 pr-4">
+                <h3 className="text-base font-bold text-gray-900 pr-4">
                   {faq.question}
                 </h3>
                 {openIndex === index ? (
@@ -162,7 +162,7 @@ const FAQ = () => {
                     exit="exit"
                     className="px-8 overflow-hidden"
                   >
-                    <p className="pb-6 pt-2 text-gray-700 text-lg leading-relaxed">
+                    <p className="pb-6 pt-2 text-gray-700 text-base leading-relaxed">
                       {faq.answer}
                     </p>
                   </motion.div>

@@ -22,7 +22,7 @@ export default function TermsOfService() {
   ];
 
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <div className=" bg-white py-2 md:py-6  lg:px-24 mt-28">
         <div className=" mx-auto">
           <div>

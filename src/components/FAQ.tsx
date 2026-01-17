@@ -101,7 +101,7 @@ const FAQ = () => {
   };
 
   return (
-    <section className="py-20 px-6 bg-white">
+    <section id="faq" className="py-20 px-6 bg-white">
       <motion.div
         className="max-w-4xl mx-auto"
         variants={container}
@@ -111,7 +111,7 @@ const FAQ = () => {
       >
         {/* Header */}
         <motion.div variants={fadeUp} className="text-center mb-16">
-          <h2 className="text-2xl md:text-6xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-5xl font-extrabold text-gray-900 mb-4">
             Frequently Asked <span className="text-blue-500">Questions</span>
           </h2>
           <p className="text-base text-gray-600">
@@ -120,7 +120,7 @@ const FAQ = () => {
           <p className="text-base text-gray-600">
             Can't find answers here?{" "}
             <a
-              href="#"
+              href="mailto:contact@drifto.com"
               className="text-blue-500 hover:text-blue-600 font-medium"
             >
               Contact us
@@ -134,9 +134,8 @@ const FAQ = () => {
             <motion.div
               key={index}
               variants={fadeUp}
-              className={`rounded-2xl overflow-hidden transition-all duration-200 ${
-                openIndex === index ? "bg-gray-100" : "bg-gray-50"
-              }`}
+              className={`rounded-2xl overflow-hidden transition-all duration-200 ${openIndex === index ? "bg-gray-100" : "bg-gray-50"
+                }`}
             >
               <button
                 onClick={() => toggleAccordion(index)}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {BiMenu} from "react-icons/bi";
+import { BiMenu } from "react-icons/bi";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -12,7 +13,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-screen z-50 fixed top-0 bg-white pl-5 md:p-20 pr-5 py-4 md:py-4">
+    <nav className="w-screen z-50  top-0 bg-white pl-5 md:p-20 pr-5 py-4 md:py-4">
       <div
         className="flex items-center justify-between"
       >
@@ -26,25 +27,25 @@ export default function Navbar() {
         {/* Desktop Nav */}
         <ul className="hidden items-center gap-8 md:flex">
           <li>
-            <Link className="font-medium text-gray-700 hover:text-black" to="/">
+            <a className="font-medium text-gray-700 hover:text-black" href="/#hero">
               Home
-            </Link>
+            </a>
           </li>
           <li>
-            <Link
+            <a
               className="font-medium text-gray-700 hover:text-black"
-              to="/pricing"
+              href="/#pricing"
             >
               Pricing
-            </Link>
+            </a>
           </li>
           <li>
-            <Link
+            <a
               className="font-medium text-gray-700 hover:text-black"
-              to="/faq"
+              href="/#faq"
             >
               F.A.Q
-            </Link>
+            </a>
           </li>
         </ul>
 
@@ -65,8 +66,8 @@ export default function Navbar() {
           </a>
 
           <button
-              className="rounded-lg bg-blue-500 px-5 py-2 text-white text-sm cursor-pointer"
-              onClick={handleGetStarted}
+            className="rounded-lg bg-blue-500 px-5 py-2 text-white text-sm cursor-pointer"
+            onClick={handleGetStarted}
           >
             Get Started
           </button>
@@ -82,69 +83,77 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      {open && (
-        <div className="mt-4 flex flex-col gap-4 rounded-xl bg-white p-6 shadow-md md:hidden">
-          <Link
-            onClick={() => setOpen(false)}
-            to="/"
-            className="text-lg font-medium"
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="mt-4 flex flex-col gap-4 bg-white p-6  md:hidden"
           >
-            Home
-          </Link>
-          <Link
-            onClick={() => setOpen(false)}
-            to="/pricing"
-            className="text-lg font-medium"
-          >
-            Pricing
-          </Link>
-          <Link
-            onClick={() => setOpen(false)}
-            to="/faq"
-            className="text-lg font-medium"
-          >
-            F.A.Q
-          </Link>
-
-          <div className="flex flex-wrap justify-center lg:justify-start gap-3">
             <a
-              href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL}
-              target="_blank"
-              className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
+              onClick={() => setOpen(false)}
+              href="/#hero"
+              className="text-lg font-medium"
             >
-              <img
-                src="/assets/icons/google_playstore.svg"
-                className="h-8 w-8"
-                alt="Google Play"
-              />
-              <div className="flex flex-col leading-tight">
-                <span className="text-xs text-gray-300">Get it on</span>
-                <span className="text-lg font-semibold">Google Play</span>
-              </div>
+              Home
+            </a>
+            <a
+              onClick={() => setOpen(false)}
+              href="/#pricing"
+              className="text-lg font-medium"
+            >
+              Pricing
+            </a>
+            <a
+              onClick={() => setOpen(false)}
+              href="/#faq"
+              className="text-lg font-medium"
+            >
+              F.A.Q
             </a>
 
-            <a
-              href={import.meta.env.VITE_DRIFTO_APPSTORE_URL}
-              target="_blank"
-              className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
-            >
-              <img
-                src="/assets/icons/apple_logo_white.png"
-                className="w-6"
-                alt="App Store"
-              />
-              <div className="flex flex-col leading-tight">
-                <span className="text-xs text-gray-300">Download on the</span>
-                <span className="text-lg font-semibold">App Store</span>
-              </div>
-            </a>
-          </div>
+            <div className="flex flex-wrap justify-center lg:justify-start gap-3">
+              <a
+                href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL}
+                target="_blank"
+                className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
+              >
+                <img
+                  src="/assets/icons/google_playstore.svg"
+                  className="h-8 w-8"
+                  alt="Google Play"
+                />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-xs text-gray-300">Get it on</span>
+                  <span className="text-md font-semibold">Google Play</span>
+                </div>
+              </a>
 
-          <button className="mt-2 rounded-lg bg-blue-500 font-bold text-2xl py-3 text-white">
-            Get Started
-          </button>
-        </div>
-      )}
+              <a
+                href={import.meta.env.VITE_DRIFTO_APPSTORE_URL}
+                target="_blank"
+                className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
+              >
+                <img
+                  src="/assets/icons/apple_logo_white.png"
+                  className="w-6"
+                  alt="App Store"
+                />
+                <div className="flex flex-col leading-tight">
+                  <span className="text-xs text-gray-300">Download on the</span>
+                  <span className="text-md font-semibold">App Store</span>
+                </div>
+              </a>
+            </div>
+
+            <button className="mt-2 rounded-lg bg-blue-500 font-bold text-sm py-3 text-white">
+              Get Started
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

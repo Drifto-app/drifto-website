@@ -32,7 +32,7 @@ export default function Pricing() {
   };
 
   return (
-    <section className="py-16 md:py-20 px-6 sm:px-12 lg:px-24 max-w-7xl mx-auto">
+    <section id="pricing" className="py-12 md:py-16 px-6 sm:px-12 lg:px-24 max-w-8xl mx-auto">
       <motion.div
         className="space-y-16 md:space-y-24"
         variants={container}
@@ -43,7 +43,7 @@ export default function Pricing() {
         {/* Heading */}
         <motion.h2
           variants={fadeUp}
-          className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-center leading-tight"
+          className="text-3xl sm:text-4xl md:text-4xl lg:text-5xl font-extrabold text-center leading-tight"
         >
           Create Your Perfect <span className="text-blue-500">Experience</span>
         </motion.h2>
@@ -54,7 +54,7 @@ export default function Pricing() {
             variants={fadeLeft}
             className="max-w-2xl text-center lg:text-left space-y-4 mx-auto lg:mx-0"
           >
-            <h3 className="text-3xl sm:text-4xl md:text-[40px] font-bold leading-tight">
+            <h3 className="text-xl sm:text-4xl md:text-[40px] font-bold leading-tight">
               Choose whatever works best for you
             </h3>
 
@@ -68,7 +68,7 @@ export default function Pricing() {
           {/* Pricing cards */}
           <motion.div
             variants={container}
-            className="flex flex-col md:flex-row gap-6 justify-center items-center"
+            className="flex flex-col md:flex-row gap-6 justify-center items-stretch"
           >
             {/* Free */}
             <motion.div
@@ -102,7 +102,7 @@ export default function Pricing() {
               <div className="p-8">
                 <Link
                   to=""
-                  className="bg-blue-600 text-white px-6 py-4 font-semibold text-lg rounded-xl w-full block"
+                  className="bg-blue-600 text-white px-6 py-4 font-semibold text-lg rounded-xl w-full block hover:bg-blue-700 transition-colors duration-200"
                 >
                   Get Started
                 </Link>
@@ -127,7 +127,7 @@ export default function Pricing() {
 
               <div className="flex flex-col gap-4 px-8 pt-8 flex-1">
                 <p>₦100 service fee for tickets above ₦1500</p>
-                <p>Free sharing on Drifto & external platforms</p>
+                {/* <p>Free sharing on Drifto & external platforms</p> */}
                 <p>Sell unlimited tickets, anytime</p>
                 <p>Fast ticketing with mobile device scanning</p>
               </div>
@@ -135,7 +135,7 @@ export default function Pricing() {
               <div className="p-8">
                 <Link
                   to=""
-                  className="bg-white text-blue-500 px-6 py-4 font-semibold text-lg rounded-xl w-full block"
+                  className="bg-white text-blue-500 px-6 py-4 font-semibold text-lg rounded-xl w-full block hover:bg-gray-100 transition-colors duration-200"
                 >
                   Get Started
                 </Link>

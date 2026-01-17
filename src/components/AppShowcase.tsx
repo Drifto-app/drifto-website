@@ -33,13 +33,13 @@ export default function AppShowcase() {
   };
 
   return (
-    <section className="md:pt-20 md:px-16 bg-blue-500/10">
+    <section className="pt-8 md:pt-20 md:px-16 bg-blue-500/10">
       <motion.div
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, amount: 0.3 }}
       >
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-20">
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-0">
           {/* Phone Mockup */}
           <motion.div
             variants={fadeUp}
@@ -59,7 +59,7 @@ export default function AppShowcase() {
           >
             <motion.h2
               variants={fadeRight}
-              className="text-2xl md:text-6xl font-extrabold leading-tight"
+              className="text-2xl md:text-5xl font-extrabold leading-tight"
             >
               Experience Life{" "}
               <span className="text-blue-500">Like Never Before</span>
@@ -98,10 +98,11 @@ export default function AppShowcase() {
             {/* Store buttons */}
             <motion.div
               variants={fadeUp}
-              className="flex md:flex-wrap justify-center md:justify-start gap-2 px-8"
+              className="flex md:flex-wrap justify-center md:justify-start gap-2 "
             >
-              <Link
-                to=""
+              <a
+                href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL}
+                target="_blank"
                 className="flex w-fit md:w-60 items-center gap-2 md:gap-4 rounded-sm bg-black p-1 px-2 md:p-2 text-white transition hover:bg-gray-800"
               >
                 <img
@@ -115,10 +116,11 @@ export default function AppShowcase() {
                     Google Play
                   </span>
                 </div>
-              </Link>
+              </a>
 
-              <Link
-                to=""
+              <a
+                href={import.meta.env.VITE_DRIFTO_APPSTORE_URL}
+                target="_blank"
                 className="flex w-fit md:w-60 items-center gap-2 md:gap-4 rounded-sm bg-black p-1 px-2 md:p-2 text-white transition hover:bg-gray-800"
               >
                 <img
@@ -132,7 +134,7 @@ export default function AppShowcase() {
                     App Store
                   </span>
                 </div>
-              </Link>
+              </a>
             </motion.div>
           </motion.div>
         </div>

@@ -20,21 +20,25 @@ export default function PrivacyPolicy() {
 
   return (
     <div>
-      <div className=" bg-white py-6 px-24 mt-28">
+      <div className=" bg-white py-2 md:py-6  lg:px-24 mt-28">
         <div className=" mx-auto">
           <div>
             <div className="text-center mb-8">
-              <h1 className="text-5xl font-bold mb-2">Privacy Policy</h1>
-              <p className=" text-base">Last Updated: November 2025</p>
+              <h1 className="text-2xl md:text-5xl font-bold mb-2">
+                Privacy Policy
+              </h1>
+              <p className="text-xs md:text-base">
+                Last Updated: November 2025
+              </p>
             </div>
 
             <div className="prose max-w-none">
-              <p className="text-lg  mb-8 text-center italic">
+              <p className="text-sm md:text-lg  mb-8 text-center italic">
                 Your privacy matters to us. Learn how we collect, use, and
                 protect your personal information.
               </p>
             </div>
-            <div className="flex flex-row-reverse justify-center gap-8">
+            <div className="flex flex-col md:flex-row-reverse justify-center gap-4 md:gap-8">
               {/* Table of Contents */}
               <div className="w-max">
                 <div className=" w-max p-6 sticky top-6">
@@ -47,7 +51,7 @@ export default function PrivacyPolicy() {
                         key={section.id}
                         href={`#section-${section.id}`}
                         onClick={() => setActiveSection(section.id)}
-                        className={`block px-3 py-2 rounded-md text-base font-bold underline underline-offset-4 `}
+                        className={`block px-3 py-2 rounded-md text-sm md:text-base font-bold underline underline-offset-4 `}
                       >
                         {section.id}. {section.title}
                       </a>
@@ -58,9 +62,9 @@ export default function PrivacyPolicy() {
 
               {/* Main Content */}
               <div className="max-w-3xl">
-                <div className="p-8 text-base">
+                <div className="p-8 text-sm md:text-base">
                   {/* Section 1 */}
-                  <section id="section-1" className="mb-8 scroll-mt-6">
+                  <section id="section-1" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">1. Introduction</h2>
                     <p className=" leading-relaxed">
                       Welcome to Drifto ("we," "our," "us"). We respect your
@@ -72,7 +76,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 2 */}
-                  <section id="section-2" className="mb-8 scroll-mt-6">
+                  <section id="section-2" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">
                       2. Information We Collect
                     </h2>
@@ -139,7 +143,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 3 */}
-                  <section id="section-3" className="mb-8 scroll-mt-6">
+                  <section id="section-3" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">
                       3. How We Use Your Information
                     </h2>
@@ -158,7 +162,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 4 */}
-                  <section id="section-4" className="mb-8 scroll-mt-6">
+                  <section id="section-4" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">
                       4. How We Share Your Information
                     </h2>
@@ -183,7 +187,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 5 */}
-                  <section id="section-5" className="mb-8 scroll-mt-6">
+                  <section id="section-5" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">5. Data Security</h2>
                     <p className=" mb-3">
                       We implement industry-standard measures such as:
@@ -196,7 +200,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 6 */}
-                  <section id="section-6" className="mb-8 scroll-mt-6">
+                  <section id="section-6" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">6. Your Rights</h2>
                     <p className=" mb-3">
                       Depending on your location, you may have the right to:
@@ -214,7 +218,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 7 */}
-                  <section id="section-7" className="mb-8 scroll-mt-6">
+                  <section id="section-7" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">7. Data Retention</h2>
                     <p className="">
                       We keep personal data only as long as necessary to provide
@@ -224,7 +228,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 8 */}
-                  <section id="section-8" className="mb-8 scroll-mt-6">
+                  <section id="section-8" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">8. Children's Privacy</h2>
                     <p className="">
                       Drifto is not intended for individuals under 13 (or the
@@ -234,7 +238,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 9 */}
-                  <section id="section-9" className="mb-8 scroll-mt-6">
+                  <section id="section-9" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">
                       9. Changes to This Policy
                     </h2>
@@ -246,7 +250,7 @@ export default function PrivacyPolicy() {
                   </section>
 
                   {/* Section 10 */}
-                  <section id="section-10" className="mb-8 scroll-mt-6">
+                  <section id="section-10" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">10. Contact Us</h2>
                     <p className=" mb-4">
                       If you have questions or concerns about this Privacy

@@ -1,21 +1,26 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {BiMenu} from "react-icons/bi";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
+  const handleGetStarted = () => {
+    // window.location.href = "https://app.drifto.app";
+
+    window.open(import.meta.env.VITE_DRIFTO_WEBAPP_URL, "_blank");
+  };
+
   return (
-    <nav className="w-screen z-50  fixed top-0 bg-white px-6 py-4">
+    <nav className="w-screen z-50 fixed top-0 bg-white pl-5 md:p-20 pr-5 py-4 md:py-4">
       <div
-        className=" flex 
-      
-       items-center justify-between"
+        className="flex items-center justify-between"
       >
         {/* Logo */}
         <img
-          src="/assets/icons/drifto_logo.svg"
+          src="/assets/icons/drifto_logo1.svg"
           alt="Drifto"
-          className="h-20"
+          className="h-6 md:h-8"
         />
 
         {/* Desktop Nav */}
@@ -45,21 +50,24 @@ export default function Navbar() {
 
         {/* Desktop Actions */}
         <div className="hidden items-center gap-4 md:flex">
-          <div className="flex items-center justify-center rounded-full border-1 border-black p-2">
+          <a href={import.meta.env.VITE_DRIFTO_APPSTORE_URL} target="_blank" className="flex items-center justify-center rounded-full border-1 border-neutral-500 p-2">
             <img
               src="/assets/icons/apple_icon.svg"
               className="h-5 w-5 cursor-pointer"
             />
-          </div>
+          </a>
 
-          <div className="flex items-center justify-center rounded-full border-1 border-black p-2">
+          <a href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL} target="_blank" className="flex items-center justify-center rounded-full border-1 border-neutral-500 p-2">
             <img
               src="/assets/icons/google_playstore.svg"
               className="h-5 w-5 cursor-pointer"
             />
-          </div>
+          </a>
 
-          <button className="rounded-lg bg-black px-5 py-2 text-white">
+          <button
+              className="rounded-lg bg-blue-500 px-5 py-2 text-white text-sm cursor-pointer"
+              onClick={handleGetStarted}
+          >
             Get Started
           </button>
         </div>
@@ -67,11 +75,9 @@ export default function Navbar() {
         {/* Hamburger */}
         <button
           onClick={() => setOpen(!open)}
-          className="flex flex-col gap-1 md:hidden"
+          className="md:hidden"
         >
-          <span className="h-0.5 w-6 bg-black"></span>
-          <span className="h-0.5 w-6 bg-black"></span>
-          <span className="h-0.5 w-6 bg-black"></span>
+          <BiMenu size={30} />
         </button>
       </div>
 
@@ -101,8 +107,9 @@ export default function Navbar() {
           </Link>
 
           <div className="flex flex-wrap justify-center lg:justify-start gap-3">
-            <Link
-              to=""
+            <a
+              href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL}
+              target="_blank"
               className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
             >
               <img
@@ -114,10 +121,11 @@ export default function Navbar() {
                 <span className="text-xs text-gray-300">Get it on</span>
                 <span className="text-lg font-semibold">Google Play</span>
               </div>
-            </Link>
+            </a>
 
-            <Link
-              to=""
+            <a
+              href={import.meta.env.VITE_DRIFTO_APPSTORE_URL}
+              target="_blank"
               className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
             >
               <img
@@ -129,7 +137,7 @@ export default function Navbar() {
                 <span className="text-xs text-gray-300">Download on the</span>
                 <span className="text-lg font-semibold">App Store</span>
               </div>
-            </Link>
+            </a>
           </div>
 
           <button className="mt-2 rounded-lg bg-blue-500 font-bold text-2xl py-3 text-white">

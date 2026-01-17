@@ -10,7 +10,7 @@ import WhyDrifto from "@/components/WhyDrifto";
 
 const HomePage = () => {
   return (
-    <div>
+    <div className="overflow-x-hidden">
       <HeroComponent />
       <WhyDrifto />
       <Pricing />

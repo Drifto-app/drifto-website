@@ -6,8 +6,8 @@ type Props = {};
 export default function HeroComponent({}: Props) {
   return (
     <section className="w-full bg-white mt-28">
-      <div className="  px-4 pb-16 md:px-6 md:py-26 ">
-        <div className="flex lg:grid lg:items-center gap-8 lg:gap-12 lg:grid-cols-2">
+      <div className="px-4 pb-16 md:px-8 md:py-26 ">
+        <div className="flex lg:grid lg:items-center gap-6 lg:gap-12 lg:grid-cols-2">
           {/* Left Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -15,34 +15,35 @@ export default function HeroComponent({}: Props) {
             transition={{ duration: 0.5, ease: "easeOut" }}
           >
             <div className="space-y-6 max-w-2xl">
-              <h1 className="text-2xl md:text-7xl font-extrabold leading-tight text-gray-900 ">
-                One Platform
+              <h1 className="text-2xl md:text-6xl font-extrabold leading-tight text-gray-900 ">
+                One Platform for
                 <br />
-                <span className=" text-blue-600">for Every Experience.</span>
+                <span className=" text-blue-600">Every Experience.</span>
               </h1>
               <p className="max-w-lg text-sm md:text-xl text-gray-600">
                 Drifo is the simplest way to discover and book unique local
                 experiences, from hidden-gem workshops to can't-miss
                 conferences. Stop searching, start doing.
               </p>
-              <div className="w-full hidden md:block  space-y-6">
+              <div className="w-full md:block  space-y-6">
                 <div className="flex flex-wrap items-center gap-4 w-full">
                   <Link
                     to=""
-                    className="rounded-lg bg-blue-600 w-full px-6 py-3 text-center text-white text-3xl font-bold transition hover:bg-blue-400"
+                    className="rounded-lg bg-blue-600 w-full px-6 py-3 text-center text-white text-md md:text-3xl font-bold transition hover:bg-blue-400"
                   >
                     Get Started
                   </Link>
                 </div>
                 <div className="flex flex-wrap justify-between gap-3">
                   {/* Google Play */}
-                  <Link
-                    to=""
+                  <a
+                    href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL}
+                    target="_blank"
                     className="flex w-full items-center gap-4 rounded-sm bg-black px-2 py-2 text-white transition hover:bg-gray-800 sm:w-[48%]"
                   >
                     <img
                       src="/assets/icons/google_playstore.svg"
-                      className="h-10 w-10"
+                      className="h-4 md:h-10 md:w-10"
                       alt="Google Play"
                     />
 
@@ -52,16 +53,17 @@ export default function HeroComponent({}: Props) {
                         Google Play
                       </span>
                     </div>
-                  </Link>
+                  </a>
 
                   {/* App Store */}
-                  <Link
-                    to=""
+                  <a
+                    href={import.meta.env.VITE_DRIFTO_APPSTORE_URL}
+                    target="_blank"
                     className="flex w-full items-center gap-4 rounded-sm bg-black px-2 py-2 text-white transition hover:bg-gray-800 sm:w-[48%]"
                   >
                     <img
                       src="/assets/icons/apple_logo_white.png"
-                      className="w-10"
+                      className="w-5 md:w-10"
                       alt="App Store"
                     />
 
@@ -71,7 +73,7 @@ export default function HeroComponent({}: Props) {
                       </span>
                       <span className="text-2xl font-semibold">App Store</span>
                     </div>
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

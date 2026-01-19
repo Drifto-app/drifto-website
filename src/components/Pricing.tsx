@@ -32,7 +32,10 @@ export default function Pricing() {
   };
 
   return (
-    <section id="pricing" className="py-12 md:py-16 px-6 sm:px-12 lg:px-24 max-w-8xl mx-auto">
+    <section
+      id="pricing"
+      className="py-12 md:py-16 px-6 sm:px-12 lg:px-24 max-w-8xl mx-auto"
+    >
       <motion.div
         className="space-y-16 md:space-y-24"
         variants={container}
@@ -68,7 +71,7 @@ export default function Pricing() {
           {/* Pricing cards */}
           <motion.div
             variants={container}
-            className="flex flex-col md:flex-row gap-6 justify-center items-stretch"
+            className="flex flex-col md:flex-row gap-6 justify-center items-center md:items-stretch"
           >
             {/* Free */}
             <motion.div

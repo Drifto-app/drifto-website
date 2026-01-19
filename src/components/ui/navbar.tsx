@@ -13,7 +13,7 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="w-screen z-50  top-0 bg-white pl-5 md:p-20 pr-5 py-4 md:py-4">
+    <nav className="w-screen z-50 top-0 bg-white pl-5 md:p-20 pr-5 py-4 md:py-4">
       <div
         className="flex items-center justify-between"
       >

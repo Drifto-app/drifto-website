@@ -49,7 +49,7 @@ export default function HeroComponent({ }: Props) {
 
                     <div className="flex flex-col leading-tight">
                       <span className="text-[10px]  md:text-xs text-gray-300">Get it on</span>
-                      <span className="text-base md:text-xl lg:text-2xl font-semibold">
+                      <span className="text-base md:text-xl lg:text-xl font-semibold">
                         Google Play
                       </span>
                     </div>
@@ -71,7 +71,7 @@ export default function HeroComponent({ }: Props) {
                       <span className="text-[10px] md:text-xs text-gray-300">
                         Download on the
                       </span>
-                      <span className="text-base md:text-xl lg:text-2xl font-semibold">App Store</span>
+                      <span className="text-base md:text-xl lg:text-xl font-semibold">App Store</span>
                     </div>
                   </a>
                 </div>

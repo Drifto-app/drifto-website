@@ -3,7 +3,7 @@ import Footer from "@/components/Footer";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import mail from "@/assests/images/mail.svg"
 
 type Props = {};
 
@@ -105,7 +105,7 @@ export default function DeleteAccount({}: Props) {
         <div className="flex flex-col m-8 bg-[#F7FBFF] border border-[#225DE526] p-8 text-center rounded-2xl">
           <div className="flex flex-col gap-6">
             <div className=" flex justify-center">
-              <img src="/assets/icons/mail.svg" alt="Mail_icon" />
+              <img src={mail} alt="Mail_icon" />
             </div>
             <h3 className=" text-3xl font-semibold mb-4">
               Can't Delete Through the App?

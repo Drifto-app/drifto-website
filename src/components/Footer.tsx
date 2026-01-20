@@ -72,17 +72,7 @@ const Footer = () => {
               <li><a href="/privacy-policy" className="hover:text-blue-600 transition-colors">Privacy Policy</a></li>
               <li><a href="/terms-service" className="hover:text-blue-600 transition-colors">Terms of service</a></li>
               <li><a href="/eula" className="hover:text-blue-600 transition-colors">EULA</a></li>
-
-
-          {/* Support */}
-          <div>
-            <h4 className="text-lg font-semibold mb-4">Support</h4>
-            <ul className="space-y-2 text-gray-400">
-              {/*<li><a href="#" className="hover:text-white transition-colors">Help Center</a></li>*/}
-              <li><a href="mailto:contact@drifto.app" className="hover:text-white transition-colors">Contact Us</a></li>
-              <li><a href="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-              <li><a href="/terms-service" className="hover:text-white transition-colors">Terms of Service</a></li>
-              <li><a href="/eula" className="hover:text-white transition-colors">EULA</a></li>
+              <li><a href="mailto:contact@drifto.app" className="hover:text-blue-600 transition-colors">Contact Us</a></li>
             </ul>
           </motion.div>
 

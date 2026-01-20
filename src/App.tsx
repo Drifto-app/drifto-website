@@ -7,7 +7,7 @@ import Navbar from "./components/ui/navbar";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DeleteAccount from "@/pages/DeleteAccount.tsx";
 import TermsOfService from "@/pages/TermsOfService.tsx";
-import Eula from "@/pages/Eula.tsx";
+import Eula from "@/pages/EULA.tsx";
 
 
 const queryClient = new QueryClient();
@@ -21,7 +21,7 @@ const App = () => (
           <Route path="/" element={<HomePage />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-service" element={<TermsOfService />} />
-          <Route path="/eula" element={<EULA />} />
+          <Route path="/eula" element={<Eula />} />
           <Route path="/delete-accounts" element={<DeleteAccount />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />

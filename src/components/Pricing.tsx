@@ -62,9 +62,10 @@ export default function Pricing() {
             </h3>
 
             <p className="text-base  sm:text-lg leading-7 sm:leading-8 text-gray-600">
-              Amet minim mollit non deserunt ullamco est sit aliqua dolor do
-              amet sint. Velit for official consequat enim to main purpose. If
-              you haven't tried out Flaro App for them help.
+              Whether you're hosting a free community meetup or selling tickets
+              to your next big event, Drifto gives you the flexibility to grow
+              on your terms. No subscriptions, no commitments—just simple,
+              transparent pricing.
             </p>
           </motion.div>
 

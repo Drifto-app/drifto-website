@@ -5,7 +5,7 @@ type Props = {};
 
 export default function HeroComponent({ }: Props) {
   return (
-    <section id="hero" className="w-full bg-white mt-26 md:mt-0">
+    <section id="hero" className="w-full bg-white mt-9 md:mt-0">
       <div className="px-3 pb-16 md:px-8 md:py-26">
         <div className="flex lg:grid lg:items-start gap-6 lg:gap-12 lg:grid-cols-2">
           {/* Left Content */}

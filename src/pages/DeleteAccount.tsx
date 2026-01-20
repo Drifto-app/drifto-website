@@ -9,10 +9,10 @@ type Props = {};
 
 export default function DeleteAccount({}: Props) {
   return (
-    <div className="mt-28">
-      <div className=" text-center">
-        <h2 className=" font-bold text-6xl">Delete Your Account</h2>
-        <p className=" font-medium text-base text-neutral-900">
+    <div className="mt-20">
+      <div className="flex flex-col gap-4 text-center">
+        <h2 className=" font-bold text-3xl md:text-5xl">Delete Your Account</h2>
+        <p className=" font-medium text-base text-neutral-900 px-2">
           We're sorry to see you go. Follow the steps below to permanently
           delete your Drifto account.
         </p>
@@ -53,12 +53,12 @@ export default function DeleteAccount({}: Props) {
             </div>
           </div>
         </div>
-        <div className="flex gap-8 flex-col xl:flex-row p-8">
+        <div className="flex gap-12 flex-col text-center p-8">
           <div>
-            <h4 className=" font-semibold text-4xl mb-12">
+            <h4 className=" font-semibold text-3xl mb-12">
               How to Delete Your Account
             </h4>
-            <p>
+            <span>
               <h5 className=" font-bold mb-3">
                 To delete your Drifto account:
               </h5>
@@ -69,10 +69,10 @@ export default function DeleteAccount({}: Props) {
                 </li>
                 <li>Confirm deletion</li>
               </ol>
-            </p>
+            </span>
           </div>
           <div>
-            <h4 className="font-semibold text-4xl mb-12">
+            <h4 className="font-semibold text-3xl mb-12">
               What Happens When You Delete Your Account
             </h4>
             <div className="flex flex-col md:flex-row justify-between text-center gap-4">
@@ -102,24 +102,26 @@ export default function DeleteAccount({}: Props) {
         </div>
       </section>
       <section>
-        <div className=" m-8 bg-[#F7FBFF] border border-[#225DE526] p-8 text-center rounded-2xl">
-          <div className=" flex justify-center  ">
-            <img src="/assets/icons/mail.svg" alt="" />
+        <div className="flex flex-col m-8 bg-[#F7FBFF] border border-[#225DE526] p-8 text-center rounded-2xl">
+          <div className="flex flex-col gap-6">
+            <div className=" flex justify-center">
+              <img src="/assets/icons/mail.svg" alt="Mail_icon" />
+            </div>
+            <h3 className=" text-3xl font-semibold mb-4">
+              Can't Delete Through the App?
+            </h3>
           </div>
-          <h3 className=" text-4xl font-semibold mb-6">
-            Can't Delete Through the App?
-          </h3>
           <p className=" mb-6">
             If you're unable to delete your account in the app, you can request
             deletion by contacting our support team directly.
           </p>
           <div className=" flex justify-center">
-            <Link
+            <a
               className="p-4 text-white font-bold bg-[#2057E0] rounded-xl"
-              to={""}
+              href="mailto:contact@drifto.app"
             >
               Email support for Deletion
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -217,7 +219,7 @@ const FAQ = () => {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="text-center mb-16">
-          <h2 className="text-2xl md:text-6xl font-extrabold text-gray-900 mb-4">
+          <h2 className="text-2xl md:text-5xl font-extrabold text-gray-900 mb-4">
             Frequently Asked <span className="text-blue-500">Questions</span>
           </h2>
         </div>

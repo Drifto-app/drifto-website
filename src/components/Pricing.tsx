@@ -103,12 +103,13 @@ export default function Pricing() {
               </div>
 
               <div className="p-8">
-                <Link
-                  to=""
+                <a
+                  href={import.meta.env.VITE_DRIFTO_WEBAPP_URL}
+                  target="_blank"
                   className="bg-blue-600 text-white px-6 py-4 font-semibold text-lg rounded-xl w-full block hover:bg-blue-700 transition-colors duration-200"
                 >
                   Get Started
-                </Link>
+                </a>
               </div>
             </motion.div>
 
@@ -136,12 +137,13 @@ export default function Pricing() {
               </div>
 
               <div className="p-8">
-                <Link
-                  to=""
+                <a
+                  href={import.meta.env.VITE_DRIFTO_WEBAPP_URL}
+                  target="_blank"
                   className="bg-white text-blue-500 px-6 py-4 font-semibold text-lg rounded-xl w-full block hover:bg-gray-100 transition-colors duration-200"
                 >
                   Get Started
-                </Link>
+                </a>
               </div>
             </motion.div>
           </motion.div>

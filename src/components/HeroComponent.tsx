@@ -5,7 +5,7 @@ type Props = {};
 
 export default function HeroComponent({ }: Props) {
   return (
-    <section id="hero" className="w-full bg-white mt-26 md:mt-16">
+    <section id="hero" className="w-full bg-white mt-26 md:mt-0">
       <div className="px-3 pb-16 md:px-8 md:py-26">
         <div className="flex lg:grid lg:items-start gap-6 lg:gap-12 lg:grid-cols-2">
           {/* Left Content */}
@@ -29,7 +29,7 @@ export default function HeroComponent({ }: Props) {
                 <div className="flex flex-wrap items-center gap-4 w-full">
                   <button
                     onClick={() => window.open(import.meta.env.VITE_DRIFTO_WEBAPP_URL, "_blank")}
-                    className="rounded-lg bg-blue-600 w-full px-6 py-3 md:py-5 text-center text-white text-sm md:text-xl font-bold transition hover:bg-blue-400 cursor-pointer"
+                    className="rounded-lg bg-blue-600 w-full px-6 py-3 md:py-4 text-center text-white text-sm md:text-lg font-bold transition hover:bg-blue-400 cursor-pointer"
                   >
                     Get Started
                   </button>

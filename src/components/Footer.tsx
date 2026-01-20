@@ -2,6 +2,7 @@ import { Mail, MapPin } from "lucide-react";
 import { FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { driftoLogo } from "@/assets";
 
 const container = {
   hidden: {},
@@ -35,7 +36,7 @@ const Footer = () => {
           {/* Brand */}
           <motion.div className="space-y-4 max-w-80" variants={fadeUp}>
             <div className="flex items-center justify-start gap-2 font-semibold text-xl">
-              <img src="/assets/icons/drifto_logo1.svg" className="h-9" />
+              <img src={driftoLogo} className="h-9" />
             </div>
 
             <p className="text-sm text-gray-600 leading-relaxed max-w-sm">

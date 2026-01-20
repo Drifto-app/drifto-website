@@ -1,5 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { driftoBanner } from "@/assets";
 
 type Props = {};
 
@@ -12,7 +13,7 @@ export default function DriftoBanner({ }: Props) {
       transition={{ duration: 0.6, ease: "easeOut" }}
       viewport={{ once: true, amount: 0.3 }}
     >
-      <img className=" w-full" src="/assets/icons/DRIFTO.svg" />
+      <img className=" w-full" src={driftoBanner} />
     </motion.div>
   );
 }

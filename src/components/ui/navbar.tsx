@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { BiMenu, BiX } from "react-icons/bi";
 import { motion, AnimatePresence } from "framer-motion";
+import { driftoLogo, appleIcon, googlePlaystore, appleLogoWhite } from "@/assets";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -29,7 +30,7 @@ export default function Navbar() {
       >
         {/* Logo */}
         <img
-          src="/assets/icons/drifto_logo1.svg"
+          src={driftoLogo}
           alt="Drifto"
           className="h-6 md:h-8"
         />
@@ -63,14 +64,14 @@ export default function Navbar() {
         <div className="hidden items-center gap-4 md:flex">
           <a href={import.meta.env.VITE_DRIFTO_APPSTORE_URL} target="_blank" className="flex items-center justify-center rounded-full border-1 border-neutral-500 p-2">
             <img
-              src="/assets/icons/apple_icon.svg"
+              src={appleIcon}
               className="h-5 w-5 cursor-pointer"
             />
           </a>
 
           <a href={import.meta.env.VITE_DRIFTO_PLAYSTORE_URL} target="_blank" className="flex items-center justify-center rounded-full border-1 border-neutral-500 p-2">
             <img
-              src="/assets/icons/google_playstore.svg"
+              src={googlePlaystore}
               className="h-5 w-5 cursor-pointer"
             />
           </a>
@@ -147,7 +148,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
                 >
                   <img
-                    src="/assets/icons/google_playstore.svg"
+                    src={googlePlaystore}
                     className="h-8 w-8"
                     alt="Google Play"
                   />
@@ -163,7 +164,7 @@ export default function Navbar() {
                   className="flex items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
                 >
                   <img
-                    src="/assets/icons/apple_logo_white.png"
+                    src={appleLogoWhite}
                     className="w-6"
                     alt="App Store"
                   />

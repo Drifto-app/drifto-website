@@ -3,6 +3,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
+import { mobileScreenshot, googlePlaystore, appleLogoWhite } from "@/assets";
 
 export default function AppShowcase() {
   const container: Variants = {
@@ -46,7 +47,7 @@ export default function AppShowcase() {
             className="flex p-8 pb-0 md:p-0 md:w-1/2 justify-center items-end lg:justify-start"
           >
             <img
-              src="/assets/images/mobile_screenshot.png"
+              src={mobileScreenshot}
               alt="Drifto Mobile App"
               className="w-full max-w-100 md:max-h-screen md:max-w-max drop-shadow-2xl"
             />
@@ -106,7 +107,7 @@ export default function AppShowcase() {
                 className="flex w-fit md:w-60 items-center gap-2 md:gap-4 rounded-sm bg-black p-1 px-2 md:p-2 text-white transition hover:bg-gray-800"
               >
                 <img
-                  src="/assets/icons/google_playstore.svg"
+                  src={googlePlaystore}
                   className="w-7 md:w-10"
                   alt="Google Play"
                 />
@@ -124,7 +125,7 @@ export default function AppShowcase() {
                 className="flex w-fit md:w-60 items-center gap-2 md:gap-4 rounded-sm bg-black p-1 px-2 md:p-2 text-white transition hover:bg-gray-800"
               >
                 <img
-                  src="/assets/icons/apple_logo_white.png"
+                  src={appleLogoWhite}
                   className="w-7 md:w-10"
                   alt="App Store"
                 />

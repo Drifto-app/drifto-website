@@ -3,11 +3,12 @@ import Footer from "@/components/Footer";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import mail from "@/assests/images/mail.svg"
+import mail from "@/assests/images/mail.svg";
+import { deleteGraphic } from "@/assets";
 
 type Props = {};
 
-export default function DeleteAccount({}: Props) {
+export default function DeleteAccount({ }: Props) {
   return (
     <div className="mt-20">
       <div className="flex flex-col gap-4 text-center">
@@ -22,7 +23,7 @@ export default function DeleteAccount({}: Props) {
           <div className="flex justify-center ">
             <img
               className="  min-w-64 lg:min-w-100"
-              src="/assets/icons/delete_graphic.svg"
+              src={deleteGraphic}
               alt=""
             />
           </div>
@@ -229,9 +230,8 @@ const FAQ = () => {
           {faqData.map((faq, index) => (
             <div
               key={index}
-              className={`rounded-2xl overflow-hidden transition-all duration-200 ${
-                openIndex === index ? "bg-gray-100" : "bg-gray-50"
-              }`}
+              className={`rounded-2xl overflow-hidden transition-all duration-200 ${openIndex === index ? "bg-gray-100" : "bg-gray-50"
+                }`}
             >
               <button
                 onClick={() => toggleAccordion(index)}

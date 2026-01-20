@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { googlePlaystore, appleLogoWhite, heroPane1, heroPane2, heroPane3, heroPane4 } from "@/assets";
+
 type Props = {};
 
 export default function HeroComponent({ }: Props) {
@@ -42,7 +44,7 @@ export default function HeroComponent({ }: Props) {
                     className="flex w-full items-center gap-2 md:gap-4 rounded-lg bg-black px-3 py-2 md:px-4 md:py-3 text-white transition hover:bg-gray-800 sm:w-[48%]"
                   >
                     <img
-                      src="/assets/icons/google_playstore.svg"
+                      src={googlePlaystore}
                       className="h-6 w-6 md:h-10 md:w-10"
                       alt="Google Play"
                     />
@@ -62,7 +64,7 @@ export default function HeroComponent({ }: Props) {
                     className="flex w-full items-center gap-2 md:gap-4 rounded-lg bg-black px-3 py-2 md:px-4 md:py-3 text-white transition hover:bg-gray-800 sm:w-[48%]"
                   >
                     <img
-                      src="/assets/icons/apple_logo_white.png"
+                      src={appleLogoWhite}
                       className="h-6 w-6 md:h-10 md:w-10"
                       alt="App Store"
                     />
@@ -100,7 +102,7 @@ export default function HeroComponent({ }: Props) {
                 },
                 opacity: { duration: 0.5, ease: "easeOut" }
               }}
-              src="/assets/images/1st_pane.png"
+              src={heroPane1}
             ></motion.img>{" "}
             <motion.img
               className="w-1/2  lg:w-1/4 relative top-8 md:top-16"
@@ -121,7 +123,7 @@ export default function HeroComponent({ }: Props) {
                 },
                 opacity: { duration: 0.5, ease: "easeOut" }
               }}
-              src="/assets/images/2nd_pane.png"
+              src={heroPane2}
             ></motion.img>{" "}
             <motion.img
               className="w-16 hidden lg:block lg:w-1/4"
@@ -142,7 +144,7 @@ export default function HeroComponent({ }: Props) {
                 },
                 opacity: { duration: 0.5, ease: "easeOut" }
               }}
-              src="/assets/images/3rd_pane.png"
+              src={heroPane3}
             ></motion.img>{" "}
             <motion.img
               className="w-1/2 lg:w-1/4 hidden lg:block relative top-16"
@@ -163,7 +165,7 @@ export default function HeroComponent({ }: Props) {
                 },
                 opacity: { duration: 0.5, ease: "easeOut" }
               }}
-              src="/assets/images/4th_pane.png"
+              src={heroPane4}
             ></motion.img>
           </div>
         </div>

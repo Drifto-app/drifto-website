@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
+import { googlePlaystore, appleLogoWhite } from "@/assets";
 
 const containerVariants: Variants = {
   hidden: { opacity: 0, y: 80 },
@@ -85,7 +86,7 @@ export default function DriftoCTA() {
                 className="flex flex-1 items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
               >
                 <img
-                  src="/assets/icons/google_playstore.svg"
+                  src={googlePlaystore}
                   className="h-8 w-8"
                   alt="Google Play"
                 />
@@ -101,7 +102,7 @@ export default function DriftoCTA() {
                 className="flex flex-1 items-center gap-2 rounded-md bg-black px-3 py-2 text-white transition hover:bg-gray-800"
               >
                 <img
-                  src="/assets/icons/apple_logo_white.png"
+                  src={appleLogoWhite}
                   className="w-6"
                   alt="App Store"
                 />

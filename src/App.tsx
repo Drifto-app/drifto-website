@@ -5,9 +5,10 @@ import NotFound from "./pages/NotFound";
 import HomePage from "./pages/HomePage";
 import Navbar from "./components/ui/navbar";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfService from "./pages/TermsOfService";
-import EULA from "./pages/EULA";
-import DeleteAccount from "./pages/DeleteAccount";
+import DeleteAccount from "@/pages/DeleteAccount.tsx";
+import TermsOfService from "@/pages/TermsOfService.tsx";
+import Eula from "@/pages/Eula.tsx";
+
 
 const queryClient = new QueryClient();
 

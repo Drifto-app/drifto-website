@@ -22,7 +22,7 @@ const App = () => (
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/terms-service" element={<TermsOfService />} />
           <Route path="/eula" element={<Eula />} />
-          <Route path="/delete-accounts" element={<DeleteAccount />} />
+          <Route path="/delete-account" element={<DeleteAccount />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

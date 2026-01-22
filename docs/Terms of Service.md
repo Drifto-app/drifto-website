@@ -32,6 +32,12 @@ We may suspend accounts that violate our rules.
 * Hosts are fully responsible for the accuracy, safety, and quality of their events.  
 * Only physical events/experiences are allowed at this time.  
 * Hosts agree that Drifto is a facilitator, not the creator or organizer of events.
+* Host Data Responsibility: Drifto may provide you with attendee information (e.g., Guest   Lists via CSV export) solely for the purpose of managing your event. You agree to:
+
+Use this data only for event management (check-in, updates, verification).
+Not use this data for marketing or spam without separate, explicit consent from the attendee.
+Not sell, share, or disclose this data to any third parties.
+Securely delete this data once it is no longer needed for the event.
 
 ## **5\. Content Rules**
 

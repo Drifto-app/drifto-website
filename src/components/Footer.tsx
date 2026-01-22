@@ -96,7 +96,7 @@ const Footer = () => {
           className="mt-16 border-t border-gray-200 pt-6 text-center text-xs text-gray-500"
           variants={fadeUp}
         >
-          © 2025 Drifto Limited. All rights reserved
+          © 2026 Drifto Limited. All rights reserved
         </motion.div>
       </div>
     </motion.footer>

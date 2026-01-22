@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
                 Privacy Policy
               </h1>
               <p className="text-xs md:text-base">
-                Last Updated: November 2025
+                Last Updated: Janurary 2026f
               </p>
             </div>
 
@@ -173,6 +173,9 @@ export default function PrivacyPolicy() {
                       <li>
                         <strong>With Service Providers:</strong> Payment
                         processors, cloud hosting, analytics services.
+                      </li>
+                      <li>
+                        <strong>With Event Organizers (Hosts):</strong> When you book an event, we share your registration details (Name, Email, and Ticket Information) with the Event Organizer to facilitate check-in, verification, and event management.
                       </li>
                       <li>
                         <strong>With Event Participants:</strong> Limited

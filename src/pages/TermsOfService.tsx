@@ -31,7 +31,7 @@ export default function TermsOfService() {
                 Terms of Service
               </h1>
               <p className="text-xs md:text-base">
-                Last Updated: November 2025
+                Last Updated: Janurary 2026
               </p>
             </div>
 
@@ -95,7 +95,7 @@ export default function TermsOfService() {
                   <section id="section-3" className="mb-8 scroll-mt-32">
                     <h2 className=" font-bold  mb-4">3. User Accounts</h2>
                     <p className=" mb-3">Users are responsible for:</p>
-                    <ul className="list-disc pl-6 space-y-2 ">
+                    <ul className="list-disc pl-6 space-y-2 mb-3">
                       <li>Keeping login credentials secure</li>
                       <li>Providing accurate information</li>
                       <li>Not impersonating others</li>
@@ -123,6 +123,15 @@ export default function TermsOfService() {
                       <li>
                         Hosts agree that Drifto is a facilitator, not the
                         creator or organizer of events.
+                      </li>
+                      <li>
+                        <p className="mb-3"><strong>Host Data Responsibility:</strong> Drifto may provide you with attendee information {`(e.g., Guest Lists via CSV export)`} solely for the purpose of managing your event. You agree to:</p>
+                        <ul className="list-disc pl-6 space-y-2 ">
+                          <li>Use this data only for event management {`(check-in, updates, verification).`}</li>
+                          <li>Not use this data for marketing or spam without separate, explicit consent from the attendee.</li>
+                          <li>Not sell, share, or disclose this data to any third parties.</li>
+                          <li>Securely delete this data once it is no longer needed for the event.</li>
+                        </ul>
                       </li>
                     </ul>
                   </section>

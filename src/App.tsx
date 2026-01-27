@@ -8,6 +8,7 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import DeleteAccount from "@/pages/DeleteAccount.tsx";
 import TermsOfService from "@/pages/TermsOfService.tsx";
 import Eula from "@/pages/EULA.tsx";
+import AppRedirect from "@/pages/AppRedirect.tsx";
 
 
 const queryClient = new QueryClient();
@@ -23,6 +24,7 @@ const App = () => (
           <Route path="/terms-service" element={<TermsOfService />} />
           <Route path="/eula" element={<Eula />} />
           <Route path="/delete-account" element={<DeleteAccount />} />
+          <Route path="/app" element={<AppRedirect />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
